@@ -5,6 +5,7 @@ interface SoundConfig {
     src: string;
     loop?: boolean;
     volume?: number;
+    html5?: boolean;
 }
 
 //Đường dẫn gốc 
@@ -36,12 +37,17 @@ const SOUND_MAP: Record<string, SoundConfig> = {
     // ---- SFX Chung ----
     'sfx-correct': { src: `${BASE_PATH}correct.mp3`, volume: 1.0 },
     'sfx-wrong': { src: `${BASE_PATH}wrong.mp3`, volume: 0.8 },
-    'sfx-click': { src: `${BASE_PATH}click.mp3`, volume: 0.8 },
+    'sfx-click': { src: `${BASE_PATH}click.mp3`, volume: 0.5 },
 
     // ---- Prompt Voice ----
     'voice-rotate': { src: `${BASE_PATH}rotate.mp3`, volume: 0.8 },
     'instruction': { src: `${BASE_PATH}instruction.mp3`, volume: 1.0 },
-    'bgm-nen': { src: `${BASE_PATH}nhan_nen.mp3`, loop: true, volume: 0.05 },
+    'bgm-nen': { 
+        src: `${BASE_PATH}nhan_nen.mp3`, 
+        loop: true, 
+        volume: 0.05,
+        html5: true
+    },
     'start': { src: `${BASE_PATH}khen_be.mp3`, volume: 1.0 },
 
     // ---- Correct Answer Variations ----
