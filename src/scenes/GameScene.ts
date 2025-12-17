@@ -75,15 +75,15 @@ export default class GameScene extends Phaser.Scene {
         AudioManager.loadAll();
 
         this.load.image('text_banner', 'assets/images/text_banner_game.png');
-        this.load.image('bar_frame', 'assets/images/Thanh_diem.png');      
-        this.load.image('bar_fill', 'assets/images/thanh_diem_full.png');
+        this.load.image('bar_frame', 'assets/images/bar_frame.png');      
+        this.load.image('bar_fill', 'assets/images/bar_fill.png');
         this.load.image('boy1', 'assets/images/boy1.png');
         this.load.image('boy2', 'assets/images/boy2.png');
         this.load.image('banner', 'assets/images/banner.png');
         this.load.image('hand', 'assets/images/hand.png');
         this.load.image('board', 'assets/images/board.png'); 
         this.load.image('icon_balloon', 'assets/images/icon_ball.png');
-        this.load.audio('bgm-nen', 'assets/audio/nhan_nen.mp3');
+        this.load.audio('bgm-nen', 'assets/audio/nhac_nen.mp3');
         
 
         this.balloonColors.forEach(c => this.load.image(`balloon_${c}`, `assets/images/balloon_${c}.png`));
@@ -402,7 +402,7 @@ export default class GameScene extends Phaser.Scene {
             const textImg = this.popupContainer.getByName('popup_text_img') as Phaser.GameObjects.Image;
 
             if (bg && icon && textImg) {
-                icon.setTexture(`item_${data.id}`);
+                icon.setTexture(`item_${data.id}`).setScale(1);
                 icon.y = -bg.displayHeight * 0.15;
     
                 textImg.setTexture(`text_${data.id}`);
