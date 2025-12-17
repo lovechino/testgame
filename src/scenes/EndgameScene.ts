@@ -13,7 +13,7 @@ export default class EndGameScene extends Phaser.Scene {
     preload() {
         this.load.image('icon', 'assets/images/icon.webp');
         
-        this.load.image('banner_congrat', 'assets/images/banner_congrat.webp');
+        this.load.image('banner_congrat', 'assets/images/banner_congrat.png');
 
         this.load.image('btn_reset', 'assets/images/btn_reset.png'); 
 
@@ -23,7 +23,6 @@ export default class EndGameScene extends Phaser.Scene {
     create() {
         const w = this.scale.width; 
         const h = this.scale.height;
-        changeBackground('assets/images/bg_game.png');
         AudioManager.loadAll();
         AudioManager.play('complete');
 

@@ -13,8 +13,8 @@ interface ItemData {
 const GAME_ITEMS: Record<string, ItemData> = {
     'grape':   { id: 'grape',   name: 'Quả nho' },
     'bee':     { id: 'bee',     name: 'Con ong' },
-    'flower':  { id: 'flower',  name: 'Bông hoa'},
-    'stonke':  { id: 'stonke',  name: 'Cục đá'  },
+    'volleyball':  { id: 'volleyball',  name: 'Bóng chuyền'},
+    'stonke':  { id: 'stonke',  name: 'Con cò'  },
     'dog':     { id: 'dog',     name: 'Con chó' },
     'letter_o':{ id: 'letter_o',name: 'Chữ O'   },
     'cow':     { id: 'cow',     name: 'Con bò'  },
@@ -65,7 +65,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     init() {
-        this.state = { score: 0, maxScore: 5, isPlaying: false, isPaused: false };
+        this.state = { score: 0, maxScore:10, isPlaying: false, isPaused: false };
         this.activeTweens = [];
         this.isInstructionCompleted = false; // Đặt lại trạng thái hướng dẫn
     }
@@ -180,11 +180,11 @@ export default class GameScene extends Phaser.Scene {
         this.popupContainer = this.add.container(this.getW() / 2, this.getH() / 2).setDepth(1000).setVisible(false);
 
         const bg = this.add.image(0, 0, 'board').setName('popup_board');
-        const scale = (this.getW() * 0.4) / bg.width; 
-        bg.setScale(scale);
+        //const scale = (this.getW() * 0.4) / bg.width; 
+        bg.setScale(0.7);
         
-        const icon = this.add.image(0, -50 * scale, 'item_grape').setName('popup_icon');
-        const textImg = this.add.image(0, bg.displayHeight * 0.25, 'text_grape').setName('popup_text_img');
+        const icon = this.add.image(0, -50 * (this.getW() * 0.4) / bg.width, 'item_grape').setName('popup_icon');
+        const textImg = this.add.image(0, bg.displayHeight * 0.2, 'text_grape').setName('popup_text_img');
 
         this.popupContainer.add([bg, icon, textImg]);
     }
@@ -202,13 +202,13 @@ export default class GameScene extends Phaser.Scene {
         bannerText.setScale((this.getW() * 0.5) / bannerText.width);
 
         // Bóng hướng dẫn
-        const tutorialBalloon = this.createBalloonContainer('balloon_blue', 'letter_o');
+        const tutorialBalloon = this.createBalloonContainer('balloon_purple', 'letter_o');
         tutorialBalloon.setPosition(this.pctX(0.5), this.pctY(0.4));
         
         // Tay chỉ + Animate
-        this.hand = this.add.sprite(this.pctX(0.55), this.pctY(0.55), 'hand');
+        this.hand = this.add.sprite(this.pctX(0.55), this.pctY(0.48), 'hand');
         this.hand.setDisplaySize(this.getW() * 0.08, this.getW() * 0.08);
-        this.tweens.add({ targets: this.hand, x: this.pctX(0.52), y: this.pctY(0.45), duration: 800, yoyo: true, repeat: -1 });
+        this.tweens.add({ targets: this.hand, x: this.pctX(0.55), y: this.pctY(0.47), duration: 350, yoyo: true, repeat: -1 });
 
         // Thiết lập tương tác cho bóng hướng dẫn
         const hitArea = tutorialBalloon.getAt(0) as Phaser.GameObjects.Sprite;
@@ -217,7 +217,7 @@ export default class GameScene extends Phaser.Scene {
         hitArea.once('pointerdown', () => {
             tutorialBalloon.destroy();
             AudioManager.stop('instruction');
-            AudioManager.play('start');
+            AudioManager.play('letter_o');
             if (this.hand) this.hand.destroy();
 
             this.tweens.add({ 
@@ -339,9 +339,16 @@ export default class GameScene extends Phaser.Scene {
 
         //CHỈ THÊM HÌNH NẾU KHÔNG PHẢI LÀ BÓNG RỖNG
         if (itemID !== 'empty') {
-            const item = this.add.sprite(0, -baseSize * 0.1, `item_${itemID}`);
-            item.setScale(0.3);
-            container.add(item);
+            if(itemID == 'whistle'){
+                const item = this.add.sprite(0, 0, `item_${itemID}`);
+                item.setScale(0.35);
+                container.add(item);
+            }
+            else{
+                const item = this.add.sprite(0, -baseSize * 0.1, `item_${itemID}`);
+                item.setScale(0.35);
+                container.add(item);
+            }
         }
         
         return container;
@@ -385,12 +392,16 @@ export default class GameScene extends Phaser.Scene {
 
             if (bg && icon && textImg) {
                 icon.setTexture(`item_${data.id}`);
-                icon.setScale((bg.displayHeight * 0.4) / icon.height);
                 icon.y = -bg.displayHeight * 0.15;
     
                 textImg.setTexture(`text_${data.id}`);
                 const maxTextWidth = bg.displayWidth * 0.6;
-                if (textImg.width > maxTextWidth) textImg.setScale(1);
+                if (textImg.width > maxTextWidth) {
+                    textImg.setScale(1);
+                    if (icon.texture.key === 'item_volleyball') textImg.setScale(0.8);
+                }
+                    
+                
                 textImg.y = bg.displayHeight * 0.2; 
             }
         }
