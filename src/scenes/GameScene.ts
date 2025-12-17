@@ -72,7 +72,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        AudioManager.loadAll();
+        //AudioManager.loadAll();
 
         this.load.image('text_banner', 'assets/images/text_banner_game.png');
         this.load.image('bar_frame', 'assets/images/bar_frame.png');      
@@ -135,17 +135,21 @@ export default class GameScene extends Phaser.Scene {
             }
             showGameButtons();
         };
+        AudioManager.loadAll().then(() => {
+
+            console.log("Audio Loaded Fully!"); // Debug
         // TRƯỜNG HỢP 1: Đã unlock âm thanh từ trước
-        if (AudioManager.isUnlocked) {
-            startGameFlow();
-        } 
-        // TRƯỜNG HỢP 2: Mới vào game lần đầu -> Âm thanh bị khóa -> CHỜ CLICK
-        else {
-            this.input.once('pointerdown', () => {
-                AudioManager.unlockAudio(); 
+            if (AudioManager.isUnlocked) {
                 startGameFlow();
-            }, this);
-        }
+            } 
+        // TRƯỜNG HỢP 2: Mới vào game lần đầu -> Âm thanh bị khóa -> CHỜ CLICK
+            else {
+                this.input.once('pointerdown', () => {
+                    AudioManager.unlockAudio(); 
+                    startGameFlow();
+                }, this);
+            }
+        });
     }
 
     // --- SETUP UI ---

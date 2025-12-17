@@ -69,6 +69,11 @@ class AudioManager {
      * @returns {Promise<void>}
      */
     loadAll(): Promise<void> {
+
+        if (this.isLoaded) {
+            return Promise.resolve();
+        }
+
         return new Promise((resolve) => {
             const keys = Object.keys(SOUND_MAP);
             let loadedCount = 0;
