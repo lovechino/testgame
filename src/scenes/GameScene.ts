@@ -116,7 +116,7 @@ export default class GameScene extends Phaser.Scene {
 
         this.bgm = this.sound.add('bgm-nen', { 
             loop: true, 
-            volume: 0.1 
+            volume: 0.3 
         });
 
         const startGameFlow = () => {
