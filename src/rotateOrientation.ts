@@ -247,12 +247,6 @@ function updateRotateHint() {
             AudioManager.stop('voice-rotate');
             currentVoiceKey = null;
         }
-        try {
-            (AudioManager as any).play('bgm-nen'); 
-        } catch (e) {
-            console.warn('[Rotate] auto play bgm-nen error:', e);
-        }
-
         // --- LOGIC PHỤC HỒI INSTRUCTION ---
         if (instructionVoiceStoppedByRotate) {
             const shouldRestoreInstruction = 
