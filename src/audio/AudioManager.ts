@@ -34,8 +34,8 @@ const ITEM_SOUNDS: Record<string, SoundConfig> = GAME_ITEM_IDS.reduce((acc, item
 const SOUND_MAP: Record<string, SoundConfig> = {
 
     // ---- SFX Chung ----
-    'sfx-correct': { src: `${BASE_PATH}correct.mp3`, volume: 1.0 },
-    'sfx-wrong': { src: `${BASE_PATH}wrong.mp3`, volume: 0.8 },
+    'sfx-correct': { src: `${BASE_PATH}correct.mp3`, volume: 0.5 },
+    'sfx-wrong': { src: `${BASE_PATH}wrong.mp3`, volume: 0.5 },
     'sfx-click': { src: `${BASE_PATH}click.mp3`, volume: 0.5 },
 
     // ---- Prompt Voice ----
