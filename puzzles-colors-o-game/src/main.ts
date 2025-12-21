@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import Scene1 from './scenes/Scene1';
+import Scene2 from './scenes/Scene2';
+
 import EndGameScene from './scenes/EndgameScene';
 import { initRotateOrientation } from './rotateOrientation';
 import AudioManager from './audio/AudioManager';
@@ -16,7 +18,7 @@ const config: Phaser.Types.Core.GameConfig = {
     width: 1920,
     height: 1080,
     parent: 'game-container',
-    scene: [Scene1,EndGameScene],
+    scene: [Scene1,Scene2,EndGameScene],
     backgroundColor: '#ffffff',
     scale: {
         mode: Phaser.Scale.FIT,       // Dùng FIT để co giãn giữ tỉ lệ
