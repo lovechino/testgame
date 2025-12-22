@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import AudioManager from '../audio/AudioManager'; 
 import { setGameSceneReference, resetVoiceState } from '../rotateOrientation';
 
-// --- 1. CẤU HÌNH CHỮ Ô ---
+// --- CONFIG ---
 const LETTER_CONFIG = {
     baseScale: 0.7, 
     outlineKey: 'o_outline',
@@ -12,7 +12,6 @@ const LETTER_CONFIG = {
     ]
 };
 
-// --- 2. CẤU HÌNH CÔ GIÁO ---
 const TEACHER_CONFIG = {
     baseScale: 0.75, 
     outlineKey: 'co_outline',
@@ -26,25 +25,28 @@ const TEACHER_CONFIG = {
 };
 
 export default class Scene2 extends Phaser.Scene {
-    // Biến logic vẽ
+    // Biến vẽ
     private brushColor: number = 0xff0000; 
     private activeRenderTexture: Phaser.GameObjects.RenderTexture | null = null; 
     private brushTexture: string = 'brush_circle';
-    private brushSize: number = 100; // Kích thước đầu cọ (Bạn chỉnh to nhỏ ở đây)
+    private brushSize: number = 100;
+    
+    // Biến trạng thái tẩy
+    private isErasing: boolean = false; 
 
-    // Quản lý nút màu để tạo hiệu ứng phóng to/thu nhỏ
+    // Biến quản lý game
     private paletteButtons: Phaser.GameObjects.Image[] = [];
+    private totalParts: number = 0; 
+    private finishedParts: Set<string> = new Set(); 
 
-    // --- 3. CẤU HÌNH BẢNG MÀU (Dùng Ảnh thật) ---
-    // Mapping: Ảnh nút nào -> Ra màu gì
     private readonly PALETTE_DATA = [
-        { key: 'btn_red',    color: 0xFF595E }, // Ảnh btn_red.png tương ứng màu đỏ
+        { key: 'btn_red',    color: 0xFF595E },
         { key: 'btn_yellow', color: 0xFFCA3A },
         { key: 'btn_green',  color: 0x8AC926 },
         { key: 'btn_blue',   color: 0x1982C4 },
         { key: 'btn_purple', color: 0x6A4C93 },
-        { key: 'btn_cream', color: 0xFDFCDC },
-        { key: 'btn_black', color: 0x000000 }
+        { key: 'btn_cream',  color: 0xFDFCDC },
+        { key: 'btn_black',  color: 0x000000 }
     ];
 
     constructor() {
@@ -56,13 +58,32 @@ export default class Scene2 extends Phaser.Scene {
     private pctX(p: number) { return this.getW() * p; }
     private pctY(p: number) { return this.getH() * p; }
 
+    private resetPaletteState() {
+      this.paletteButtons.forEach(b => b.destroy());
+      this.paletteButtons.length = 0;
+      this.isErasing = false;
+      // Kiểm tra xem có màu nào không trước khi gán
+      if (this.PALETTE_DATA.length > 0) {
+          this.brushColor = this.PALETTE_DATA[0].color;
+      }
+    }
+
+    init() {
+        this.totalParts = 0;
+        this.finishedParts.clear();
+        this.resetPaletteState();
+    }
+    
+    shutdown() {
+        this.resetPaletteState();
+    }
+
     preload() {
-        // --- LOAD ẢNH CHỮ Ô ---
+        // Load Ảnh Game
         this.load.image('o_outline', 'assets/images/S2/o_outline.png');
         this.load.image('o_hat', 'assets/images/S2/o_hat.png');
         this.load.image('o_body', 'assets/images/S2/o_body.png');
 
-        // --- LOAD ẢNH CÔ GIÁO ---
         this.load.image('co_outline', 'assets/images/S2/teacher.png');
         this.load.image('co_face', 'assets/images/S2/face.png');
         this.load.image('co_hair', 'assets/images/S2/hair.png');
@@ -70,23 +91,23 @@ export default class Scene2 extends Phaser.Scene {
         this.load.image('co_hands', 'assets/images/S2/hand.png');
         this.load.image('co_book', 'assets/images/S2/book.png');
 
-        // --- LOAD ẢNH NỀN, BẢNG ---
         this.load.image('board_s2', 'assets/images/bg/board_scene_2.png');
         this.load.image('banner_s2', 'assets/images/S2/banner.png');
         this.load.image('text_banner_s2', 'assets/images/S2/text_banner.png');
 
-        // --- LOAD 7 ẢNH NÚT MÀU (QUAN TRỌNG) ---
-        // Bạn nhớ đặt tên file trong thư mục đúng như thế này nhé
+        // Load Nút Màu
         this.load.image('btn_red',    'assets/images/color/red.png');
         this.load.image('btn_yellow', 'assets/images/color/yellow.png');
         this.load.image('btn_green',  'assets/images/color/green.png');
         this.load.image('btn_blue',   'assets/images/color/blue.png');
         this.load.image('btn_purple', 'assets/images/color/purple.png');
-        this.load.image('btn_cream',   'assets/images/color/cream.png');
-        this.load.image('btn_black',   'assets/images/color/black.png');
+        this.load.image('btn_cream',  'assets/images/color/cream.png');
+        this.load.image('btn_black',  'assets/images/color/black.png');
+        
+        // Load Ảnh Cục Tẩy
+        this.load.image('btn_eraser', 'assets/images/ui/btn_exit.png');
 
-        // --- TẠO ĐẦU CỌ VẼ (BRUSH) ---
-        // Vẫn dùng code tạo hình tròn mờ để nét vẽ mềm mại
+        // Tạo texture cọ
         if (!this.textures.exists('brush_circle')) {
             const canvas = this.textures.createCanvas('brush_circle', this.brushSize, this.brushSize);
             if (canvas) {
@@ -103,21 +124,16 @@ export default class Scene2 extends Phaser.Scene {
 
     create() {
         resetVoiceState(); 
+        (window as any).gameScene = this;
         setGameSceneReference(this);
+        
         this.creatBroadAndBanner();
 
         const centerY = this.pctY(0.48);
-
-        // 1. Tạo Cô Giáo (Trái)
         this.createCharacter(this.pctX(0.37), centerY, TEACHER_CONFIG);
-
-        // 2. Tạo Chữ Ô (Phải)
         this.createCharacter(this.pctX(0.7), centerY, LETTER_CONFIG);
 
-        // 3. Tạo Bảng Màu (Ở dưới đáy)
         this.createPalette();
-
-        // 4. Setup sự kiện vẽ
         this.setupInput();
     }
 
@@ -127,77 +143,79 @@ export default class Scene2 extends Phaser.Scene {
         this.add.image(this.pctX(0.5), bannerS2.displayHeight + this.pctY(0.03),'board_s2').setOrigin(0.5,0).setScale(0.7);
     }
 
-    // --- HÀM TẠO BẢNG MÀU TỪ ẢNH ---
     private createPalette() {
-        const buttonSpacing = this.pctX(0.07); // Khoảng cách giữa các nút
-        const yPos = this.pctY(0.89); // Cách đáy màn hình 80px
+        const buttonSpacing = this.pctX(0.07); 
+        const yPos = this.pctY(0.89); 
 
-        // Tính toán để căn giữa hàng nút
-        const totalWidth = (this.PALETTE_DATA.length - 1) * buttonSpacing;
+        // Tính tổng chiều rộng gồm: Các nút màu + Nút tẩy
+        const totalItems = this.PALETTE_DATA.length + 1; // +1 cho Eraser
+        const totalWidth = (totalItems - 1) * buttonSpacing;
         const startX = (this.getW() - totalWidth) / 2;
 
+        // 1. Tạo các nút MÀU
         this.PALETTE_DATA.forEach((item, index) => {
-            // Tạo nút từ key ảnh (btn_red, btn_blue...)
             const btn = this.add.image(startX + index * buttonSpacing, yPos, item.key);
+            btn.setInteractive({ useHandCursor: true }).setAlpha(0.8);
             
-            // Làm cho nút bấm được
-            btn.setInteractive({ useHandCursor: true });
-
-            // Mặc định hơi mờ một chút để làm nổi bật nút đang chọn
-            btn.setAlpha(0.8);
-
+            // Logic khi bấm nút MÀU
             btn.on('pointerdown', () => {
-                // Set màu cọ
-                this.brushColor = item.color;
+                this.isErasing = false; // Tắt tẩy
+                this.brushColor = item.color; // Set màu
                 
-                // Hiệu ứng: Nút chọn thì Sáng + To, Nút khác thì Mờ + Nhỏ
                 this.paletteButtons.forEach(b => b.setScale(0.6).setAlpha(0.8));
                 btn.setScale(0.8).setAlpha(1);
-                
-                // AudioManager.play('sfx-click'); 
             });
-
             this.paletteButtons.push(btn);
         });
 
-        // Mặc định kích hoạt nút đầu tiên
-        if (this.paletteButtons.length > 0) {
-            this.paletteButtons[0].emit('pointerdown');
-        }
+        // 2. Tạo nút TẨY (Ở cuối hàng)
+        const eraserIndex = this.PALETTE_DATA.length;
+        const eraserBtn = this.add.image(startX + eraserIndex * buttonSpacing, yPos, 'btn_eraser');
+        
+        eraserBtn.setInteractive({ useHandCursor: true }).setAlpha(0.8);
+
+        // Logic khi bấm nút TẨY
+        eraserBtn.on('pointerdown', () => {
+            this.isErasing = true; // Bật chế độ tẩy
+
+            this.paletteButtons.forEach(b => b.setScale(0.6).setAlpha(0.8));
+            eraserBtn.setScale(0.8).setAlpha(1);
+        });
+        
+        this.paletteButtons.push(eraserBtn);
+
+        // Mặc định chọn màu đầu tiên
+        if (this.paletteButtons.length > 0) this.paletteButtons[0].emit('pointerdown');
     }
 
-    // --- HÀM TẠO NHÂN VẬT ---
+    // --- ĐÃ XÓA HÀM getImageDensity (KHÔNG CẦN DÙNG NỮA) ---
+
     private createCharacter(centerX: number, centerY: number, config: any) {
-        config.parts.forEach((part: any) => {
-            const x = centerX + part.offsetX;
-            const y = centerY + part.offsetY;
-            this.createPaintablePart(x, y, part.key, part.scale);
+        config.parts.forEach((part: any, index: number) => {
+            const uniqueId = `${part.key}_${index}_${Math.random()}`;
+            this.createPaintablePart(centerX + part.offsetX, centerY + part.offsetY, part.key, part.scale, uniqueId);
+            this.totalParts++;
         });
 
         const outline = this.add.image(centerX, centerY, config.outlineKey);
-        outline.setScale(config.baseScale);
-        outline.setDepth(100); 
-        outline.setInteractive({ pixelPerfect: true }); 
+        outline.setScale(config.baseScale).setDepth(100).setInteractive({ pixelPerfect: true });
     }
 
-    // --- TẠO LỚP VẼ ---
-    private createPaintablePart(x: number, y: number, key: string, scale: number) {
-        const maskImage = this.make.image({ x, y, key: key, add: false });
-        maskImage.setScale(scale);
+    private createPaintablePart(x: number, y: number, key: string, scale: number, uniqueId: string) {
+        const maskImage = this.make.image({ x, y, key: key, add: false }).setScale(scale);
         const mask = maskImage.createBitmapMask();
 
         const rtW = maskImage.width * scale;
         const rtH = maskImage.height * scale;
         
         const rt = this.add.renderTexture(x - rtW/2, y - rtH/2, rtW, rtH);
-        rt.setOrigin(0, 0); 
-        rt.setMask(mask); 
-        rt.setDepth(10);  
-
-        const hitArea = this.add.image(x, y, key).setScale(scale);
-        hitArea.setAlpha(0.01); 
-        hitArea.setDepth(50); 
+        rt.setOrigin(0, 0).setMask(mask).setDepth(10);
         
+        rt.setData('id', uniqueId);
+        rt.setData('isFinished', false);
+        rt.setData('key', key); // Lưu tên ảnh gốc để lát so sánh
+
+        const hitArea = this.add.image(x, y, key).setScale(scale).setAlpha(0.01).setDepth(50);
         hitArea.setInteractive({ useHandCursor: true, pixelPerfect: true });
 
         hitArea.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
@@ -206,14 +224,17 @@ export default class Scene2 extends Phaser.Scene {
         });
     }
 
-    // --- LOGIC VẼ (CHUẨN TÂM) ---
+    // --- LOGIC VẼ VÀ TẨY ---
     private paint(pointer: Phaser.Input.Pointer, rt: Phaser.GameObjects.RenderTexture) {
         const localX = pointer.x - rt.x;
         const localY = pointer.y - rt.y;
-
-        // Tính toán trừ đi nửa kích thước cọ để vẽ đúng tâm
         const offset = this.brushSize / 2;
-        rt.draw(this.brushTexture, localX - offset, localY - offset, 1.0, this.brushColor);
+
+        if (this.isErasing) {
+            rt.erase(this.brushTexture, localX - offset, localY - offset);
+        } else {
+            rt.draw(this.brushTexture, localX - offset, localY - offset, 1.0, this.brushColor);
+        }
     }
 
     private setupInput() {
@@ -224,7 +245,103 @@ export default class Scene2 extends Phaser.Scene {
         });
 
         this.input.on('pointerup', () => {
-            this.activeRenderTexture = null;
+            // TỐI ƯU HIỆU NĂNG:
+            // Nếu đang tẩy thì thôi, khỏi tính toán (chắc chắn % giảm)
+            if (this.isErasing) {
+                this.activeRenderTexture = null;
+                return; 
+            }
+            
+            if (this.activeRenderTexture) {
+                this.checkProgress(this.activeRenderTexture);
+                this.activeRenderTexture = null;
+            }
         });
+    }
+
+    // --- LOGIC KIỂM TRA MỚI (INTERSECTION) ---
+    private checkProgress(rt: Phaser.GameObjects.RenderTexture) {
+        const id = rt.getData('id');
+        const key = rt.getData('key'); // Lấy tên ảnh gốc ra
+        
+        // STICKY WIN: Nếu xong rồi thì bỏ qua luôn (bé tẩy đi cũng không mất Win)
+        if (rt.getData('isFinished')) return;
+
+        rt.snapshot((snapshot) => {
+            if (!(snapshot instanceof HTMLImageElement)) return;
+
+            // 1. Chuẩn bị Canvas
+            const w = snapshot.width;
+            const h = snapshot.height;
+            // Thu nhỏ 1/4 để tính toán siêu nhanh
+            const checkW = Math.floor(w / 4);
+            const checkH = Math.floor(h / 4);
+
+            // 2. Lấy dữ liệu NÉT VẼ CỦA BÉ (Paint Data)
+            const cvsPaint = document.createElement('canvas');
+            cvsPaint.width = checkW;
+            cvsPaint.height = checkH;
+            const ctxPaint = cvsPaint.getContext('2d');
+            if (!ctxPaint) return;
+            ctxPaint.drawImage(snapshot, 0, 0, checkW, checkH);
+            const paintData = ctxPaint.getImageData(0, 0, checkW, checkH).data;
+
+            // 3. Lấy dữ liệu HÌNH DÁNG GỐC (Mask Data)
+            const cvsMask = document.createElement('canvas');
+            cvsMask.width = checkW;
+            cvsMask.height = checkH;
+            const ctxMask = cvsMask.getContext('2d');
+            if (!ctxMask) return;
+            
+            // Lấy ảnh gốc từ Phaser Texture Manager
+            const maskTexture = this.textures.get(key).getSourceImage(); 
+            ctxMask.drawImage(maskTexture as HTMLImageElement, 0, 0, checkW, checkH);
+            const maskData = ctxMask.getImageData(0, 0, checkW, checkH).data;
+
+            // 4. SO SÁNH TỪNG PIXEL (Thuật toán Intersection)
+            let matchCount = 0;      // Số pixel tô đúng
+            let totalMaskPixels = 0; // Tổng số pixel của cái áo
+
+            // Duyệt qua mảng pixel (bước nhảy 4 vì 1 pixel gồm R,G,B,A)
+            for (let i = 3; i < paintData.length; i += 4) {
+                // Kiểm tra xem pixel này có thuộc cái áo không? (Alpha > 0)
+                const isInsideShape = maskData[i] > 0;
+
+                if (isInsideShape) {
+                    totalMaskPixels++; // Tính vào tổng diện tích cần tô
+
+                    // Kiểm tra xem bé có tô vào đây không?
+                    const isPainted = paintData[i] > 0;
+                    if (isPainted) {
+                        matchCount++; // Tô trúng!
+                    }
+                }
+            }
+
+            // 5. TÍNH KẾT QUẢ CUỐI CÙNG
+            // Tránh chia cho 0 nếu ảnh rỗng
+            const percentage = totalMaskPixels > 0 ? (matchCount / totalMaskPixels) : 0;
+
+            console.log(`Tiến độ ${id}: ${(percentage * 100).toFixed(1)}%`);
+
+            // > 90% là cho thắng (Vì thuật toán này rất chuẩn nên có thể để ngưỡng cao)
+            if (percentage > 0.90) {
+                rt.setData('isFinished', true);
+                this.finishedParts.add(id);
+                
+                this.tweens.add({ targets: rt, alpha: 0.8, yoyo: true, duration: 100, repeat: 1 });
+                this.checkWinCondition();
+            }
+        });
+    }
+
+    private checkWinCondition() {
+        console.log(`Đã xong: ${this.finishedParts.size} / ${this.totalParts}`);
+        if (this.finishedParts.size >= this.totalParts) {
+            console.log("CHIẾN THẮNG!");
+            this.time.delayedCall(1000, () => {
+                this.scene.start('EndGameScene');
+            });
+        }
     }
 }
