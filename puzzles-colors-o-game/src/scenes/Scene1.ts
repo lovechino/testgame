@@ -114,9 +114,34 @@ export default class Scene1 extends Phaser.Scene {
     // --- PHẦN DỰNG GIAO DIỆN ---
 
     createBanner() {
-        // Banner ở trên cùng
-        this.bannerBg = this.add.image(this.pctX(0.5), this.pctY(0.01), 'banner_bg').setOrigin(0.5,0).setScale(0.7);
-        const text = this.add.image(this.pctX(0.5), this.pctY(0.03), 'banner_text').setOrigin(0.5,0).setScale(0.7);
+        const destY_Bg = this.pctY(0.01);
+        const destY_Text = this.pctY(0.03);
+
+        // --- 1. ĐẶT LUÔN TẠI VỊ TRÍ ĐÍCH (Không rơi nữa) ---
+        this.bannerBg = this.add.image(
+            this.pctX(0.5), 
+            destY_Bg, // Đặt thẳng vào vị trí y chuẩn
+            'banner_bg'
+        ).setOrigin(0.5, 0).setScale(0.7);
+        
+        const text = this.add.image(
+            this.pctX(0.5), 
+            destY_Text, // Đặt thẳng vào vị trí y chuẩn
+            'banner_text'
+        ).setOrigin(0.5, 0).setScale(0.7);
+
+        this.startBannerIdle(this.bannerBg, destY_Bg);
+        this.startBannerIdle(text, destY_Text);
+    }
+    startBannerIdle(target: Phaser.GameObjects.Image, originalY: number) {
+        this.tweens.add({
+            targets: target,
+            y: originalY + 5, 
+            duration: 2000, 
+            yoyo: true,  
+            repeat: -1,
+            ease: 'Sine.easeInOut' // Chuyển động mượt như sóng
+        });
     }
 
     createLeftPanel() { 
@@ -137,6 +162,15 @@ export default class Scene1 extends Phaser.Scene {
             'img_rain'
         ).setScale(0.7).setOrigin(0.5,1);
 
+        this.tweens.add({
+            targets: rain,
+            y: '+=10', // Trôi lên xuống
+            duration: 1200,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
+
         const cau_do =  this.add.image(
             centerX, 
             underY - rain.displayHeight - this.pctY(0.05), 
@@ -149,6 +183,14 @@ export default class Scene1 extends Phaser.Scene {
             'icon_o_header'
         ).setScale(0.7).setOrigin(0.5,0);
         
+        this.tweens.add({
+            targets: icon_o,
+            angle: { from: -5, to: 5 }, // Nghiêng qua lại
+            duration: 1500,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
     }
 
     createRightPanel() {
@@ -207,6 +249,16 @@ export default class Scene1 extends Phaser.Scene {
         item.setData('isCorrect', isCorrect);
         item.setData('originScale', scaleVal); // Lưu scale gốc
 
+        // IDLE: Nhấp nhô
+        this.tweens.add({
+            targets: item,
+            y: y - 10, 
+            duration: 1500,
+            yoyo: true, 
+            repeat: -1, 
+            ease: 'Sine.easeInOut'
+        });
+
         item.on('pointerdown', () => {
             if (!this.isGameActive) return; 
             
@@ -239,6 +291,8 @@ export default class Scene1 extends Phaser.Scene {
         console.log("CHỌN ĐÚNG!");
         this.isGameActive = false;
         this.puzzleItems.forEach(i => i.disableInteractive());
+
+        this.tweens.killTweensOf(winnerItem);
         AudioManager.play('sfx-ting');
 
         // Ẩn món sai
@@ -281,16 +335,12 @@ export default class Scene1 extends Phaser.Scene {
                 this.nextScene();
                 
             }
-        });
-
-        
-
-        
+        }); 
     }
+
     nextScene() {
         // Chuyển màn sau 3s (nếu cần)
         this.time.delayedCall(1000, () => {
-            hideGameButtons();
             this.scene.start('Scene2'); 
         });
     }
