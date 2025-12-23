@@ -30,6 +30,7 @@ export default class Scene2 extends Phaser.Scene {
     private activeRenderTexture: Phaser.GameObjects.RenderTexture | null = null;
     private brushTexture: string = 'brush_circle';
     private brushSize: number = 100;
+    private partColors: Map<string, Set<number>> = new Map();
 
     // Biến trạng thái tẩy
     private isErasing: boolean = false;
@@ -272,6 +273,17 @@ export default class Scene2 extends Phaser.Scene {
         } else {
             // --- NẾU LÀ VẼ ---
             rt.draw(this.brushTexture, localX - offset, localY - offset, 1.0, this.brushColor);
+
+            // --- MỚI: LƯU MÀU ĐÃ DÙNG ---
+            const id = rt.getData('id');
+            
+            // Nếu chưa có danh sách cho phần này thì tạo mới
+            if (!this.partColors.has(id)) {
+                this.partColors.set(id, new Set());
+            }
+            
+            // Thêm màu hiện tại vào danh sách (Set tự động loại bỏ màu trùng)
+            this.partColors.get(id)?.add(this.brushColor);
         }
     }
 
@@ -362,7 +374,33 @@ export default class Scene2 extends Phaser.Scene {
             if (percentage > 0.90) {
                 rt.setData('isFinished', true);
                 this.finishedParts.add(id);
-                this.tweens.add({ targets: rt, alpha: 0.8, yoyo: true, duration: 100, repeat: 1 });
+
+                // --- LOGIC AUTO-FILL THÔNG MINH ---
+                
+                // Lấy danh sách màu đã dùng cho phần này
+                const usedColors = this.partColors.get(id);
+
+                // Điều kiện: Chỉ fill nếu bé chỉ dùng DUY NHẤT 1 màu
+                // (usedColors && usedColors.size === 1)
+                if (usedColors && usedColors.size === 1) {
+                    rt.setBlendMode(Phaser.BlendModes.NORMAL);
+                    rt.fill(this.brushColor); // Lấp đầy cho đẹp
+                } else {
+                    console.log("Bé tô nhiều màu, không Auto-Fill để bảo toàn tác phẩm");
+                }
+                // --- CÁC HIỆU ỨNG KHÁC VẪN CHẠY BÌNH THƯỜNG ---
+                AudioManager.play('sfx-ting');
+
+                this.tweens.add({ 
+                    targets: rt, 
+                    alpha: 0.8, 
+                    yoyo: true, 
+                    duration: 100, 
+                    repeat: 2,
+                    onComplete: () => {
+                        rt.setAlpha(1);
+                    } 
+                });
                 this.checkWinCondition();
             }
         });
