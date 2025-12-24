@@ -83,6 +83,16 @@ export default class Scene1 extends Phaser.Scene {
 
         // 3. Logic bắt đầu game (Xử lý Unlock Audio)
         this.initAudioFlow();
+
+        this.events.on('wake', () => {
+            console.log("Scene đã thức dậy! Reset bộ đếm giờ.");
+            
+            // Reset thời gian chờ để người chơi có thời gian định thần lại
+            this.idleTimer = 0; 
+            
+            // Nếu cần thiết, đảm bảo input được bật lại (dù resume tự làm, nhưng chắc ăn)
+            if (this.input.keyboard) this.input.keyboard.enabled = true;
+        });
     }
 
     // --- HÀM PHỤ TRỢ: Lấy độ dài file âm thanh (Tính bằng giây) ---

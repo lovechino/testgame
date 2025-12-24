@@ -24,7 +24,7 @@ export default class Scene2 extends Phaser.Scene {
     // --- THÊM VÀO ĐÂY ---
     // Biến cho hệ thống Gợi ý (Idle Hint)
     private idleTimer: number = 0;           // Đếm thời gian
-    private readonly IDLE_THRESHOLD = 5000;  // 5 giây
+    private readonly IDLE_THRESHOLD = 10000;  // 5 giây
     private activeHintTween: Phaser.Tweens.Tween | null = null; // Tween đang chạy
     
     // Map lưu trữ các bộ phận chưa tô (Key: ID, Value: Image HitArea)
@@ -145,6 +145,15 @@ export default class Scene2 extends Phaser.Scene {
 
         // GỌI INTRO
         this.playIntroSequence();
+        this.events.on('wake', () => {
+            console.log("Scene đã thức dậy! Reset bộ đếm giờ.");
+            
+            // Reset thời gian chờ để người chơi có thời gian định thần lại
+            this.idleTimer = 0; 
+            
+            // Nếu cần thiết, đảm bảo input được bật lại (dù resume tự làm, nhưng chắc ăn)
+            if (this.input.keyboard) this.input.keyboard.enabled = true;
+        });
     }
 
     private playIntroSequence() {
@@ -561,7 +570,7 @@ export default class Scene2 extends Phaser.Scene {
             console.log("CHIẾN THẮNG!");
 
             AudioManager.play('sfx-correct');
-            this.time.delayedCall(1000, () => {
+            this.time.delayedCall(2500, () => {
                 this.scene.start('EndGameScene');
             });
         }

@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { hideGameButtons } from '../main'; 
 import AudioManager from '../audio/AudioManager';
 import { changeBackground } from './utils/backgroundManager';
+import { resetVoiceState } from '../rotateOrientation';
 
 export default class EndGameScene extends Phaser.Scene {
     private containerEl: HTMLElement | null = null;
@@ -21,6 +22,7 @@ export default class EndGameScene extends Phaser.Scene {
     }
 
     create() {
+        resetVoiceState();
         const w = this.scale.width; 
         const h = this.scale.height;
         AudioManager.loadAll();

@@ -243,6 +243,14 @@ function updateRotateHint() {
         try {
             // Gọi voice-rotate ngay (bên trong đã có cooldown + stopAll)
             playVoiceLocked(null as any, 'voice-rotate');
+
+            // Lệnh này sẽ đóng băng mọi thứ: Tween, Timer, Update loop...
+            if (gameSceneReference && gameSceneReference.scene) {
+                // Kiểm tra xem scene có đang chạy không để tránh lỗi
+                if (gameSceneReference.scene.isActive()) {
+                     gameSceneReference.scene.pause();
+                }
+            }
         } catch (e) {
             console.warn('[Rotate] auto play voice-rotate error:', e);
         }
@@ -256,6 +264,13 @@ function updateRotateHint() {
         if (currentVoiceKey === 'voice-rotate') {
             AudioManager.stop('voice-rotate');
             currentVoiceKey = null;
+        }
+
+        // Mọi thứ sẽ chạy tiếp từ chỗ bị dừng
+        if (gameSceneReference && gameSceneReference.scene) {
+            if (gameSceneReference.scene.isPaused()) {
+                gameSceneReference.scene.resume();
+            }
         }
 
     // --- LOGIC PHỤC HỒI MỚI ---
