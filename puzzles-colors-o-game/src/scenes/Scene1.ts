@@ -59,7 +59,7 @@ export default class Scene1 extends Phaser.Scene {
     }
 
     create() {
-        this.bgm = this.sound.add('bgm-nen', { loop: true, volume: 0.3 });
+        this.bgm = this.sound.add('bgm-nen', { loop: true, volume: 0.25 });
         // 1. Setup hệ thống Rotation & Audio
         resetVoiceState();
         (window as any).gameScene = this; // 
@@ -168,7 +168,7 @@ export default class Scene1 extends Phaser.Scene {
 
     createBanner() {
         const destY_Bg = this.pctY(0.01);
-        const destY_Text = this.pctY(0.035);
+        const destY_Text = this.pctY(0.038);
 
         // --- 1. ĐẶT LUÔN TẠI VỊ TRÍ ĐÍCH (Không rơi nữa) ---
         this.bannerBg = this.add.image(
