@@ -170,13 +170,25 @@ export default class Scene2 extends Phaser.Scene {
         });
     }
 
+    // --- THÊM HÀM NÀY VÀO ---
+    public restartIntro() {
+        console.log("🔄 Restarting Intro after rotation...");
+        this.stopIntro();
+        if (this.handHint) {
+            this.tweens.killTweensOf(this.handHint);
+            this.handHint.setAlpha(0).setPosition(-200, -200);
+        }
+        this.time.delayedCall(200, () => {
+            this.playIntroSequence();
+        });
+    }
+
     private stopIntro() {
         // Nếu intro đã tắt rồi thì thôi, không làm gì nữa
-        if (!this.isIntroActive) return;
+        //if (!this.isIntroActive) return;
 
         console.log("Dừng Intro!");
-        this.isIntroActive = false; // Gạt cầu dao tắt vòng lặp
-
+        this.isIntroActive = false;
         this.idleTimer = 0;
 
         // Dừng chuyển động bàn tay ngay lập tức
