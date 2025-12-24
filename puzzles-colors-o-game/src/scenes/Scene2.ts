@@ -65,6 +65,10 @@ export default class Scene2 extends Phaser.Scene {
     }
 
     init() {
+        // --- FIX LỖI "LOAD LẠI BỊ SAI" ---
+        // Phải xóa sạch danh sách cũ, nếu không game sẽ lấy nhầm vật thể đã chết của màn chơi trước
+        this.unfinishedPartsMap.clear(); 
+        this.partColors.clear();
 
         this.totalParts = 0;
         this.finishedParts.clear();
