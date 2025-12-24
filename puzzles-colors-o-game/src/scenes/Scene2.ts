@@ -24,7 +24,7 @@ export default class Scene2 extends Phaser.Scene {
     // --- THÊM VÀO ĐÂY ---
     // Biến cho hệ thống Gợi ý (Idle Hint)
     private idleTimer: number = 0;           // Đếm thời gian
-    private readonly IDLE_THRESHOLD = 100;  // 5 giây
+    private readonly IDLE_THRESHOLD = 10000;  // 5 giây
     private activeHintTween: Phaser.Tweens.Tween | null = null; // Tween đang chạy
     
     // Map lưu trữ các bộ phận chưa tô (Key: ID, Value: Image HitArea)
