@@ -1,40 +1,65 @@
-## Target - Requirements
-- Làm game bài học số 2 trong SGK môn vietnamese-45
-- Có 2 logic chính
-    - 1. Tap to choose exact 
-    - 2. Coloring 
+# 🌈 Puzzles Colors O
 
+**Game giáo dục cho trẻ 4–5 tuổi, giúp rèn kỹ năng nhận diện đồ vật, số và màu sắc thông qua hai màn chơi tương tác, trực quan bằng Phaser 3 + TypeScript.**
 
-## Explore-tech 
-- Cần nắm công nghệ gì?
-    - Node project 
-    - Languge JS/TS
-    - Phaser 
+---
 
+## 🧩 Tech Stack
 
-## Triển khai 
+- **Phaser 3** – game engine canvas chính để dựng Scene, tween và âm thanh.  
+- **TypeScript** – đảm bảo định kiểu trong toàn bộ scene, helper và audio manager.  
+- **Vite** – bundler nhanh, hỗ trợ `assetsInclude` cho `png/jpg/mp3/json`, reload tức thì.  
+- **Asset pipeline** – `public/assets/{images,audio,data}` đi kèm `TextureKeys`, `AudioKeys`, `DataKeys` để preload tập trung trong `PreloadScene`.  
+- **Các helper riêng**: `PaintManager`, `IdleManager`, `GameUtils`, `AudioManager`, `BackgroundManager`, `rotateOrientation`.
 
-- Cách làm thông thường
-    - 1. Mô hình xoắn ốc: thử nghiệm nhỏ -> mở rộng -> tinh chỉnh -> ...
-    - 2. Chủân hóa: hệ thống hóa các module -> refactor + đóng gói các module -> đạt tiêu chuẩn deploy 
+---
 
-- Cách pair-coding với AI hiệu quả 
-    - 1. Làm rõ đề bài -> bóc tách đề bài to thành các tác vụ chi tiết rõ ràng input-output 
-    - 2. Thử nghiệm giải pháp 
-        -> thử nhiều giải pháp khác nhau cho 1 tác vụ 
-        -> các đánh giá giải pháp: các metrics cụ thể, các tradeoff là gì  
-        -> chốt giải pháp tốt: phải hiểu thật chắc chắn về giải pháp, nắm tường tận công nghệ 
-            -> 1. hiểu thật rõ API, platform bên dưới 
-            -> 2. Hiểu tường tận luồng, thuật toán 
-            -> 3. Từ đó có thể tự tùy biến mà ít dùng AI  
-    - 3. Testing và fix issue 
-        -> 1. Chắc chắn về logic muốn làm: logic muốn làm khớp với đúng code 
-            - Comment mạch lạc từ cả repo -> từng module -> từng file -> từng method -> từng đoạn code 
-        -> Cơ chế print log hiệu quả để trace issue 
-            - Console print đơn giản
-            - Tìm hiểu cơ chế logging hoặc các thu viện logging
-                - Cơ chế tắt bật log
-            - Cơ chế run debug để trace rõ giá trị các biến, ... 
-        -> 2. Hiểu tường tạn mạch lạc về các loại API và cơ chế sử dụng 
+## 📷 Ảnh demo
 
-## Đóng gói và bàn giao 
+![Demo (đặt placeholder)](https://via.placeholder.com/1280x720?text=Puzzles+Colors+O+Demo)
+
+_Hình ảnh trên là placeholder; thay bằng đoạn GIF hoặc video khi có bản dựng cuối._
+
+---
+
+## 🛠️ Cài đặt
+
+1. Clone repository:
+   ```bash
+   git clone <repo-url>
+   cd puzzles-colors-o-game
+   ```
+2. Cài phụ thuộc:
+   ```bash
+   npm install
+   ```
+3. Kiểm tra thư mục asset:
+   - `public/assets/images/`: chứa UI, Scene1, Scene2, bg.  
+   - `public/assets/audio/`: các SFX/voice.  
+   - `public/assets/data/level_s2_config.json`: config phần tô màu.
+
+---
+
+## ▶️ Chạy game
+
+- **Dev**: `npm run dev` → mở `http://localhost:5173`.  
+- **Build production**: `npm run build`.  
+- **Preview sau build**: `npm run preview`.  
+- **Tương tác UI**:
+  - `btn-reset`: dừng âm thanh, reset music + restart `Scene1`.  
+  - `btn-exit`: khi chạy trong host (Iruka), gọi `host.complete()` kèm trạng thái.  
+- **Flow**: Preload → Scene1 (chọn đồ vật đúng) → Scene2 (tô màu) → EndGame.
+
+---
+
+## 📚 Tài liệu tham khảo
+
+- [Implementation Overview](docs/IMPLEMENTATION.md) – flow scene, helper liên quan.  
+- [Algorithms & Problem Solving](docs/ALGORITHMS.md) – logic cấp cao, tween, hint, idle.  
+- [Gameplay Mechanics](docs/GAME_MECHANICS.md) – luật chơi, điểm, win/lose, spawn.  
+- [Development Guide](docs/DEVELOPMENT.md) – cấu trúc thư mục, quy trình đóng góp, build/deploy.  
+- README này là entry point; mở rộng trong `/docs` khi cần deep dive.
+
+---
+
+_Cần demo live hoặc hướng dẫn plugin phaser? Thêm trong `docs/` tương ứng hoặc khai triển `docs/PLAYTEST.md` nếu muốn._  
