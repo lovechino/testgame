@@ -59,7 +59,7 @@ export default class Scene1 extends Phaser.Scene {
     }
 
     private setupBackgroundAndAudio() {
-        changeBackground('assets/images/bg/backgroud_game.png'); 
+        changeBackground('assets/images/bg/backgroud_game.jpg'); 
         if (this.sound.get(AudioKeys.BgmNen)) {
             this.sound.stopByKey(AudioKeys.BgmNen);
         }
