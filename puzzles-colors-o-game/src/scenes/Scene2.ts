@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 import { SceneKeys, TextureKeys, DataKeys } from '../consts/Keys';
-import { GameConstants } from '../consts/GameConstants'; // Import
+import { GameConstants } from '../consts/GameConstants'; 
 import { GameUtils } from '../utils/GameUtils';
 import { IdleManager } from '../utils/IdleManager';
 import { PaintManager } from '../utils/PaintManager'; 
@@ -14,7 +14,7 @@ export default class Scene2 extends Phaser.Scene {
 
     private unfinishedPartsMap: Map<string, Phaser.GameObjects.Image> = new Map();
     private finishedParts: Set<string> = new Set();
-    private partColors: Map<string, Set<number>> = new Map();
+    // ❌ ĐÃ XÓA BIẾN THỪA partColors
     private totalParts: number = 0;
     private isIntroActive: boolean = false;
 
@@ -38,7 +38,7 @@ export default class Scene2 extends Phaser.Scene {
     init() {
         this.unfinishedPartsMap.clear();
         this.finishedParts.clear();
-        this.partColors.clear();
+        // ❌ ĐÃ XÓA clear partColors
         this.totalParts = 0;
         this.paletteButtons = [];
     }
@@ -73,12 +73,11 @@ export default class Scene2 extends Phaser.Scene {
         (window as any).gameScene = this;
         setGameSceneReference(this);
 
-        this.paintManager = new PaintManager(this, (id, rt, color) => {
-            this.handlePartComplete(id, rt, color);
+        this.paintManager = new PaintManager(this, (id, rt, usedColors) => {
+            this.handlePartComplete(id, rt, usedColors);
         });
         this.paintManager.setColor(this.PALETTE_DATA[0].color); 
 
-        // Sử dụng Constant
         this.idleManager = new IdleManager(GameConstants.IDLE.THRESHOLD, () => this.showHint());
     }
 
@@ -92,10 +91,10 @@ export default class Scene2 extends Phaser.Scene {
     }
 
     private createUI() {
+        // ... (Giữ nguyên logic UI)
         const UI = GameConstants.SCENE2.UI;
         const cx = GameUtils.pctX(this, 0.5);
         
-        // --- TÍNH TOÁN BIẾN TRUNG GIAN ---
         const bannerY = GameUtils.pctY(this, UI.BANNER_Y);
         const banner = this.add.image(cx, bannerY, TextureKeys.S2_Banner).setOrigin(0.5, 0).setScale(0.7);
 
@@ -110,9 +109,8 @@ export default class Scene2 extends Phaser.Scene {
     }
 
     private createPalette() {
+        // ... (Giữ nguyên logic Palette)
         const UI = GameConstants.SCENE2.UI;
-
-        // --- TÍNH TOÁN BIẾN TRUNG GIAN ---
         const spacing = GameUtils.pctX(this, UI.PALETTE_SPACING);
         const yPos = GameUtils.pctY(this, UI.PALETTE_Y);
         const totalItems = this.PALETTE_DATA.length + 1; 
@@ -179,24 +177,22 @@ export default class Scene2 extends Phaser.Scene {
         this.add.image(cx, cy, config.outlineKey).setScale(config.baseScale).setDepth(100).setInteractive({ pixelPerfect: true });
     }
 
-    private handlePartComplete(id: string, rt: Phaser.GameObjects.RenderTexture, color: number) {
+    // ✅ LOGIC NHẬN MÀU TỪ PAINTMANAGER
+    private handlePartComplete(id: string, rt: Phaser.GameObjects.RenderTexture, usedColors: Set<number>) {
         this.finishedParts.add(id);
-        
-        if (!this.partColors.has(id)) this.partColors.set(id, new Set());
-        this.partColors.get(id)?.add(color);
-
-        const used = this.partColors.get(id);
-        if (used && used.size === 1) {
+        // Chỉ auto-fill nếu bé dùng đúng 1 màu
+        if (usedColors.size === 1) {
+            const singleColor = usedColors.values().next().value || 0; 
+            
             rt.setBlendMode(Phaser.BlendModes.NORMAL);
-            rt.fill(color);
+            rt.fill(singleColor);
+        } else {
+            console.log("Multi-color artwork preserved!");
         }
-
         this.unfinishedPartsMap.delete(id);
-        this.partColors.delete(id);
-
+        
         AudioManager.play('sfx-ting');
         
-        // Sử dụng Constant Timing
         this.tweens.add({ targets: rt, alpha: 0.8, yoyo: true, duration: GameConstants.SCENE2.TIMING.AUTO_FILL, repeat: 2 });
 
         if (this.finishedParts.size >= this.totalParts) {
@@ -229,8 +225,6 @@ export default class Scene2 extends Phaser.Scene {
         
         const UI = GameConstants.SCENE2.UI;
         const INTRO = GameConstants.SCENE2.INTRO_HAND;
-
-        // --- TÍNH TOÁN BIẾN TRUNG GIAN ---
         const startX = this.firstColorBtn.x + 20;
         const startY = this.firstColorBtn.y + 20;
         const endX = GameUtils.pctX(this, UI.HAND_INTRO_END_X);
@@ -264,17 +258,19 @@ export default class Scene2 extends Phaser.Scene {
         const IDLE_CFG = GameConstants.IDLE;
 
         this.activeHintTween = this.tweens.add({
-            targets: target, alpha: { from: 0.01, to: 0.6 },
+            targets: target, alpha: { from: 0.01, to: 0.3 },
             scale: { from: target.getData('originScale'), to: target.getData('originScale') * 1.05 },
             duration: IDLE_CFG.FADE_IN, yoyo: true, repeat: 2,
             onComplete: () => { this.activeHintTween = null; this.idleManager.reset(); }
         });
 
-        // --- TÍNH TOÁN BIẾN TRUNG GIAN ---
+        // ✅ FIX QUAN TRỌNG: Dùng originScale để tính toán vị trí, tránh bị lệch khi tween
         const hX = target.getData('hintX') || 0;
         const hY = target.getData('hintY') || 0;
-        const destX = target.x + (hX * target.scaleX);
-        const destY = target.y + (hY * target.scaleX);
+        const originScale = target.getData('originScale') || 1; 
+
+        const destX = target.x + (hX * originScale);
+        const destY = target.y + (hY * originScale);
 
         this.handHint.setPosition(destX + IDLE_CFG.OFFSET_X, destY + IDLE_CFG.OFFSET_Y).setAlpha(0).setScale(0.7);
         this.tweens.chain({
