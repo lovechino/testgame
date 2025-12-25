@@ -177,6 +177,19 @@ class AudioManager {
             dummySound.play();
         }
     }
+
+    public getDuration(key: string): number {
+        const sound = this.sounds[key];
+        
+        if (sound) {
+            // Howler trả về duration (giây). 
+            // Cần đảm bảo file đã load xong (state 'loaded'), nếu không nó trả về 0.
+            return sound.duration();
+        }
+        
+        console.warn(`[AudioManager] Không tìm thấy duration cho key: "${key}"`);
+        return 0; // Trả về 0 để an toàn
+    }
 }
 
 // Xuất phiên bản duy nhất (Singleton)
