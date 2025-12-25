@@ -1,14 +1,17 @@
 import Phaser from 'phaser';
 import Scene1 from './scenes/Scene1';
 import Scene2 from './scenes/Scene2';
+import PreloadScene from './scenes/PreloadScene';
 
 import EndGameScene from './scenes/EndgameScene';
-import { initRotateOrientation } from './rotateOrientation';
+import { initRotateOrientation } from './utils/rotateOrientation';
 import AudioManager from './audio/AudioManager';
 
 declare global {
     interface Window {
         gameScene: any;
+        irukaHost: any; // Khai báo thêm để TS không báo lỗi
+        irukaGameState: any;
     }
 }
 
@@ -18,7 +21,7 @@ const config: Phaser.Types.Core.GameConfig = {
     width: 1920,
     height: 1080,
     parent: 'game-container',
-    scene: [Scene1,Scene2,EndGameScene],
+    scene: [PreloadScene, Scene1, Scene2, EndGameScene],
     backgroundColor: '#ffffff',
     scale: {
         mode: Phaser.Scale.FIT,       // Dùng FIT để co giãn giữ tỉ lệ
@@ -37,8 +40,9 @@ const game = new Phaser.Game(config);
 
 // --- 2. XỬ LÝ LOGIC UI & XOAY MÀN HÌNH (Giữ nguyên logic cũ của bạn) ---
 function updateUIButtonScale() {
-    const container = document.getElementById('game-container')!;
+    //const container = document.getElementById('game-container')!;
     const resetBtn = document.getElementById('btn-reset') as HTMLImageElement;
+    if (!resetBtn) return; // Thêm check null cho an toàn
 
     const w = window.innerWidth;
     const h = window.innerHeight;
@@ -79,6 +83,7 @@ function attachResetHandler() {
             }
 
             if (window.gameScene && window.gameScene.scene) {
+                window.gameScene.scene.stop();
                 window.gameScene.scene.start('Scene1'); 
             } else {
                 console.error('GameScene instance not found on window. Cannot restart.');

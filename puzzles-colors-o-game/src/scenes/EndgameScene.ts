@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import { hideGameButtons } from '../main'; 
 import AudioManager from '../audio/AudioManager';
-import { changeBackground } from './utils/backgroundManager';
-import { resetVoiceState } from '../rotateOrientation';
+import { changeBackground } from '../utils/BackgroundManager';
+import { resetVoiceState } from '../utils/rotateOrientation';
 
 export default class EndGameScene extends Phaser.Scene {
     private containerEl: HTMLElement | null = null;
