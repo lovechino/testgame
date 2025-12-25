@@ -1,6 +1,6 @@
 // src/rotateOrientation.ts
 import Phaser from 'phaser';
-import AudioManager from './audio/AudioManager';
+import AudioManager from '../audio/AudioManager';
 
 // ================== STATE CHUNG ==================
 let rotateOverlay: HTMLDivElement | null = null;
