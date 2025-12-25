@@ -1,31 +1,28 @@
 import Phaser from 'phaser';
 
-// Imports
 import { SceneKeys, TextureKeys, DataKeys } from '../consts/Keys';
+import { GameConstants } from '../consts/GameConstants'; // Import
 import { GameUtils } from '../utils/GameUtils';
 import { IdleManager } from '../utils/IdleManager';
-import { PaintManager } from '../utils/PaintManager'; // IMPORT MỚI
+import { PaintManager } from '../utils/PaintManager'; 
 import { playVoiceLocked, setGameSceneReference, resetVoiceState } from '../utils/rotateOrientation'; 
 import AudioManager from '../audio/AudioManager';
 
 export default class Scene2 extends Phaser.Scene {
-    // Managers
     private paintManager!: PaintManager;
     private idleManager!: IdleManager;
 
-    // State
     private unfinishedPartsMap: Map<string, Phaser.GameObjects.Image> = new Map();
     private finishedParts: Set<string> = new Set();
-    private partColors: Map<string, Set<number>> = new Map(); // Theo dõi màu cho mỗi phần
+    private partColors: Map<string, Set<number>> = new Map();
     private totalParts: number = 0;
     private isIntroActive: boolean = false;
 
-    // UI
     private paletteButtons: Phaser.GameObjects.Image[] = [];
     private handHint!: Phaser.GameObjects.Image;
     private firstColorBtn!: Phaser.GameObjects.Image;
+    private activeHintTween: Phaser.Tweens.Tween | null = null;
 
-    // Palette Data
     private readonly PALETTE_DATA = [
         { key: TextureKeys.BtnRed,    color: 0xFF595E },
         { key: TextureKeys.BtnYellow, color: 0xFFCA3A },
@@ -61,7 +58,6 @@ export default class Scene2 extends Phaser.Scene {
     }
 
     update(time: number, delta: number) {
-        // Chỉ đếm giờ khi không đang tô và Intro đã xong
         if (!this.paintManager.isPainting() && !this.isIntroActive && this.finishedParts.size < this.totalParts) {
             this.idleManager.update(delta);
         }
@@ -69,24 +65,21 @@ export default class Scene2 extends Phaser.Scene {
 
     shutdown() {
         this.stopIntro();
-        this.paintManager = null as any; // Giải phóng
+        this.paintManager = null as any; 
     }
 
-    // --- 1. HỆ THỐNG ---
     private setupSystem() {
         resetVoiceState();
         (window as any).gameScene = this;
         setGameSceneReference(this);
 
-        // Khởi tạo PaintManager
         this.paintManager = new PaintManager(this, (id, rt, color) => {
             this.handlePartComplete(id, rt, color);
         });
-        // Mặc định chọn màu đỏ
-        this.paintManager.setColor(this.PALETTE_DATA[0].color);
+        this.paintManager.setColor(this.PALETTE_DATA[0].color); 
 
-        // Khởi tạo IdleManager
-        this.idleManager = new IdleManager(10000, () => this.showHint());
+        // Sử dụng Constant
+        this.idleManager = new IdleManager(GameConstants.IDLE.THRESHOLD, () => this.showHint());
     }
 
     private setupInput() {
@@ -98,33 +91,39 @@ export default class Scene2 extends Phaser.Scene {
         });
     }
 
-    // --- 2. GIAO DIỆN (UI) ---
     private createUI() {
+        const UI = GameConstants.SCENE2.UI;
         const cx = GameUtils.pctX(this, 0.5);
         
-        // Banner
-        const banner = this.add.image(cx, GameUtils.pctY(this, 0.01), TextureKeys.S2_Banner).setOrigin(0.5, 0).setScale(0.7);
-        this.add.image(cx, GameUtils.pctY(this, 0.01) + banner.displayHeight/2, TextureKeys.S2_TextBanner).setScale(0.7);
-        this.add.image(cx, banner.displayHeight + GameUtils.pctY(this, 0.03), TextureKeys.S2_Board).setOrigin(0.5, 0).setScale(0.7);
+        // --- TÍNH TOÁN BIẾN TRUNG GIAN ---
+        const bannerY = GameUtils.pctY(this, UI.BANNER_Y);
+        const banner = this.add.image(cx, bannerY, TextureKeys.S2_Banner).setOrigin(0.5, 0).setScale(0.7);
 
-        // Palette
+        const textY = bannerY + banner.displayHeight/2;
+        this.add.image(cx, textY, TextureKeys.S2_TextBanner).setScale(0.7);
+        
+        const boardY = banner.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
+        this.add.image(cx, boardY, TextureKeys.S2_Board).setOrigin(0.5, 0).setScale(0.7);
+
         this.createPalette();
-
-        // Hand Hint
         this.handHint = this.add.image(0, 0, TextureKeys.HandHint).setDepth(200).setAlpha(0).setScale(0.7);
     }
 
     private createPalette() {
-        const spacing = GameUtils.pctX(this, 0.07);
-        const yPos = GameUtils.pctY(this, 0.89);
-        const startX = (GameUtils.getW(this) - (this.PALETTE_DATA.length * spacing)) / 2;
+        const UI = GameConstants.SCENE2.UI;
 
-        // Nút màu
+        // --- TÍNH TOÁN BIẾN TRUNG GIAN ---
+        const spacing = GameUtils.pctX(this, UI.PALETTE_SPACING);
+        const yPos = GameUtils.pctY(this, UI.PALETTE_Y);
+        const totalItems = this.PALETTE_DATA.length + 1; 
+        const startX = (GameUtils.getW(this) - (totalItems - 1) * spacing) / 2;
+
         this.PALETTE_DATA.forEach((item, i) => {
-            const btn = this.add.image(startX + i * spacing, yPos, item.key).setInteractive();
+            const btnX = startX + (i * spacing);
+            const btn = this.add.image(btnX, yPos, item.key).setInteractive();
             if (i === 0) {
                 this.firstColorBtn = btn;
-                btn.setScale(0.8).setAlpha(1); // Highlight mặc định
+                btn.setScale(0.8).setAlpha(1); 
             } else {
                 btn.setAlpha(0.8).setScale(0.6);
             }
@@ -136,8 +135,8 @@ export default class Scene2 extends Phaser.Scene {
             this.paletteButtons.push(btn);
         });
 
-        // Nút tẩy
-        const eraser = this.add.image(startX + this.PALETTE_DATA.length * spacing, yPos, TextureKeys.BtnEraser).setInteractive().setAlpha(0.8).setScale(0.6);
+        const eraserX = startX + (this.PALETTE_DATA.length * spacing);
+        const eraser = this.add.image(eraserX, yPos, TextureKeys.BtnEraser).setInteractive().setAlpha(0.8).setScale(0.6);
         eraser.on('pointerdown', () => {
             this.updatePaletteVisuals(eraser);
             this.paintManager.setEraser();
@@ -150,7 +149,6 @@ export default class Scene2 extends Phaser.Scene {
         activeBtn.setScale(0.8).setAlpha(1);
     }
 
-    // --- 3. LEVEL & OBJECTS ---
     private createLevel() {
         const data = this.cache.json.get(DataKeys.LevelS2Config);
         if (data) {
@@ -165,17 +163,11 @@ export default class Scene2 extends Phaser.Scene {
 
         config.parts.forEach((part: any, index: number) => {
             const id = `${part.key}_${index}`;
+            const layerX = cx + part.offsetX;
+            const layerY = cy + part.offsetY;
             
-            // Gọi PaintManager để tạo layer tô màu (Code gọn hẳn!)
-            const hitArea = this.paintManager.createPaintableLayer(
-                cx + part.offsetX, 
-                cy + part.offsetY, 
-                part.key, 
-                part.scale, 
-                id
-            );
+            const hitArea = this.paintManager.createPaintableLayer(layerX, layerY, part.key, part.scale, id);
 
-            // Lưu thông tin để hint
             hitArea.setData('hintX', part.hintX || 0);
             hitArea.setData('hintY', part.hintY || 0);
             hitArea.setData('originScale', part.scale);
@@ -184,73 +176,76 @@ export default class Scene2 extends Phaser.Scene {
             this.totalParts++;
         });
 
-        // Outline đè lên
         this.add.image(cx, cy, config.outlineKey).setScale(config.baseScale).setDepth(100).setInteractive({ pixelPerfect: true });
     }
 
-    // --- 4. GAME LOGIC ---
     private handlePartComplete(id: string, rt: Phaser.GameObjects.RenderTexture, color: number) {
         this.finishedParts.add(id);
         
-        // Lưu màu để check auto-fill (Logic cũ của bạn, nhưng giờ quản lý ở Scene)
         if (!this.partColors.has(id)) this.partColors.set(id, new Set());
         this.partColors.get(id)?.add(color);
 
-        // Auto-fill nếu chỉ dùng 1 màu
         const used = this.partColors.get(id);
         if (used && used.size === 1) {
             rt.setBlendMode(Phaser.BlendModes.NORMAL);
             rt.fill(color);
         }
 
-        // Cleanup
         this.unfinishedPartsMap.delete(id);
         this.partColors.delete(id);
 
         AudioManager.play('sfx-ting');
-        this.tweens.add({ targets: rt, alpha: 0.8, yoyo: true, duration: 100, repeat: 2 });
+        
+        // Sử dụng Constant Timing
+        this.tweens.add({ targets: rt, alpha: 0.8, yoyo: true, duration: GameConstants.SCENE2.TIMING.AUTO_FILL, repeat: 2 });
 
         if (this.finishedParts.size >= this.totalParts) {
             console.log("WIN!");
             AudioManager.play('sfx-correct');
-            this.time.delayedCall(2500, () => this.scene.start(SceneKeys.EndGame));
+            this.time.delayedCall(GameConstants.SCENE2.TIMING.WIN_DELAY, () => this.scene.start(SceneKeys.EndGame));
         }
     }
 
-    // --- 5. INTRO & HINT ---
-    // (Giữ nguyên logic animation cũ nhưng dùng GameUtils)
-    
     public restartIntro() {
         this.stopIntro();
-        this.time.delayedCall(200, () => this.playIntroSequence());
+        this.time.delayedCall(GameConstants.SCENE2.TIMING.RESTART_INTRO, () => this.playIntroSequence());
     }
 
     private playIntroSequence() {
         this.isIntroActive = true;
         playVoiceLocked(null, 'voice_intro_s2');
-        this.time.delayedCall(1000, () => { if (this.isIntroActive) this.runHandTutorial(); });
+        this.time.delayedCall(GameConstants.SCENE2.TIMING.INTRO_DELAY, () => { if (this.isIntroActive) this.runHandTutorial(); });
     }
 
     private stopIntro() {
         this.isIntroActive = false;
-        this.idleManager.start();
+        this.idleManager.start(); 
         this.tweens.killTweensOf(this.handHint);
         this.handHint.setAlpha(0).setPosition(-200, -200);
     }
 
     private runHandTutorial() {
         if (!this.firstColorBtn || !this.isIntroActive) return;
-        const start = { x: this.firstColorBtn.x + 20, y: this.firstColorBtn.y + 20 };
-        const end = { x: GameUtils.pctX(this, 0.37), y: GameUtils.pctY(this, 0.48) };
+        
+        const UI = GameConstants.SCENE2.UI;
+        const INTRO = GameConstants.SCENE2.INTRO_HAND;
 
-        this.handHint.setPosition(start.x, start.y).setAlpha(0).setScale(0.7);
+        // --- TÍNH TOÁN BIẾN TRUNG GIAN ---
+        const startX = this.firstColorBtn.x + 20;
+        const startY = this.firstColorBtn.y + 20;
+        const endX = GameUtils.pctX(this, UI.HAND_INTRO_END_X);
+        const endY = GameUtils.pctY(this, UI.HAND_INTRO_END_Y);
+        const dragY = endY + 100;
+
+        this.handHint.setPosition(startX, startY).setAlpha(0).setScale(0.7);
+
         this.tweens.chain({
             targets: this.handHint,
             tweens: [
-                { alpha: 1, x: start.x, y: start.y, duration: 600, ease: 'Power2' },
-                { scale: 0.5, duration: 200, yoyo: true, repeat: 0.7 },
-                { x: end.x, y: end.y + 100, duration: 800, delay: 100 },
-                { x: '-=30', y: '-=10', duration: 400, yoyo: true, repeat: 3 },
+                { alpha: 1, x: startX, y: startY, duration: INTRO.MOVE, ease: 'Power2' },
+                { scale: 0.5, duration: INTRO.TAP, yoyo: true, repeat: 0.7 },
+                { x: endX, y: dragY, duration: INTRO.DRAG, delay: 100 },
+                { x: '-=30', y: '-=10', duration: INTRO.RUB, yoyo: true, repeat: 3 },
                 { alpha: 0, duration: 500, onComplete: () => {
                     this.handHint.setPosition(-200, -200);
                     if (this.isIntroActive) this.time.delayedCall(1000, () => this.runHandTutorial());
@@ -266,27 +261,28 @@ export default class Scene2 extends Phaser.Scene {
 
         AudioManager.play('hint');
         
-        // Tween vật thể
-        this.tweens.add({
+        const IDLE_CFG = GameConstants.IDLE;
+
+        this.activeHintTween = this.tweens.add({
             targets: target, alpha: { from: 0.01, to: 0.6 },
             scale: { from: target.getData('originScale'), to: target.getData('originScale') * 1.05 },
-            duration: 800, yoyo: true, repeat: 2,
-            onComplete: () => this.idleManager.reset()
+            duration: IDLE_CFG.FADE_IN, yoyo: true, repeat: 2,
+            onComplete: () => { this.activeHintTween = null; this.idleManager.reset(); }
         });
 
-        // Tween bàn tay
+        // --- TÍNH TOÁN BIẾN TRUNG GIAN ---
         const hX = target.getData('hintX') || 0;
         const hY = target.getData('hintY') || 0;
         const destX = target.x + (hX * target.scaleX);
         const destY = target.y + (hY * target.scaleX);
 
-        this.handHint.setPosition(destX + 50, destY + 50).setAlpha(0).setScale(0.7);
+        this.handHint.setPosition(destX + IDLE_CFG.OFFSET_X, destY + IDLE_CFG.OFFSET_Y).setAlpha(0).setScale(0.7);
         this.tweens.chain({
             targets: this.handHint,
             tweens: [
-                { alpha: 1, x: destX, y: destY, duration: 500 },
-                { scale: 0.5, duration: 400, yoyo: true, repeat: 3 },
-                { alpha: 0, duration: 500 }
+                { alpha: 1, x: destX, y: destY, duration: IDLE_CFG.FADE_IN },
+                { scale: 0.5, duration: IDLE_CFG.SCALE, yoyo: true, repeat: 3 },
+                { alpha: 0, duration: IDLE_CFG.FADE_OUT }
             ]
         });
     }

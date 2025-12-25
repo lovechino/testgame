@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 
 import { SceneKeys, TextureKeys, AudioKeys } from '../consts/Keys';
+import { GameConstants } from '../consts/GameConstants'; // Import
 import { GameUtils } from '../utils/GameUtils';
 import { IdleManager } from '../utils/IdleManager';
 
@@ -9,9 +10,7 @@ import { showGameButtons } from '../main';
 import { playVoiceLocked, setGameSceneReference, resetVoiceState } from '../utils/rotateOrientation'; 
 import { changeBackground } from '../utils/BackgroundManager';
 
-
 export default class Scene1 extends Phaser.Scene {
-    // --- KHAI BÁO BIẾN ---
     private puzzleItems: Phaser.GameObjects.Image[] = [];
     private victoryBg!: Phaser.GameObjects.Image;
     private victoryText!: Phaser.GameObjects.Image;
@@ -20,15 +19,11 @@ export default class Scene1 extends Phaser.Scene {
 
     private isGameActive: boolean = false;
     private bgm!: Phaser.Sound.BaseSound;
-
-    // Quản lý Logic gợi ý & Timer
     private idleManager!: IdleManager;
     private isHintActive: boolean = false;
     private instructionTimer?: Phaser.Time.TimerEvent;
 
-    constructor() {
-        super(SceneKeys.Scene1);
-    }
+    constructor() { super(SceneKeys.Scene1); }
 
     create() {
         this.setupSystem();
@@ -38,7 +33,6 @@ export default class Scene1 extends Phaser.Scene {
         this.initGameFlow();
 
         this.events.on('wake', () => {
-            console.log("Scene đã thức dậy! Reset bộ đếm giờ.");
             this.idleManager.reset();
             if (this.input.keyboard) this.input.keyboard.enabled = true;
             if (!this.bgm.isPlaying) this.bgm.play();
@@ -46,84 +40,82 @@ export default class Scene1 extends Phaser.Scene {
     }
 
     update(time: number, delta: number) {
-        // Hàm update giờ chỉ còn 1 dòng duy nhất!
         this.idleManager.update(delta);
     }
 
-    // --- 1. SETUP HỆ THỐNG ---
     private setupSystem() {
         resetVoiceState();
         (window as any).gameScene = this;
         setGameSceneReference(this);
 
-        // Khởi tạo IdleManager: 10 giây không bấm -> gọi showIdleHint
-        this.idleManager = new IdleManager(10000, () => {
+        // Sử dụng IDLE.THRESHOLD
+        this.idleManager = new IdleManager(GameConstants.IDLE.THRESHOLD, () => {
             this.showIdleHint();
         });
 
-        // Reset timer khi chạm màn hình
         this.input.on('pointerdown', () => {
             this.resetIdleState();
         });
     }
 
-    // --- 2. SETUP BACKGROUND & AUDIO ---
     private setupBackgroundAndAudio() {
-        changeBackground('assets/images/bg/backgroud_game.png'); // Đường dẫn ảnh nền giữ nguyên hoặc đưa vào Keys nếu muốn
-
-        // Xử lý nhạc nền (Phaser Sound)
+        changeBackground('assets/images/bg/backgroud_game.png'); 
         if (this.sound.get(AudioKeys.BgmNen)) {
             this.sound.stopByKey(AudioKeys.BgmNen);
         }
         this.bgm = this.sound.add(AudioKeys.BgmNen, { loop: true, volume: 0.25 });
     }
 
-    // --- 3. DỰNG GIAO DIỆN (UI) ---
     private createUI() {
-        // Banner trên cùng
-        const destY_Bg = GameUtils.pctY(this, 0.01);
-        const centerX = GameUtils.pctX(this, 0.5);
+        const UI = GameConstants.SCENE1.UI;
+        const cx = GameUtils.pctX(this, 0.5);
+        
+        // --- TÍNH TOÁN BIẾN TRUNG GIAN ---
+        const bannerY = GameUtils.pctY(this, UI.BANNER_Y);
 
-        this.bannerBg = this.add.image(centerX, destY_Bg, TextureKeys.S1_BannerBg)
+        this.bannerBg = this.add.image(cx, bannerY, TextureKeys.S1_BannerBg)
             .setOrigin(0.5, 0).setScale(0.7);
         
-        const destY_Text = destY_Bg + this.bannerBg.displayHeight / 2;
-        this.add.image(centerX, destY_Text, TextureKeys.S1_BannerText)
-            .setScale(0.7);
+        // Tính toán sau khi banner đã add
+        const textY = bannerY + this.bannerBg.displayHeight / 2;
+        this.add.image(cx, textY, TextureKeys.S1_BannerText).setScale(0.7);
 
-        // Bàn tay gợi ý (mặc định ẩn)
         this.handHint = this.add.image(0, 0, TextureKeys.HandHint)
             .setDepth(200).setAlpha(0).setScale(0.7);
     }
 
-    // --- 4. TẠO CÁC ĐỐI TƯỢNG GAME ---
     private createGameObjects() {
         this.createLeftPanel();
         this.createRightPanel();
     }
 
     private createLeftPanel() { 
+        const UI = GameConstants.SCENE1.UI;
+        const ANIM = GameConstants.SCENE1.ANIM;
 
-        // Bảng bên trái
-        const boardY = this.bannerBg.displayHeight + GameUtils.pctY(this, 0.03);
-        const boardLeft = this.add.image(
-            GameUtils.pctX(this, 0.5) - GameUtils.pctY(this, 0.01),
-            boardY,
-            TextureKeys.S1_Board
-        ).setOrigin(1, 0).setScale(0.7);
+        // 1. Vị trí Bảng
+        const boardY = this.bannerBg.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
+        const boardX = GameUtils.pctX(this, 0.5) - GameUtils.pctY(this, UI.BOARD_MARGIN_X);
+        
+        const boardLeft = this.add.image(boardX, boardY, TextureKeys.S1_Board)
+            .setOrigin(1, 0).setScale(0.7);
 
-        const centerX = GameUtils.pctX(this, 0.5 - boardLeft.displayWidth / GameUtils.getW(this) / 2) - GameUtils.pctY(this, 0.01);
+        // 2. Center
+        const centerX = GameUtils.pctX(this, 0.5 - boardLeft.displayWidth / GameUtils.getW(this) / 2) - GameUtils.pctY(this, UI.BOARD_MARGIN_X);
         const centerY = boardY + boardLeft.displayHeight / 2;
-        const underY = boardY + boardLeft.displayHeight;
+        const bottomY = boardY + boardLeft.displayHeight;
 
-        // Mây mưa & Bài thơ
-        const rain = this.add.image(centerX, centerY + boardLeft.displayHeight * 0.45, TextureKeys.S1_Rain)
+        // 3. Mưa (Tính toán sạch)
+        const rainY = centerY + (boardLeft.displayHeight * UI.RAIN_OFFSET);
+        const rain = this.add.image(centerX, rainY, TextureKeys.S1_Rain)
             .setScale(0.7).setOrigin(0.5, 1);
 
-        const poemText = this.add.image(centerX, underY - rain.displayHeight - GameUtils.pctY(this, 0.05), TextureKeys.S1_PoemText)
+        // 4. Bài thơ
+        const poemY = bottomY - rain.displayHeight - GameUtils.pctY(this, UI.POEM_OFFSET);
+        const poemText = this.add.image(centerX, poemY, TextureKeys.S1_PoemText)
             .setScale(0.7).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
 
-        this.tweens.add({ targets: poemText, y: '+=10', duration: 1200, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+        this.tweens.add({ targets: poemText, y: '+=10', duration: ANIM.POEM_FLOAT, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
         
         poemText.on('pointerdown', () => {
             if (this.isGameActive) {
@@ -133,35 +125,44 @@ export default class Scene1 extends Phaser.Scene {
             }
         });
 
-        const iconO = this.add.image(
-            centerX - boardLeft.displayWidth * 0.13, 
-            boardY + GameUtils.pctY(this, 0.02), 
-            TextureKeys.S1_IconOHeader
-        ).setScale(0.7).setOrigin(0.5, 0);
+        // 5. Icon O
+        const iconX = centerX - boardLeft.displayWidth * UI.ICON_O_X;
+        const iconY = boardY + GameUtils.pctY(this, UI.ICON_O_Y);
+        const iconO = this.add.image(iconX, iconY, TextureKeys.S1_IconOHeader)
+            .setScale(0.7).setOrigin(0.5, 0);
 
-        this.tweens.add({ targets: iconO, angle: { from: -4, to: 4 }, duration: 400, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+        this.tweens.add({ targets: iconO, angle: { from: -4, to: 4 }, duration: ANIM.ICON_SHAKE, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     }
 
     private createRightPanel() {
-        // Bảng bên phải
-        const boardY = this.bannerBg.displayHeight + GameUtils.pctY(this, 0.03);
-        const boardRight = this.add.image(
-            GameUtils.pctX(this, 0.5) + GameUtils.pctY(this, 0.01),
-            boardY,
-            TextureKeys.S1_Board
-        ).setOrigin(0, 0).setScale(0.7);
+        const UI = GameConstants.SCENE1.UI;
 
-        const centerX = GameUtils.pctX(this, 0.5 + boardRight.displayWidth / GameUtils.getW(this) / 2) + GameUtils.pctY(this, 0.01);
+        // 1. Bảng Phải
+        const boardY = this.bannerBg.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
+        const boardX = GameUtils.pctX(this, 0.5) + GameUtils.pctY(this, UI.BOARD_MARGIN_X);
+        
+        const boardRight = this.add.image(boardX, boardY, TextureKeys.S1_Board)
+            .setOrigin(0, 0).setScale(0.7);
+
+        // 2. Center
+        const centerX = GameUtils.pctX(this, 0.5 + boardRight.displayWidth / GameUtils.getW(this) / 2) + GameUtils.pctY(this, UI.BOARD_MARGIN_X);
         const centerY = boardY + boardRight.displayHeight / 2;
 
-        this.puzzleItems = []; // Reset mảng
+        this.puzzleItems = [];
 
-        // Tạo 3 món đồ chơi (Sử dụng TextureKeys)
-        this.createPuzzleItem(centerX - boardRight.displayWidth * 0.15, centerY - boardRight.displayWidth * 0.35, TextureKeys.S1_ItemUmbrella, true);
-        this.createPuzzleItem(centerX - boardRight.displayWidth * 0.15, centerY + boardRight.displayWidth * 0.35, TextureKeys.S1_ItemMushroom, false);
-        this.createPuzzleItem(centerX + boardRight.displayWidth * 0.25, centerY, TextureKeys.S1_ItemLamp, false);
+        // 3. Tính toán vị trí Items (Biến trung gian)
+        const item1X = centerX - boardRight.displayWidth * UI.ITEM_OFFSET_X;
+        const item1Y = centerY - boardRight.displayWidth * UI.ITEM_OFFSET_Y;
+        this.createPuzzleItem(item1X, item1Y, TextureKeys.S1_ItemUmbrella, true);
 
-        // UI Chiến thắng
+        const item2X = centerX - boardRight.displayWidth * UI.ITEM_OFFSET_X;
+        const item2Y = centerY + boardRight.displayWidth * UI.ITEM_OFFSET_Y;
+        this.createPuzzleItem(item2X, item2Y, TextureKeys.S1_ItemMushroom, false);
+
+        const item3X = centerX + boardRight.displayWidth * 0.25; 
+        const item3Y = centerY;
+        this.createPuzzleItem(item3X, item3Y, TextureKeys.S1_ItemLamp, false);
+
         this.victoryBg = this.add.image(centerX, centerY, TextureKeys.BgPopup).setScale(0).setDepth(20);
         this.victoryText = this.add.image(centerX, centerY + 220, TextureKeys.S1_TextResult).setAlpha(0).setDepth(21).setScale(0.8);
     }
@@ -170,8 +171,7 @@ export default class Scene1 extends Phaser.Scene {
         const item = this.add.image(x, y, key).setInteractive({ useHandCursor: true }).setScale(0.7);
         item.setData('isCorrect', isCorrect);
 
-        // Hiệu ứng nhấp nhô
-        this.tweens.add({ targets: item, y: y - 10, duration: 1500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+        this.tweens.add({ targets: item, y: y - 10, duration: GameConstants.SCENE1.ANIM.FLOAT, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
         item.on('pointerdown', () => {
             if (!this.isGameActive) return;
@@ -182,9 +182,6 @@ export default class Scene1 extends Phaser.Scene {
         return item;
     }
 
-    // --- 5. LOGIC GAME FLOW ---
-    
-    // Được gọi khi bắt đầu vào màn hoặc khi Restart
     private initGameFlow() {
         if (this.input.keyboard) this.input.keyboard.enabled = false;
 
@@ -195,14 +192,12 @@ export default class Scene1 extends Phaser.Scene {
             playVoiceLocked(null, 'instruction');
             const instructionTime = AudioManager.getDuration('instruction') + 0.5;
 
-            // Timer chờ đọc xong hướng dẫn thì đọc câu đố
             this.instructionTimer = this.time.delayedCall(instructionTime * 1000, () => {
                 if (this.isGameActive) {
                     playVoiceLocked(null, 'cau_do');
                     const riddleDuration = AudioManager.getDuration('cau_do');
 
-                    // Đọc xong câu đố thì bắt đầu đếm giờ gợi ý
-                    this.time.delayedCall((riddleDuration + 1) * 1000, () => {
+                    this.time.delayedCall((riddleDuration * 1000) + GameConstants.SCENE1.TIMING.DELAY_IDLE, () => {
                         if (this.isGameActive) {
                             this.idleManager.start(); 
                         }
@@ -214,7 +209,6 @@ export default class Scene1 extends Phaser.Scene {
             showGameButtons();
         };
 
-        // Check Audio unlock (cho iOS)
         AudioManager.loadAll().then(() => {
             if (AudioManager.isUnlocked) {
                 startAction();
@@ -227,14 +221,12 @@ export default class Scene1 extends Phaser.Scene {
         });
     }
 
-    // --- 6. XỬ LÝ TƯƠNG TÁC (ĐÚNG/SAI) ---
-
     handleWrong(item: Phaser.GameObjects.Image) {
         AudioManager.play('sfx-wrong')
         this.tweens.add({
             targets: item,
             angle: { from: -10, to: 10 },
-            duration: 80,
+            duration: GameConstants.SCENE1.ANIM.WRONG_SHAKE,
             yoyo: true,
             repeat: 3,
             onComplete: () => { item.angle = 0; }
@@ -242,10 +234,9 @@ export default class Scene1 extends Phaser.Scene {
     }
 
     private handleCorrect(winnerItem: Phaser.GameObjects.Image) {
-        console.log("CHỌN ĐÚNG!");
         this.isGameActive = false;
         if (this.instructionTimer) this.instructionTimer.remove(false);
-        this.idleManager.stop(); // Dừng gợi ý
+        this.idleManager.stop(); 
 
         this.puzzleItems.forEach(i => i.disableInteractive());
         this.tweens.killTweensOf(winnerItem);
@@ -254,14 +245,13 @@ export default class Scene1 extends Phaser.Scene {
         AudioManager.stop('cau_do');
         AudioManager.play('sfx-ting');
 
-        // Ẩn các món sai
         this.puzzleItems.forEach(i => {
             if (i !== winnerItem) this.tweens.add({ targets: i, alpha: 0, scale: 0, duration: 300 });
         });
 
-        // Hiện popup chiến thắng
-        this.tweens.add({ targets: this.victoryBg, scale: 0.9, duration: 600, ease: 'Back.out' });
-        this.tweens.add({ targets: this.victoryText, alpha: 1, y: this.victoryText.y - 20, duration: 600 });
+        const ANIM = GameConstants.SCENE1.ANIM;
+        this.tweens.add({ targets: this.victoryBg, scale: 0.9, duration: ANIM.WIN_POPUP, ease: 'Back.out' });
+        this.tweens.add({ targets: this.victoryText, alpha: 1, y: this.victoryText.y - 20, duration: ANIM.WIN_POPUP });
 
         winnerItem.setDepth(100);
         this.tweens.add({
@@ -269,11 +259,11 @@ export default class Scene1 extends Phaser.Scene {
             x: this.victoryBg.x,
             y: this.victoryBg.y - 100,
             scale: 0.7,
-            duration: 600,
+            duration: ANIM.WIN_POPUP,
             ease: 'Back.out',
             onComplete: () => {
                 playVoiceLocked(null, 'voice_cai_o');
-                this.time.delayedCall(1500, () => {
+                this.time.delayedCall(GameConstants.SCENE1.TIMING.DELAY_CORRECT_SFX, () => {
                     AudioManager.play('sfx-correct');
                     const khenTime = AudioManager.getDuration('sfx-correct');
                     this.time.delayedCall(khenTime * 1000, () => {
@@ -284,8 +274,6 @@ export default class Scene1 extends Phaser.Scene {
         });
     }
 
-    // --- 7. LOGIC GỢI Ý & HELPER ---
-    // 2. Hàm tắt gợi ý (Reset)
     private resetIdleState() {
         this.idleManager.reset();
         if (this.isHintActive && this.handHint) {
@@ -295,7 +283,6 @@ export default class Scene1 extends Phaser.Scene {
         }
     }
 
-    // Gợi ý ĐÁP ÁN (Chỉ thẳng vào cái Ô khi bí)
     private showIdleHint() {
         if (!this.isGameActive || this.isHintActive) return;
         const correctItem = this.puzzleItems.find(i => i.getData('isCorrect') === true);
@@ -305,14 +292,16 @@ export default class Scene1 extends Phaser.Scene {
         this.handHint.setPosition(GameUtils.getW(this) + 100, GameUtils.getH(this));
         this.handHint.setAlpha(0);
 
+        const IDLE = GameConstants.IDLE;
+        
         this.tweens.chain({
             targets: this.handHint,
             tweens: [
-                { alpha: 1, x: correctItem.x + 30, y: correctItem.y + 30, duration: 800, ease: 'Power2' },
-                { scale: 0.5, duration: 300, yoyo: true, repeat: 2 },
-                { alpha: 0, duration: 500, onComplete: () => {
+                { alpha: 1, x: correctItem.x + IDLE.OFFSET_X, y: correctItem.y + IDLE.OFFSET_Y, duration: IDLE.FADE_IN, ease: 'Power2' },
+                { scale: 0.5, duration: IDLE.SCALE, yoyo: true, repeat: 2 },
+                { alpha: 0, duration: IDLE.FADE_OUT, onComplete: () => {
                         this.isHintActive = false;
-                        this.idleManager.reset(); // Reset để đếm lại
+                        this.idleManager.reset(); 
                         this.handHint.setPosition(-200, -200);
                     }
                 }
@@ -320,10 +309,14 @@ export default class Scene1 extends Phaser.Scene {
         });
     }
 
+    public restartIntro() {
+        if (this.instructionTimer) { this.instructionTimer.remove(false); this.instructionTimer = undefined; }
+        this.resetIdleState(); this.idleManager.stop(); this.initGameFlow();
+    }
+
     private nextScene() {
-        // Chuyển màn sau 3s (nếu cần)
-        this.time.delayedCall(1000, () => {
-            this.scene.start('Scene2');
+        this.time.delayedCall(GameConstants.SCENE1.TIMING.DELAY_NEXT, () => {
+            this.scene.start(SceneKeys.Scene2);
         });
     }
 }

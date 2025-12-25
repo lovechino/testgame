@@ -1,16 +1,16 @@
 import Phaser from 'phaser';
+import { GameConstants } from '../consts/GameConstants'; // Import mới
 
 export class PaintManager {
     private scene: Phaser.Scene;
-    private brushColor: number = 0xff0000;
-    private brushSize: number = 100;
+    
+    // Sử dụng Constant thay vì số cứng
+    private brushColor: number = GameConstants.PAINT.DEFAULT_COLOR;
+    private brushSize: number = GameConstants.PAINT.BRUSH_SIZE;
+    
     private brushTexture: string = 'brush_circle';
     private isErasing: boolean = false;
-    
-    // Lưu các phần đang tô
     private activeRenderTexture: Phaser.GameObjects.RenderTexture | null = null;
-    
-    // Callback gọi về Scene khi tô xong 1 phần
     private onPartComplete: (id: string, rt: Phaser.GameObjects.RenderTexture, colorUsed: number) => void;
 
     constructor(scene: Phaser.Scene, onComplete: (id: string, rt: Phaser.GameObjects.RenderTexture, colorUsed: number) => void) {
@@ -19,7 +19,6 @@ export class PaintManager {
         this.createBrushTexture();
     }
 
-    // 1. Tạo bút vẽ (Texture hình tròn mờ)
     private createBrushTexture() {
         if (!this.scene.textures.exists(this.brushTexture)) {
             const canvas = this.scene.textures.createCanvas(this.brushTexture, this.brushSize, this.brushSize);
@@ -35,7 +34,6 @@ export class PaintManager {
         }
     }
 
-    // 2. Cấu hình cọ
     public setColor(color: number) {
         this.isErasing = false;
         this.brushColor = color;
@@ -49,13 +47,10 @@ export class PaintManager {
         return this.activeRenderTexture !== null;
     }
 
-    // 3. Tạo vùng tô màu (RenderTexture)
     public createPaintableLayer(x: number, y: number, key: string, scale: number, uniqueId: string): Phaser.GameObjects.Image {
-        // Tạo Mask
         const maskImage = this.scene.make.image({ x, y, key, add: false }).setScale(scale);
         const mask = maskImage.createBitmapMask();
 
-        // Tạo RenderTexture
         const rtW = maskImage.width * scale;
         const rtH = maskImage.height * scale;
         const rt = this.scene.add.renderTexture(x - rtW/2, y - rtH/2, rtW, rtH);
@@ -63,12 +58,11 @@ export class PaintManager {
         rt.setOrigin(0, 0).setMask(mask).setDepth(10);
         rt.setData('id', uniqueId);
         rt.setData('key', key); 
+        rt.setData('isFinished', false);
 
-        // Tạo HitArea (vùng chạm) trả về cho Scene quản lý
         const hitArea = this.scene.add.image(x, y, key).setScale(scale).setAlpha(0.01).setDepth(50);
         hitArea.setInteractive({ useHandCursor: true, pixelPerfect: true });
 
-        // Sự kiện chạm
         hitArea.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
             this.activeRenderTexture = rt;
             this.paint(pointer, rt);
@@ -77,7 +71,6 @@ export class PaintManager {
         return hitArea;
     }
 
-    // 4. Xử lý vẽ
     public handlePointerMove(pointer: Phaser.Input.Pointer) {
         if (pointer.isDown && this.activeRenderTexture) {
             this.paint(pointer, this.activeRenderTexture);
@@ -107,7 +100,6 @@ export class PaintManager {
         }
     }
 
-    // 5. Thuật toán kiểm tra tiến độ (Clean Math)
     private checkProgress(rt: Phaser.GameObjects.RenderTexture) {
         if (rt.getData('isFinished')) return;
         
@@ -117,7 +109,6 @@ export class PaintManager {
         rt.snapshot((snapshot) => {
             if (!(snapshot instanceof HTMLImageElement)) return;
             
-            // Giảm độ phân giải check 4 lần để tối ưu hiệu năng
             const w = snapshot.width;
             const h = snapshot.height;
             const checkW = Math.floor(w / 4);
@@ -135,23 +126,22 @@ export class PaintManager {
             let total = 0;
 
             for (let i = 3; i < paintData.length; i += 4) {
-                if (maskData[i] > 0) { // Nếu pixel thuộc vùng hình gốc
+                if (maskData[i] > 0) {
                     total++;
-                    if (paintData[i] > 0) match++; // Nếu bé đã tô
+                    if (paintData[i] > 0) match++;
                 }
             }
 
             const percentage = total > 0 ? match / total : 0;
             
-            // Nếu tô > 90% thì gọi callback hoàn thành
-            if (percentage > 0.90) {
+            // Sử dụng Constant tỷ lệ thắng
+            if (percentage > GameConstants.PAINT.WIN_PERCENT) {
                 rt.setData('isFinished', true);
                 this.onPartComplete(id, rt, this.brushColor);
             }
         });
     }
 
-    // Helper tạo context canvas tạm
     private getTempContext(img: HTMLImageElement, w: number, h: number) {
         const canvas = document.createElement('canvas');
         canvas.width = w;
