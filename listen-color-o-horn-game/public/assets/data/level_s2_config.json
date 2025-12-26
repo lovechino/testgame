@@ -16,7 +16,7 @@
     "baseX_pct": 0.7,
     "baseY_pct": 0.48,
     "parts": [
-      { "key": "o_body", "offsetX": 1, "offsetY": 5, "scale": 0.7,  "hintX": -130, "hintY": 0 }
+      { "key": "o_body", "offsetX": 1, "offsetY": 4, "scale": 0.7,  "hintX": -130, "hintY": 0 }
     ]
   }
 }
