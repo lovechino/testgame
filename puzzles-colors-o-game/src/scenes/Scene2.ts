@@ -255,7 +255,7 @@ export default class Scene2 extends Phaser.Scene {
         // Kiểm tra điều kiện thắng
         if (this.finishedParts.size >= this.totalParts) {
             console.log("WIN!");
-            AudioManager.play('sfx-correct');
+            AudioManager.play('sfx-correct_s2');
             this.time.delayedCall(GameConstants.SCENE2.TIMING.WIN_DELAY, () => this.scene.start(SceneKeys.EndGame));
         }
     }
@@ -335,7 +335,7 @@ export default class Scene2 extends Phaser.Scene {
         // Visual 1: Nhấp nháy bộ phận đó
         this.activeHintTween = this.tweens.add({
             targets: target, alpha: { from: 0.01, to: 0.3 },
-            scale: { from: target.getData('originScale'), to: target.getData('originScale') * 1.05 },
+            scale: { from: target.getData('originScale'), to: target.getData('originScale') * 1.01 },
             duration: IDLE_CFG.FADE_IN, yoyo: true, repeat: 2,
             onComplete: () => { this.activeHintTween = null; this.idleManager.reset(); }
         });

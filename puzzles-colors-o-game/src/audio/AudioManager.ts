@@ -15,6 +15,7 @@ const SOUND_MAP: Record<string, SoundConfig> = {
 
     // ---- SFX Chung ----
     'sfx-correct': { src: `${BASE_PATH}sfx/correct_answer.mp3`, volume: 1.0 },
+    'sfx-correct_s2': { src: `${BASE_PATH}sfx/correct_color.mp3`, volume: 1.0 },
     'sfx-wrong': { src: `${BASE_PATH}sfx/wrong.mp3`, volume: 0.5 },
     'sfx-click': { src: `${BASE_PATH}sfx/click.mp3`, volume: 0.5 },
     'voice_cai_o': { src: `${BASE_PATH}prompt/cai_o.mp3`, volume: 1.0 }, // Đọc đáp án
