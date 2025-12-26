@@ -255,7 +255,7 @@ export default class Scene2 extends Phaser.Scene {
         // Kiểm tra điều kiện thắng
         if (this.finishedParts.size >= this.totalParts) {
             console.log("WIN!");
-            AudioManager.play('sfx-correct');
+            AudioManager.play('sfx-correct_s2');
             this.time.delayedCall(GameConstants.SCENE2.TIMING.WIN_DELAY, () => this.scene.start(SceneKeys.EndGame));
         }
     }
