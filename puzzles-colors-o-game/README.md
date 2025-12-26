@@ -16,10 +16,6 @@
 
 ## 📷 Ảnh demo
 
-![Demo (đặt placeholder)](https://via.placeholder.com/1280x720?text=Puzzles+Colors+O+Demo)
-
-_Hình ảnh trên là placeholder; thay bằng đoạn GIF hoặc video khi có bản dựng cuối._
-
 ---
 
 ## 🛠️ Cài đặt
