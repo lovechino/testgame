@@ -52,12 +52,7 @@ export default class Scene1 extends Phaser.Scene {
         this.initGameFlow();            // Bắt đầu luồng game (Intro voice -> Start)
 
         // Sự kiện khi Scene được đánh thức lại (ví dụ: quay lại từ scene khác hoặc unmute)
-        this.events.on('wake', () => {
-            this.idleManager.reset();
-            if (this.input.keyboard) this.input.keyboard.enabled = true;
-            // Đảm bảo nhạc nền chạy lại nếu bị dừng
-            if (!this.bgm.isPlaying) this.bgm.play();
-        });
+        this.events.on('wake', this.handleWake, this);
     }
 
     /**
@@ -68,6 +63,37 @@ export default class Scene1 extends Phaser.Scene {
     update(time: number, delta: number) {
         // Cập nhật bộ đếm thời gian rảnh
         this.idleManager.update(delta);
+    }
+
+    /**
+     * Hàm dọn dẹp bộ nhớ khi chuyển Scene (QUAN TRỌNG)
+     */
+    shutdown() {
+        // 1. Hủy lắng nghe sự kiện wake (để không bị nhân đôi khi quay lại)
+        this.events.off('wake', this.handleWake, this);
+        
+        // 2. Dừng nhạc nền
+        if (this.bgm && this.bgm.isPlaying) {
+            this.bgm.stop();
+        }
+
+        // 3. Hủy timer đọc giọng nói (nếu đang chạy dở)
+        if (this.instructionTimer) {
+            this.instructionTimer.remove(false);
+            this.instructionTimer = undefined;
+        }
+
+        // 4. Dừng Idle Manager
+        if (this.idleManager) {
+            this.idleManager.stop();
+        }
+    }
+
+    // Hàm xử lý khi game được bật lại (tách ra từ create cũ)
+    private handleWake() {
+        this.idleManager.reset();
+        if (this.input.keyboard) this.input.keyboard.enabled = true;
+        if (this.bgm && !this.bgm.isPlaying) this.bgm.play();
     }
 
     // =================================================================
@@ -338,7 +364,10 @@ export default class Scene1 extends Phaser.Scene {
         this.isGameActive = false; // Khóa game, không cho click nữa
         
         // Hủy timer hướng dẫn nếu đang chạy (tránh việc voice chồng voice)
-        if (this.instructionTimer) this.instructionTimer.remove(false);
+        if (this.instructionTimer) {
+            this.instructionTimer.remove(false);
+            this.instructionTimer = undefined;
+        }
         this.idleManager.stop(); 
 
         // Vô hiệu hóa tương tác tất cả vật thể
