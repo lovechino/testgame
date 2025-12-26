@@ -124,7 +124,7 @@ export default class Scene1 extends Phaser.Scene {
      * Cài đặt hình nền và nhạc nền
      */
     private setupBackgroundAndAudio() {
-        changeBackground('assets/images/bg/backgroud_game.png'); 
+        changeBackground('assets/images/bg/backgroud_game.jpg'); 
         
         // Dừng nhạc nền cũ nếu có (tránh chồng nhạc)
         if (this.sound.get(AudioKeys.BgmNen)) {
