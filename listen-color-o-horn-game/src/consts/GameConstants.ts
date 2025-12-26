@@ -43,11 +43,11 @@ export const GameConstants = {
             ICON_O_Y: 0.06,
             
             /** Item lệch trục X so với tâm bảng (Tỉ lệ chiều rộng bảng) */
-            ITEM_OFFSET_X_1: 0.23, // Tăng -> trái
+            ITEM_OFFSET_X_1: 0.2, // Tăng -> trái
             ITEM_OFFSET_X_2: 0.17, // Tắng -> trái
             ITEM_OFFSET_X_3: 0.2,  // Tăng -> Phải
             /** Item lệch trục Y so với tâm bảng (Tỉ lệ chiều rộng bảng) */
-            ITEM_OFFSET_Y_1: 0.35,
+            ITEM_OFFSET_Y_1: 0.4,
             ITEM_OFFSET_Y_2: 0.35,
             ITEM_OFFSET_Y_3: 0,
         },

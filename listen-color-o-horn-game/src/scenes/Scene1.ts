@@ -241,7 +241,7 @@ export default class Scene1 extends Phaser.Scene {
         this.puzzleItems = []; // Reset danh sách items
 
         // 3. Tạo các Item câu đố (Cái ô, Nấm, Đèn)
-        // Item 1: Cái hộp (Sai->false)
+        // Item 1: Cái tẩy (Sai->false)
         const item1X = centerX - boardRight.displayWidth * UI.ITEM_OFFSET_X_1;
         const item1Y = centerY - boardRight.displayWidth * UI.ITEM_OFFSET_Y_1;
         this.createPuzzleItem(item1X, item1Y, TextureKeys.S1_ItemBox, false);
