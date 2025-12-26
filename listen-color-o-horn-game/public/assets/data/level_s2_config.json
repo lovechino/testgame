@@ -7,7 +7,7 @@
     "parts": [
       { "key": "flag_left", "offsetX": 5, "offsetY": -3, "scale": 0.71, "hintX": -130, "hintY": 100 },
       { "key": "flag_mid", "offsetX": 1, "offsetY": -2.5, "scale": 0.705, "hintX": 70, "hintY": 20 },
-      { "key": "flag_right",   "offsetX": 0, "offsetY": -1, "scale": 0.705, "hintX": 370, "hintY": -70 }
+      { "key": "flag_right",   "offsetX": 2, "offsetY": -1, "scale": 0.705, "hintX": 370, "hintY": -70 }
     ]
   },
   "letter": {
