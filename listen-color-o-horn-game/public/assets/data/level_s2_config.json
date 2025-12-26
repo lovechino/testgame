@@ -1,0 +1,22 @@
+{
+  "teacher": {
+    "baseScale": 0.75,
+    "outlineKey": "flag_outline",
+    "baseX_pct": 0.37, 
+    "baseY_pct": 0.48,
+    "parts": [
+      { "key": "flag_left", "offsetX": 5, "offsetY": -3, "scale": 0.71, "hintX": -130, "hintY": 100 },
+      { "key": "flag_mid", "offsetX": 1, "offsetY": -2.5, "scale": 0.705, "hintX": 70, "hintY": 20 },
+      { "key": "flag_right",   "offsetX": 0, "offsetY": -1, "scale": 0.705, "hintX": 370, "hintY": -70 }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.7,
+    "outlineKey": "o_outline",
+    "baseX_pct": 0.7,
+    "baseY_pct": 0.48,
+    "parts": [
+      { "key": "o_body", "offsetX": 1, "offsetY": 5, "scale": 0.7,  "hintX": -130, "hintY": 0 }
+    ]
+  }
+}
