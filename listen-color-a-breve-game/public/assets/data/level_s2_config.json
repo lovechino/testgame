@@ -1,0 +1,25 @@
+{
+  "item": {
+    "baseScale": 0.75,
+    "outlineKey": "towel_outline",
+    "baseX_pct": 0.37, 
+    "baseY_pct": 0.45,
+    "parts": [
+      { "key": "towel_1", "offsetX": -1, "offsetY": 0, "scale": 0.75, "hintX": -150, "hintY": 150 },
+      { "key": "towel_2", "offsetX": -1, "offsetY": 0, "scale": 0.75, "hintX": 50, "hintY": -30 },
+      { "key": "towel_3", "offsetX": -1, "offsetY": 0, "scale": 0.75, "hintX": 100, "hintY": 130 },
+      { "key": "towel_4", "offsetX": -1, "offsetY": 0, "scale": 0.75, "hintX": 100, "hintY": 200 },
+      { "key": "towel_5", "offsetX": -1, "offsetY": 0, "scale": 0.75, "hintX": -190, "hintY": -160 }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.7,
+    "outlineKey": "a_outline",
+    "baseX_pct": 0.68,
+    "baseY_pct": 0.45,
+    "parts": [
+      { "key": "a_body", "offsetX": 1, "offsetY": 4, "scale": 0.7,  "hintX": -125, "hintY": 0 },
+      { "key": "a_hat", "offsetX": 1, "offsetY": 1, "scale": 0.7,  "hintX": 20, "hintY": -210 }
+    ]
+  }
+}
