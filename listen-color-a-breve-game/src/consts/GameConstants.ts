@@ -8,7 +8,7 @@ export const GameConstants = {
     // =========================================
     IDLE: {
         /** Thời gian chờ trước khi hiện gợi ý (ms). 10000 = 10 giây */
-        THRESHOLD: 3000,
+        THRESHOLD: 10000,
         /** Thời gian hiệu ứng hiện bàn tay (ms) */
         FADE_IN: 800,
         /** Thời gian hiệu ứng ấn xuống (Scale nhỏ lại) (ms) */
