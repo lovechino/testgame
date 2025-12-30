@@ -5,13 +5,8 @@
     "baseX_pct": 0.4,
     "baseY_pct": 0.5,
     "parts": [
-      { "key": "s2_item_1", "offsetX": -70, "offsetY": 10, "scale": 0.59, "hintX": -220, "hintY": 100 },
-      { "key": "s2_item_2", "offsetX": -65, "offsetY": -47, "scale": 0.6, "hintX": -330, "hintY": -200 },
-      { "key": "s2_item_3", "offsetX": -58, "offsetY": -55, "scale": 0.6, "hintX": -300, "hintY": -270 },
-      { "key": "s2_item_4", "offsetX": -55, "offsetY": -67, "scale": 0.59, "hintX": -220, "hintY": -320 },
-      { "key": "s2_item_5", "offsetX": 0, "offsetY": -3, "scale": 0.74, "hintX": -120, "hintY": -300 },
-      { "key": "s2_item_6", "offsetX": -16, "offsetY": -52, "scale": 0.6, "hintX": -10, "hintY": -260 },
-      { "key": "s2_item_7", "offsetX": -35, "offsetY": -44, "scale": 0.6, "hintX": -10, "hintY": -260 },
+      { "key": "s2_item_1", "offsetX": 3, "offsetY": 0, "scale": 0.75, "hintX": -250, "hintY": 100 },
+      { "key": "s2_item_4", "offsetX": 3, "offsetY": 0, "scale": 0.75, "hintX": -220, "hintY": -330 },
       { "key": "s2_item_8", "offsetX": 3, "offsetY": 0, "scale": 0.75, "hintX": -10, "hintY": -230 },
       { "key": "s2_item_9", "offsetX": -15, "offsetY": -4, "scale": 0.59, "hintX": 10, "hintY": 100 }
     ]

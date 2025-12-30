@@ -39,15 +39,9 @@ export default class PreloadScene extends Phaser.Scene {
         
         this.load.image(TextureKeys.S2_Item_Outline, 'assets/images/S2/pant_outline.png');
         this.load.image(TextureKeys.S2_Item_1, 'assets/images/S2/pant_1.png');
-        this.load.image(TextureKeys.S2_Item_2, 'assets/images/S2/pant_2.png');
-        this.load.image(TextureKeys.S2_Item_3, 'assets/images/S2/pant_3.png');
         this.load.image(TextureKeys.S2_Item_4, 'assets/images/S2/pant_4.png');
-        this.load.image(TextureKeys.S2_Item_5, 'assets/images/S2/pant_5.png');
-        this.load.image(TextureKeys.S2_Item_6, 'assets/images/S2/pant_6.png');
-        this.load.image(TextureKeys.S2_Item_7, 'assets/images/S2/pant_7.png');
         this.load.image(TextureKeys.S2_Item_8, 'assets/images/S2/pant_8.png');
         this.load.image(TextureKeys.S2_Item_9, 'assets/images/S2/pant_9.png');
-        this.load.image(TextureKeys.S2_Item_10, 'assets/images/S2/pant_10.png');
         this.load.image(TextureKeys.S2_Text_Item,'assets/images/S2/text_item.png');
 
         // - Nút màu
