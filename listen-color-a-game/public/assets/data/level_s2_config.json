@@ -8,14 +8,12 @@
       { "key": "jacket_1", "offsetX": -12, "offsetY": 8, "scale": 0.825, "hintX": -320, "hintY": 70 },
       { "key": "jacket_2", "offsetX": -10, "offsetY": 8, "scale": 0.83, "hintX": -250, "hintY": 0 },
       { "key": "jacket_3", "offsetX": -10, "offsetY": 8, "scale": 0.83, "hintX": -265, "hintY": 260 },
-      { "key": "jacket_4", "offsetX": -10, "offsetY": 6, "scale": 0.83, "hintX": -220, "hintY": 400 },
       { "key": "jacket_5", "offsetX": -12, "offsetY": 10, "scale": 0.82, "hintX": -50, "hintY": -150 },
       { "key": "jacket_6", "offsetX": -12, "offsetY": 8, "scale": 0.82, "hintX": -80, "hintY": 150 },
       { "key": "jacket_7", "offsetX": -11, "offsetY": 8, "scale": 0.825, "hintX": 30, "hintY": 50 },
       { "key": "jacket_8", "offsetX": -12, "offsetY": 8, "scale": 0.83, "hintX": 80, "hintY": 280 },
       { "key": "jacket_9", "offsetX": -12, "offsetY": 8, "scale": 0.825, "hintX": 200, "hintY": 100 },
-      { "key": "jacket_10", "offsetX": -12, "offsetY": 8, "scale": 0.825, "hintX": -80, "hintY": 440 },
-      { "key": "jacket_11", "offsetX": -10, "offsetY": 6, "scale": 0.83, "hintX": 40, "hintY": 440 }
+      { "key": "jacket_10", "offsetX": -12, "offsetY": 8, "scale": 0.825, "hintX": -80, "hintY": 440 }
     ]
   },
   "letter": {

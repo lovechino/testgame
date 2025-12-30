@@ -42,14 +42,12 @@ export enum TextureKeys {
     S2_Jacket_1 = 'jacket_1',
     S2_Jacket_2 = 'jacket_2',
     S2_Jacket_3 = 'jacket_3',
-    S2_Jacket_4 = 'jacket_4',
     S2_Jacket_5 = 'jacket_5',
     S2_Jacket_6 = 'jacket_6',
     S2_Jacket_7 = 'jacket_7',
     S2_Jacket_8 = 'jacket_8',
     S2_Jacket_9 = 'jacket_9',
     S2_Jacket_10 = 'jacket_10',
-    S2_Jacket_11 = 'jacket_11',
 
     // Các nút màu
     BtnRed = 'btn_red',
