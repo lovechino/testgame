@@ -7,7 +7,7 @@
     "parts": [
       { "key": "s2_item_1", "offsetX": 3, "offsetY": 0, "scale": 0.75, "hintX": -250, "hintY": 100 },
       { "key": "s2_item_4", "offsetX": 3, "offsetY": 0, "scale": 0.75, "hintX": -220, "hintY": -330 },
-      { "key": "s2_item_8", "offsetX": 3, "offsetY": 0, "scale": 0.75, "hintX": -10, "hintY": -230 },
+      { "key": "s2_item_8", "offsetX": 3, "offsetY": 0, "scale": 0.75, "hintX": -50, "hintY": -200 },
       { "key": "s2_item_9", "offsetX": -15, "offsetY": -4, "scale": 0.59, "hintX": 10, "hintY": 100 }
     ]
   },
