@@ -1,0 +1,22 @@
+{
+  "item": {
+    "baseScale": 0.65,
+    "outlineKey": "item_outline",
+    "baseX_pct": 0.35,
+    "baseY_pct": 0.45,
+    "parts": [
+      { "key": "s2_item_1", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 50, "hintY": -50 },
+      { "key": "s2_item_2", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 50, "hintY": -300 },
+      { "key": "s2_item_3", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 50, "hintY": 250 }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.7,
+    "outlineKey": "e_outline",
+    "baseX_pct": 0.65,
+    "baseY_pct": 0.48,
+    "parts": [
+      { "key": "e_body", "offsetX": 1, "offsetY": 4, "scale": 0.7,  "hintX": -125, "hintY": 0 }
+    ]
+  }
+}
