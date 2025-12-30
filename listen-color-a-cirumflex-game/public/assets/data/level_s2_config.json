@@ -12,7 +12,7 @@
       { "key": "s2_item_5", "offsetX": 0, "offsetY": -3, "scale": 0.74, "hintX": -120, "hintY": -300 },
       { "key": "s2_item_6", "offsetX": -16, "offsetY": -52, "scale": 0.6, "hintX": -10, "hintY": -260 },
       { "key": "s2_item_7", "offsetX": -35, "offsetY": -44, "scale": 0.6, "hintX": -10, "hintY": -260 },
-      { "key": "s2_item_8", "offsetX": -22, "offsetY": -4, "scale": 0.59, "hintX": -10, "hintY": -230 },
+      { "key": "s2_item_8", "offsetX": 3, "offsetY": 0, "scale": 0.75, "hintX": -10, "hintY": -230 },
       { "key": "s2_item_9", "offsetX": -15, "offsetY": -4, "scale": 0.59, "hintX": 10, "hintY": 100 }
     ]
   },
