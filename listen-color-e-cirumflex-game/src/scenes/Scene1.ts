@@ -409,7 +409,7 @@ export default class Scene1 extends Phaser.Scene {
                     
                     // Đợi khen xong thì chuyển Scene
                     this.time.delayedCall(khenTime * 1000, () => {
-                        this.nextScene();
+                        this.scene.start(SceneKeys.Scene2);
                     });
                 });
             }
@@ -478,12 +478,4 @@ export default class Scene1 extends Phaser.Scene {
         this.initGameFlow(); // Chạy lại từ đầu luồng game
     }
 
-    /**
-     * Chuyển sang màn chơi tiếp theo (Scene 2)
-     */
-    private nextScene() {
-        this.time.delayedCall(GameConstants.SCENE1.TIMING.DELAY_NEXT, () => {
-            this.scene.start(SceneKeys.Scene2);
-        });
-    }
 }

@@ -16,7 +16,7 @@ declare global {
 }
 
 // --- CẤU HÌNH GAME (Theo cấu trúc mẫu: FIT) ---
-const config: Phaser.Types.Core.GameConfig = {
+const config: Phaser.Types.Core.GameConfig & { resolution?: number } = {
     type: Phaser.AUTO,
     width: 1920,
     height: 1080,
@@ -26,13 +26,19 @@ const config: Phaser.Types.Core.GameConfig = {
     scale: {
         mode: Phaser.Scale.FIT,       // Dùng FIT để co giãn giữ tỉ lệ
         autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1920, 
+        height: 1080,
     },
     physics: {
         default: 'arcade',
         arcade: { debug: false }
     },
+    resolution: 2/3,
     render: {
         transparent: true,
+        roundPixels: false, // Tắt làm tròn để mượt hơn
+        antialias: true,    // Vẫn bật khử răng cưa cho đẹp
+        powerPreference: 'high-performance',
     },
 };
 
@@ -49,7 +55,7 @@ function updateUIButtonScale() {
 
     const MIN_UI_SCALE = 0.45;
     const MAX_UI_SCALE = 1;
-    const scaleFromViewport = Math.min(w, h) / 1080;
+    const scaleFromViewport = Math.min(w, h) / 720;
     const scale = Math.min(Math.max(scaleFromViewport, MIN_UI_SCALE), MAX_UI_SCALE);
     const baseSize = 100;
     const newSize = baseSize * scale;

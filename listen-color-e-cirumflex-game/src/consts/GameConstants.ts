@@ -69,7 +69,7 @@ export const GameConstants = {
             /** Delay chuyển sang Scene 2 (ms) */
             DELAY_NEXT: 1000,
             /** Chờ đọc xong voice "Cái ô" mới phát SFX vỗ tay (ms) */
-            DELAY_CORRECT_SFX: 1500,
+            DELAY_CORRECT_SFX: 1000,
         }
     },
 
@@ -86,8 +86,8 @@ export const GameConstants = {
             PALETTE_SPACING: 0.07,
             
             // Tọa độ đích cho bàn tay hướng dẫn Intro
-            HAND_INTRO_END_X: 0.42,
-            HAND_INTRO_END_Y: 0.4,
+            HAND_INTRO_END_X: 0.35,
+            HAND_INTRO_END_Y: 0.6,
             // Toạ độ text đồ vật
             NAME_X: 0.45,
             NAME_Y: 0.3,
