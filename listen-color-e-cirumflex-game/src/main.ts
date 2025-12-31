@@ -15,6 +15,11 @@ declare global {
     }
 }
 
+// 1. Thêm check mobile
+const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+// 2. Nếu mobile thì giảm resolution, PC thì giữ nguyên
+const pixelRatio = isMobile ? 0.6 : 1.0;
+
 // --- CẤU HÌNH GAME (Theo cấu trúc mẫu: FIT) ---
 const config: Phaser.Types.Core.GameConfig & { resolution?: number } = {
     type: Phaser.AUTO,
@@ -33,7 +38,7 @@ const config: Phaser.Types.Core.GameConfig & { resolution?: number } = {
         default: 'arcade',
         arcade: { debug: false }
     },
-    resolution: 2/3,
+    resolution: pixelRatio,
     render: {
         transparent: true,
         roundPixels: false, // Tắt làm tròn để mượt hơn

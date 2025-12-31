@@ -3,6 +3,9 @@ import { GameConstants } from '../consts/GameConstants';
 
 export class PaintManager {
     private scene: Phaser.Scene;
+
+    private totalDistancePainted: number = 0; 
+    private readonly CHECK_THRESHOLD: number = 300; // Vẽ đủ 300px mới check
     
     // Config
     private brushColor: number = GameConstants.PAINT.DEFAULT_COLOR;
@@ -89,6 +92,8 @@ export class PaintManager {
             this.lastX = pointer.x - rt.x;
             this.lastY = pointer.y - rt.y;
 
+            this.totalDistancePainted = 0;
+
             this.paint(pointer, rt);
         });
 
@@ -107,8 +112,12 @@ export class PaintManager {
             return;
         }
         if (this.activeRenderTexture) {
-            this.checkProgress(this.activeRenderTexture);
+            // CHỈ CHECK NẾU VẼ ĐỦ NHIỀU
+            if (this.totalDistancePainted > this.CHECK_THRESHOLD) {
+                this.checkProgress(this.activeRenderTexture);
+            }
             this.activeRenderTexture = null;
+            this.totalDistancePainted = 0; // Reset
         }
     }
 
@@ -122,12 +131,17 @@ export class PaintManager {
         const distance = Phaser.Math.Distance.Between(this.lastX, this.lastY, currentX, currentY);
 
         // Tối ưu: Nếu di chuyển quá ít (< 1px) thì bỏ qua
-        if (distance < 1) return;
+        if (distance < 2) return;
+
 
         // 3. Thuật toán LERP (Nội suy)
-        const stepSize = this.brushSize / 4; // Mật độ vẽ
-        const steps = Math.ceil(distance / stepSize);
-        const offset = this.brushSize / 2;
+        // GIẢM MẬT ĐỘ VẼ: Vẽ thưa hơn
+        const stepSize = this.brushSize / 2; 
+        
+        //GIỚI HẠN VÒNG LẶP: Tránh treo máy
+        let steps = Math.ceil(distance / stepSize);
+        if (steps > 50) steps = 50;
+        const offset = this.brushSize / 2
 
         for (let i = 0; i < steps; i++) {
             const t = i / steps;
@@ -139,6 +153,11 @@ export class PaintManager {
             } else {
                 rt.draw(this.brushTexture, interpX - offset, interpY - offset, 1.0, this.brushColor);
             }
+        }
+
+        // 3. CỘNG DỒN QUÃNG ĐƯỜNG
+        if (!this.isErasing) {
+            this.totalDistancePainted += distance;
         }
 
         // Vẽ chốt hạ tại điểm cuối

@@ -49,6 +49,7 @@ canvas {
 #game-container > canvas {
     position: relative;
     z-index: 1;
+    touch-action: none;
 }
 
 /* --- MÀN HÌNH CẢNH BÁO (KÍNH MỜ) --- */

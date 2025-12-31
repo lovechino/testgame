@@ -9,6 +9,9 @@ import { playVoiceLocked, setGameSceneReference, resetVoiceState } from '../util
 import AudioManager from '../audio/AudioManager';
 
 export default class Scene2 extends Phaser.Scene {
+
+    private debugText!: Phaser.GameObjects.Text;
+
     // --- QUẢN LÝ LOGIC (MANAGERS) ---
     private paintManager!: PaintManager; // Quản lý việc tô màu, cọ vẽ, canvas
     private idleManager!: IdleManager;   // Quản lý thời gian rảnh để hiện gợi ý
@@ -66,16 +69,19 @@ export default class Scene2 extends Phaser.Scene {
             this.idleManager.reset();
             if (this.input.keyboard) this.input.keyboard.enabled = true;
         });
+
+        this.debugText = this.add.text(10, 50, 'FPS: 60', { font: '30px Arial', color: '#00ff00', backgroundColor: '#000000' });
+        this.debugText.setScrollFactor(0).setDepth(9999);
     }
 
     update(time: number, delta: number) {
-        // Chỉ đếm thời gian Idle khi:
-        // 1. Không đang tô màu
-        // 2. Không đang chạy Intro
-        // 3. Chưa thắng game
         if (!this.paintManager.isPainting() && !this.isIntroActive && this.finishedParts.size < this.totalParts) {
             this.idleManager.update(delta);
         }
+
+        const fps = Math.floor(this.game.loop.actualFps);
+        this.debugText.setText(`FPS: ${fps}`);
+        this.debugText.setColor(fps < 30 ? '#ff0000' : (fps < 55 ? '#ffff00' : '#00ff00'));
     }
 
     shutdown() {
