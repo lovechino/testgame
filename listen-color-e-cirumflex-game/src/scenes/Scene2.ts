@@ -206,12 +206,19 @@ export default class Scene2 extends Phaser.Scene {
         const cy = GameUtils.pctY(this, config.baseY_pct);
 
         config.parts.forEach((part: any, index: number) => {
-            const id = `${part.key}_${index}`;
+            const id = `${part.frame}_${index}`; // Đổi ID theo tên frame cho dễ debug
             const layerX = cx + part.offsetX;
             const layerY = cy + part.offsetY;
             
             // Tạo vùng tô màu thông qua PaintManager
-            const hitArea = this.paintManager.createPaintableLayer(layerX, layerY, part.key, part.scale, id);
+            const hitArea = this.paintManager.createPaintableLayer(
+                layerX, 
+                layerY, 
+                part.key,   // 's2_parts'
+                part.frame, // 'doll_1'
+                part.scale, 
+                id
+            );
 
             // --- BEST PRACTICE: LƯU DỮ LIỆU TĨNH ---
             // Lưu các thông số cấu hình vào Data Manager của Game Object.

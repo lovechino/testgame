@@ -69,8 +69,8 @@ export class PaintManager {
         return this.activeRenderTexture !== null;
     }
 
-    public createPaintableLayer(x: number, y: number, key: string, scale: number, uniqueId: string): Phaser.GameObjects.Image {
-        const maskImage = this.scene.make.image({ x, y, key, add: false }).setScale(scale);
+    public createPaintableLayer(x: number, y: number, key: string,frame: string, scale: number, uniqueId: string): Phaser.GameObjects.Image {
+        const maskImage = this.scene.make.image({ x, y, key, frame: frame, add: false }).setScale(scale);
         const mask = maskImage.createBitmapMask();
 
         const rtW = maskImage.width * scale;
@@ -79,10 +79,11 @@ export class PaintManager {
         
         rt.setOrigin(0, 0).setMask(mask).setDepth(10);
         rt.setData('id', uniqueId);
-        rt.setData('key', key); 
+        rt.setData('key', key);
+        rt.setData('frame', frame); 
         rt.setData('isFinished', false);
 
-        const hitArea = this.scene.add.image(x, y, key).setScale(scale).setAlpha(0.01).setDepth(50);
+        const hitArea = this.scene.add.image(x, y, key, frame).setScale(scale).setAlpha(0.01).setDepth(50);
         hitArea.setInteractive({ useHandCursor: true, pixelPerfect: true });
 
         hitArea.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
@@ -179,12 +180,13 @@ export class PaintManager {
         this.lastY = currentY;
     }
 
-    // ✅ HÀM CHECK PROGRESS MỚI: TỐI ƯU BỘ NHỚ
+    // ✅ HÀM CHECK PROGRESS ĐÃ SỬA LỖI ATLAS
     private checkProgress(rt: Phaser.GameObjects.RenderTexture) {
         if (rt.getData('isFinished')) return;
         
         const id = rt.getData('id');
         const key = rt.getData('key');
+        const frameName = rt.getData('frame');
 
         rt.snapshot((snapshot) => {
             if (!(snapshot instanceof HTMLImageElement)) return;
@@ -194,22 +196,41 @@ export class PaintManager {
             const checkW = Math.floor(w / 4);
             const checkH = Math.floor(h / 4);
 
-            // ✅ TÁI SỬ DỤNG CANVAS (Không tạo mới)
+            // 1. Lấy mẫu nét vẽ (PAINT) - Giữ nguyên
             const ctxPaint = this.getRecycledContext(this.helperCanvasPaint, snapshot, checkW, checkH);
-            const sourceImg = this.scene.textures.get(key).getSourceImage() as HTMLImageElement;
-            const ctxMask = this.getRecycledContext(this.helperCanvasMask, sourceImg, checkW, checkH);
+
+            // 2. Lấy mẫu hình gốc (MASK) - PHẢI SỬA ĐOẠN NÀY
+            // Không dùng getRecycledContext được nữa vì ta cần cắt ảnh
+            this.helperCanvasMask.width = checkW;
+            this.helperCanvasMask.height = checkH;
+            const ctxMask = this.helperCanvasMask.getContext('2d');
 
             if (!ctxPaint || !ctxMask) return;
 
+            // Xóa sạch canvas mask trước khi vẽ
+            ctxMask.clearRect(0, 0, checkW, checkH);
+
+            // Lấy thông tin tọa độ cắt từ Atlas
+            const texture = this.scene.textures.get(key);
+            const frame = texture.get(frameName);
+
+            // 🔥 CẮT ẢNH TỪ ATLAS (QUAN TRỌNG NHẤT) 🔥
+            ctxMask.drawImage(
+                frame.source.image as CanvasImageSource, // Ảnh nguồn (Atlas to)
+                frame.cutX, frame.cutY,          // Tọa độ cắt (X, Y trên Atlas)
+                frame.cutWidth, frame.cutHeight, // Kích thước vùng cắt
+                0, 0, checkW, checkH             // Vẽ đè lên canvas kiểm tra
+            );
+
+            // 3. So sánh Pixel
             const paintData = ctxPaint.getImageData(0, 0, checkW, checkH).data;
             const maskData = ctxMask.getImageData(0, 0, checkW, checkH).data;
 
             let match = 0;
             let total = 0;
 
-            // Thuật toán đếm Pixel (Giữ nguyên logic của bạn)
             for (let i = 3; i < paintData.length; i += 4) {
-                if (maskData[i] > 0) { // Nếu pixel thuộc vùng mask
+                if (maskData[i] > 0) { // Nếu pixel thuộc vùng mask (hình con búp bê)
                     total++;
                     if (paintData[i] > 0) match++; // Nếu đã được tô
                 }
@@ -217,14 +238,15 @@ export class PaintManager {
 
             const percentage = total > 0 ? match / total : 0;
             
+            // ✅ THÊM LOG ĐỂ BẠN CHECK (CẢNH BÁO)
+            console.log(`[Paint Check] Part: ${id} | Progress: ${(percentage * 100).toFixed(1)}%`);
+
             if (percentage > GameConstants.PAINT.WIN_PERCENT) {
+                console.log(`>>> HOÀN THÀNH: ${id}`); // Log khi thắng
                 rt.setData('isFinished', true);
                 
-                // ✅ GỬI DANH SÁCH MÀU VỀ SCENE
                 const usedColors = this.partColors.get(id) || new Set([this.brushColor]);
                 this.onPartComplete(id, rt, usedColors);
-                
-                // Clear bộ nhớ màu của phần này cho nhẹ
                 this.partColors.delete(id);
             }
         });

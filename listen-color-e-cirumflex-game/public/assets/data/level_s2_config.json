@@ -5,14 +5,30 @@
     "baseX_pct": 0.35,
     "baseY_pct": 0.55,
     "parts": [
-      { "key": "s2_item_1", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": -250, "hintY": -150 },
-      { "key": "s2_item_2", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 50, "hintY": -265 },
-      { "key": "s2_item_3", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 0, "hintY": -50 },
-      { "key": "s2_item_4", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": -50, "hintY": 250 },
-      { "key": "s2_item_5", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 0, "hintY": 100 },
-      { "key": "s2_item_6", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": -270, "hintY": 230 },
-      { "key": "s2_item_7", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 200, "hintY": 200 },
-      { "key": "s2_item_8", "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 100, "hintY": 400 }
+      { 
+        "key": "s2_parts", "frame": "doll_1", 
+        "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": -250, "hintY": -150 },
+      { 
+        "key": "s2_parts", "frame": "doll_2", 
+        "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 50, "hintY": -265 },
+      { 
+        "key": "s2_parts", "frame": "doll_3", 
+        "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 0, "hintY": -50 },
+      { 
+        "key": "s2_parts", "frame": "doll_4", 
+        "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": -50, "hintY": 250 },
+      { 
+        "key": "s2_parts", "frame": "doll_5", 
+        "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 0, "hintY": 100 },
+      { 
+        "key": "s2_parts", "frame": "doll_6", 
+        "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": -270, "hintY": 230 },
+      { 
+        "key": "s2_parts", "frame": "doll_7", 
+        "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 200, "hintY": 200 },
+      { 
+        "key": "s2_parts", "frame": "doll_8", 
+        "offsetX": 0, "offsetY": 0, "scale": 0.65, "hintX": 100, "hintY": 400 }
     ]
   },
   "letter": {
@@ -21,8 +37,8 @@
     "baseX_pct": 0.65,
     "baseY_pct": 0.48,
     "parts": [
-      { "key": "e_body", "offsetX": 1, "offsetY": 4, "scale": 0.7,  "hintX": -125, "hintY": 0 },
-      { "key": "e_hat", "offsetX": 1, "offsetY": 0, "scale": 0.7,  "hintX": 50, "hintY": -250 }
+      { "key": "s2_parts", "frame": "e_body", "offsetX": 1, "offsetY": 4, "scale": 0.7,  "hintX": -125, "hintY": 0 },
+      { "key": "s2_parts", "frame": "e_hat", "offsetX": 1, "offsetY": 0, "scale": 0.7,  "hintX": 50, "hintY": -250 }
     ]
   }
 }

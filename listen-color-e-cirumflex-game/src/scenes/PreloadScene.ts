@@ -34,20 +34,20 @@ export default class PreloadScene extends Phaser.Scene {
 
         // - Các bộ phận nhân vật/chữ
         this.load.image(TextureKeys.S2_A_Outline, 'assets/images/S2/e_outline.png');
-        this.load.image(TextureKeys.S2_A_Body, 'assets/images/S2/e_body.png');
-        this.load.image(TextureKeys.S2_A_Hat, 'assets/images/S2/e_hat.png');
+       // this.load.image(TextureKeys.S2_A_Body, 'assets/images/S2/e_body.png');
+        //this.load.image(TextureKeys.S2_A_Hat, 'assets/images/S2/e_hat.png');
         
         this.load.image(TextureKeys.S2_Item_Outline, 'assets/images/S2/doll_outline.png');
-        this.load.image(TextureKeys.S2_Item_1, 'assets/images/S2/doll_1.png');
-        this.load.image(TextureKeys.S2_Item_2, 'assets/images/S2/doll_2.png');
-        this.load.image(TextureKeys.S2_Item_3, 'assets/images/S2/doll_3.png');
-        this.load.image(TextureKeys.S2_Item_4, 'assets/images/S2/doll_4.png');
-        this.load.image(TextureKeys.S2_Item_5, 'assets/images/S2/doll_5.png');
-        this.load.image(TextureKeys.S2_Item_6, 'assets/images/S2/doll_6.png');
-        this.load.image(TextureKeys.S2_Item_7, 'assets/images/S2/doll_7.png');
-        this.load.image(TextureKeys.S2_Item_8, 'assets/images/S2/doll_8.png');
+        //this.load.image(TextureKeys.S2_Item_1, 'assets/images/S2/doll_1.png');
+        //this.load.image(TextureKeys.S2_Item_2, 'assets/images/S2/doll_2.png');
+        //this.load.image(TextureKeys.S2_Item_3, 'assets/images/S2/doll_3.png');
+        //this.load.image(TextureKeys.S2_Item_4, 'assets/images/S2/doll_4.png');
+        //this.load.image(TextureKeys.S2_Item_5, 'assets/images/S2/doll_5.png');
+       // this.load.image(TextureKeys.S2_Item_6, 'assets/images/S2/doll_6.png');
+       // this.load.image(TextureKeys.S2_Item_7, 'assets/images/S2/doll_7.png');
+       // this.load.image(TextureKeys.S2_Item_8, 'assets/images/S2/doll_8.png');
         this.load.image(TextureKeys.S2_Text_Item,'assets/images/S2/text_item.png');
-
+        this.load.atlas('s2_parts', 'assets/images/S2/s2_atlas.png', 'assets/images/S2/s2_atlas.json');
         // - Nút màu
         this.load.image(TextureKeys.BtnRed, 'assets/images/color/red.png');
         this.load.image(TextureKeys.BtnYellow, 'assets/images/color/yellow.png');
