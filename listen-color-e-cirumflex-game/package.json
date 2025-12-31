@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "howler": "^2.2.4",
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "@types/howler": "^2.2.12",
+    "prettier": "3.6.2",
+    "vite": "^7.2.2"
+  },
+  "name": "listen-color-e-cirumflex-game",
+  "description": "* Tạo cấu trúc:",
+  "homepage": ".",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
