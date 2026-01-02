@@ -69,34 +69,60 @@ export class PaintManager {
         return this.activeRenderTexture !== null;
     }
 
-    public createPaintableLayer(x: number, y: number, key: string,frame: string, scale: number, uniqueId: string): Phaser.GameObjects.Image {
-        const maskImage = this.scene.make.image({ x, y, key, frame: frame, add: false }).setScale(scale);
+    public createPaintableLayer(x: number, y: number, key: string, frameName: string, scale: number, uniqueId: string): Phaser.GameObjects.Image {
+        // 1. Lấy thông tin frame từ Atlas để tính toán kích thước THỰC TẾ (Bé xíu)
+        const texture = this.scene.textures.get(key);
+        const frameData = texture.get(frameName);
+
+        // 2. Tạo Mask Image (Giữ nguyên logic cũ để làm mặt nạ)
+        const maskImage = this.scene.make.image({ x, y, key, frame: frameName, add: false }).setScale(scale);
         const mask = maskImage.createBitmapMask();
 
-        const rtW = maskImage.width * scale;
-        const rtH = maskImage.height * scale;
-        const rt = this.scene.add.renderTexture(x - rtW/2, y - rtH/2, rtW, rtH);
+        // --- 🔥 SỬA ĐOẠN NÀY ĐỂ FIX LAG 🔥 ---
         
-        rt.setOrigin(0, 0).setMask(mask).setDepth(10);
+        // Thay vì lấy maskImage.width (Full size 1920x1080), ta lấy kích thước đã cắt (Ví dụ: 200x300)
+        const rtW = frameData.cutWidth * scale;
+        const rtH = frameData.cutHeight * scale;
+
+        // Tính toán vị trí đặt Render Texture (Phải đặt lệch đi để khớp với hình hiển thị)
+        // Công thức: Tọa độ Gốc - Một nửa kích thước gốc + Độ lệch trim + Một nửa kích thước mới
+        // (Hoặc đơn giản hơn: Căn theo toạ độ lệch của frame)
+        const rtX = x - (frameData.realWidth * scale) / 2 + (frameData.x * scale);
+        const rtY = y - (frameData.realHeight * scale) / 2 + (frameData.y * scale);
+
+        // Tạo Render Texture bé xinh (chỉ chứa đúng hình cái tay/chân)
+        const rt = this.scene.add.renderTexture(rtX, rtY, rtW, rtH);
+        
+        rt.setOrigin(0, 0)
+          .setMask(mask)
+          .setDepth(10);
+          
         rt.setData('id', uniqueId);
         rt.setData('key', key);
-        rt.setData('frame', frame); 
+        rt.setData('frame', frameName); 
         rt.setData('isFinished', false);
 
-        const hitArea = this.scene.add.image(x, y, key, frame).setScale(scale).setAlpha(0.01).setDepth(50);
+        // 3. Tạo HitArea (Vùng chạm) - Cái này vẫn để Full Size để dễ bắt sự kiện
+        const hitArea = this.scene.add.image(x, y, key, frameName)
+            .setScale(scale)
+            .setAlpha(0.01) // Gần như trong suốt
+            .setDepth(50);
+            
         hitArea.setInteractive({ useHandCursor: true, pixelPerfect: true });
 
         hitArea.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
             this.activeRenderTexture = rt;
             
-            // ✅ QUAN TRỌNG: Lưu vị trí bắt đầu để tính toán LERP
+            // Tính toạ độ chuột tương đối với RT (RT giờ nằm lệch nên phải tính theo rt.x, rt.y)
             this.lastX = pointer.x - rt.x;
             this.lastY = pointer.y - rt.y;
 
             this.totalDistancePainted = 0;
-
             this.paint(pointer, rt);
         });
+
+        // Debug: Bỏ comment dòng này để xem kích thước thật sự (Nó phải bé tầm 200-300px mới đúng)
+        // console.log(`Created RT ${uniqueId}: ${rtW}x${rtH}`);
 
         return hitArea;
     }
@@ -113,12 +139,21 @@ export class PaintManager {
             return;
         }
         if (this.activeRenderTexture) {
-            // CHỈ CHECK NẾU VẼ ĐỦ NHIỀU
+            // Lưu tham chiếu RT lại vì this.activeRenderTexture sẽ bị null ngay sau đó
+            const rtToCheck = this.activeRenderTexture;
+
             if (this.totalDistancePainted > this.CHECK_THRESHOLD) {
-                this.checkProgress(this.activeRenderTexture);
+                // ✅ FIX KHỰNG: Đẩy việc check xuống 50ms sau
+                setTimeout(() => {
+                    // Kiểm tra lại xem RT và Scene còn sống không (tránh lỗi khi chuyển cảnh nhanh)
+                    if (rtToCheck && rtToCheck.scene && rtToCheck.active) {
+                        this.checkProgress(rtToCheck);
+                    }
+                }, 50); 
             }
+            
             this.activeRenderTexture = null;
-            this.totalDistancePainted = 0; // Reset
+            this.totalDistancePainted = 0;
         }
     }
 
