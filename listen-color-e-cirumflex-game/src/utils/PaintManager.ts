@@ -5,7 +5,7 @@ export class PaintManager {
     private scene: Phaser.Scene;
 
     private totalDistancePainted: number = 0; 
-    private readonly CHECK_THRESHOLD: number = 300; // Vẽ đủ 300px mới check
+    private readonly CHECK_THRESHOLD: number = 30; 
     
     // Config
     private brushColor: number = GameConstants.PAINT.DEFAULT_COLOR;
@@ -139,21 +139,28 @@ export class PaintManager {
             return;
         }
         if (this.activeRenderTexture) {
-            // Lưu tham chiếu RT lại vì this.activeRenderTexture sẽ bị null ngay sau đó
             const rtToCheck = this.activeRenderTexture;
 
+            // Kiểm tra xem tổng quãng đường đã vẽ (tích lũy từ các lần trước) có đủ lớn không
             if (this.totalDistancePainted > this.CHECK_THRESHOLD) {
-                // ✅ FIX KHỰNG: Đẩy việc check xuống 50ms sau
+                
+                // ✅ FIX: Chỉ reset biến đếm KHI VÀ CHỈ KHI chúng ta thực hiện check
+                this.totalDistancePainted = 0; 
+
                 setTimeout(() => {
-                    // Kiểm tra lại xem RT và Scene còn sống không (tránh lỗi khi chuyển cảnh nhanh)
                     if (rtToCheck && rtToCheck.scene && rtToCheck.active) {
                         this.checkProgress(rtToCheck);
                     }
-                }, 50); 
+                }, 50);
+            } else {
+                // ⚠️ QUAN TRỌNG: Nếu chưa đủ ngưỡng thì KHÔNG ĐƯỢC RESET về 0
+                // Để nó cộng dồn tiếp cho lần vẽ sau.
+                // (Ví dụ: Lần 1 vẽ 20px, lần 2 vẽ 30px -> Tổng 50px -> Đủ điều kiện check)
+                console.log(`Chưa đủ ngưỡng check (${this.totalDistancePainted}/${this.CHECK_THRESHOLD}), đợi nét tiếp theo...`);
             }
             
             this.activeRenderTexture = null;
-            this.totalDistancePainted = 0;
+            // DÒNG CŨ CỦA BẠN LÀ: this.totalDistancePainted = 0; (Ở đây là SAI vì nó xóa công sức vẽ nét ngắn)
         }
     }
 
@@ -218,6 +225,7 @@ export class PaintManager {
     // ✅ HÀM CHECK PROGRESS ĐÃ SỬA LỖI ATLAS
     // PaintManager.ts
 
+
     private checkProgress(rt: Phaser.GameObjects.RenderTexture) {
         if (rt.getData('isFinished')) return;
         
@@ -230,6 +238,7 @@ export class PaintManager {
             
             const w = snapshot.width;
             const h = snapshot.height;
+            // Kích thước canvas kiểm tra (nhỏ hơn 4 lần để nhẹ)
             const checkW = Math.floor(w / 4);
             const checkH = Math.floor(h / 4);
 
@@ -250,26 +259,19 @@ export class PaintManager {
             const texture = this.scene.textures.get(key);
             const frame = texture.get(frameName);
 
-            // --- 🔥 FIX LOGIC VẼ ATLAS CÓ TRIM 🔥 ---
+            // --- 🔥 FIX LOGIC CHECK WIN (ĐÃ SỬA) 🔥 ---
+            // Vì RT đã được cắt gọn (Trimmed) ở createPaintableLayer,
+            // nên Snapshot cũng là hình đã cắt gọn.
+            // Ta chỉ cần vẽ thẳng vùng cắt của Atlas vào Canvas kiểm tra là khớp 100%.
             
-            // Tính tỷ lệ thu nhỏ để vẽ vào canvas check (vì checkW nhỏ hơn ảnh gốc)
-            // frame.realWidth là kích thước gốc chưa bị cắt của ảnh
-            const scaleX = checkW / frame.realWidth;
-            const scaleY = checkH / frame.realHeight;
-
             ctxMask.drawImage(
                 frame.source.image as CanvasImageSource, // Ảnh nguồn (Atlas)
                 frame.cutX, frame.cutY,                  // Tọa độ cắt trên Atlas
                 frame.cutWidth, frame.cutHeight,         // Kích thước vùng cắt
-                
-                // VẼ VÀO ĐÍCH: Phải tính cả độ lệch (Offset) của Trim
-                frame.x * scaleX,        // dx: Lệch X
-                frame.y * scaleY,        // dy: Lệch Y
-                frame.width * scaleX,    // dWidth: Chiều rộng sau khi Trim
-                frame.height * scaleY    // dHeight: Chiều cao sau khi Trim
+                0, 0, checkW, checkH                     // Vẽ tràn đầy vào canvas kiểm tra
             );
 
-            // 3. So sánh Pixel (Giữ nguyên)
+            // 3. So sánh Pixel (Giữ nguyên logic cũ)
             const paintData = ctxPaint.getImageData(0, 0, checkW, checkH).data;
             const maskData = ctxMask.getImageData(0, 0, checkW, checkH).data;
 
@@ -285,8 +287,8 @@ export class PaintManager {
 
             const percentage = total > 0 ? match / total : 0;
             
-            // Log để kiểm tra (có thể xóa sau khi ngon)
-            console.log(`[Paint] Part: ${id} | ${match}/${total} (${(percentage * 100).toFixed(1)}%)`);
+            // Log kiểm tra
+            // console.log(`[Paint] Part: ${id} | Progress: ${(percentage * 100).toFixed(1)}%`);
 
             if (percentage > GameConstants.PAINT.WIN_PERCENT) {
                 console.log(`>>> WIN PART: ${id}`);

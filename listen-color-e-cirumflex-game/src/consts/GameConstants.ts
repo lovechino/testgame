@@ -116,7 +116,7 @@ export const GameConstants = {
     PAINT: {
         BRUSH_SIZE: 100,
         /** Tỉ lệ tô màu để tính là hoàn thành (0.90 = 90%) */
-        WIN_PERCENT: 0.7,
+        WIN_PERCENT: 0.9,
         DEFAULT_COLOR: 0xff0000
     },
 
