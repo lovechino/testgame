@@ -98,6 +98,8 @@ export class PaintManager {
         rt.setOrigin(0, 0)
           .setMask(mask)
           .setDepth(10);
+
+        rt.setVisible(false);
           
         rt.setData('id', uniqueId);
         rt.setData('key', key);
@@ -124,10 +126,10 @@ export class PaintManager {
 
             // 4. Nếu click vào vùng trong suốt (Alpha < 255) -> BỎ QUA NGAY
             // Để sự kiện trôi xuống layer bên dưới (nhờ topOnly = false)
-            if (alpha < 200) {
+            if (alpha < 50) {
                 return; 
             }
-
+            rt.setVisible(true);
             // 5. Nếu trúng vùng có màu -> Bắt đầu vẽ
             this.activeRenderTexture = rt;
             this.lastX = pointer.x - rt.x;
