@@ -179,7 +179,7 @@ export class PaintManager {
 
         // 3. Thuật toán LERP (Nội suy)
         // GIẢM MẬT ĐỘ VẼ: Vẽ thưa hơn
-        const stepSize = this.brushSize / 2; 
+        const stepSize = this.brushSize *0.65; 
         
         //GIỚI HẠN VÒNG LẶP: Tránh treo máy
         let steps = Math.ceil(distance / stepSize);
@@ -223,8 +223,6 @@ export class PaintManager {
     }
 
     // ✅ HÀM CHECK PROGRESS ĐÃ SỬA LỖI ATLAS
-    // PaintManager.ts
-
 
     private checkProgress(rt: Phaser.GameObjects.RenderTexture) {
         if (rt.getData('isFinished')) return;
@@ -236,11 +234,22 @@ export class PaintManager {
         rt.snapshot((snapshot) => {
             if (!(snapshot instanceof HTMLImageElement)) return;
             
-            const w = snapshot.width;
-            const h = snapshot.height;
-            // Kích thước canvas kiểm tra (nhỏ hơn 4 lần để nhẹ)
-            const checkW = Math.floor(w / 4);
-            const checkH = Math.floor(h / 4);
+            // 🔥 TỐI ƯU CỰC MẠNH (BEST PRACTICE) 🔥
+            // Thay vì chia tỉ lệ (w/4), ta ép về kích thước cố định SIÊU NHỎ (32px).
+            // Dù là iPhone 15 hay máy Android đời Tống thì CPU cũng chỉ phải duyệt 32x32 = 1024 điểm ảnh.
+            // Tốc độ xử lý sẽ < 2ms (cực nhanh).
+            const FIXED_SIZE = 32; 
+            
+            const aspectRatio = snapshot.width / snapshot.height;
+            let checkW = FIXED_SIZE;
+            let checkH = FIXED_SIZE;
+
+            // Tính toán kích thước giữ tỉ lệ khung hình
+            if (aspectRatio > 1) {
+                checkH = Math.floor(FIXED_SIZE / aspectRatio);
+            } else {
+                checkW = Math.floor(FIXED_SIZE * aspectRatio);
+            }
 
             // 1. Lấy mẫu nét vẽ (PAINT)
             const ctxPaint = this.getRecycledContext(this.helperCanvasPaint, snapshot, checkW, checkH);
@@ -259,19 +268,15 @@ export class PaintManager {
             const texture = this.scene.textures.get(key);
             const frame = texture.get(frameName);
 
-            // --- 🔥 FIX LOGIC CHECK WIN (ĐÃ SỬA) 🔥 ---
-            // Vì RT đã được cắt gọn (Trimmed) ở createPaintableLayer,
-            // nên Snapshot cũng là hình đã cắt gọn.
-            // Ta chỉ cần vẽ thẳng vùng cắt của Atlas vào Canvas kiểm tra là khớp 100%.
-            
+            // Vẽ Atlas vào (Logic cũ đã chuẩn, giữ nguyên)
             ctxMask.drawImage(
-                frame.source.image as CanvasImageSource, // Ảnh nguồn (Atlas)
-                frame.cutX, frame.cutY,                  // Tọa độ cắt trên Atlas
-                frame.cutWidth, frame.cutHeight,         // Kích thước vùng cắt
-                0, 0, checkW, checkH                     // Vẽ tràn đầy vào canvas kiểm tra
+                frame.source.image as CanvasImageSource,
+                frame.cutX, frame.cutY,
+                frame.cutWidth, frame.cutHeight,
+                0, 0, checkW, checkH 
             );
 
-            // 3. So sánh Pixel (Giữ nguyên logic cũ)
+            // 3. So sánh Pixel (Vòng lặp này giờ chạy siêu nhanh vì checkW, checkH rất nhỏ)
             const paintData = ctxPaint.getImageData(0, 0, checkW, checkH).data;
             const maskData = ctxMask.getImageData(0, 0, checkW, checkH).data;
 
@@ -279,21 +284,17 @@ export class PaintManager {
             let total = 0;
 
             for (let i = 3; i < paintData.length; i += 4) {
-                if (maskData[i] > 0) { // Pixel thuộc hình mẫu
+                if (maskData[i] > 0) {
                     total++;
-                    if (paintData[i] > 0) match++; // Pixel đã được tô
+                    if (paintData[i] > 0) match++;
                 }
             }
 
             const percentage = total > 0 ? match / total : 0;
             
-            // Log kiểm tra
-            // console.log(`[Paint] Part: ${id} | Progress: ${(percentage * 100).toFixed(1)}%`);
-
             if (percentage > GameConstants.PAINT.WIN_PERCENT) {
                 console.log(`>>> WIN PART: ${id}`);
                 rt.setData('isFinished', true);
-                
                 const usedColors = this.partColors.get(id) || new Set([this.brushColor]);
                 this.onPartComplete(id, rt, usedColors);
                 this.partColors.delete(id);

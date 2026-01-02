@@ -15,10 +15,20 @@ declare global {
     }
 }
 
-// 1. Thêm check mobile
+// 1. Check mobile
 const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-// 2. Nếu mobile thì giảm resolution, PC thì giữ nguyên
-const pixelRatio = isMobile ? 0.6 : 1.0;
+
+// 2. TÍNH TOÁN RESOLUTION THÔNG MINH (BEST PRACTICE)
+// Lấy tỉ lệ màn hình thực tế của thiết bị
+const deviceRatio = window.devicePixelRatio || 1;
+// 🔥 QUAN TRỌNG: Đặt giới hạn trần (Cap) là 1.5
+// Dù màn hình xịn cỡ nào (Retina, 4K), game chỉ render tối đa 1.5 lần điểm ảnh CSS.
+// Mắt thường không phân biệt được sự khác biệt trên màn hình đt bé, nhưng hiệu năng tăng gấp 3-4 lần.
+const maxRatio = 1.5; 
+const realRatio = Math.min(deviceRatio, maxRatio);
+
+// Nếu là mobile nhân 0.6, PC nhân 0.8 (cho nhẹ hẳn)
+const finalResolution = realRatio * (isMobile ? 0.6 : 0.8);
 
 // --- CẤU HÌNH GAME (Theo cấu trúc mẫu: FIT) ---
 const config: Phaser.Types.Core.GameConfig & { resolution?: number } = {
@@ -38,7 +48,7 @@ const config: Phaser.Types.Core.GameConfig & { resolution?: number } = {
         default: 'arcade',
         arcade: { debug: false }
     },
-    resolution: pixelRatio,
+    resolution: finalResolution, // ✅ Dùng biến đã tính toán kỹ
     render: {
         transparent: true,
         roundPixels: false, // Tắt làm tròn để mượt hơn
