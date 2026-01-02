@@ -14,6 +14,7 @@ export default class Scene1 extends Phaser.Scene {
     // --- KHAI BÁO BIẾN UI & GAME OBJECTS ---
     // Danh sách các vật thể để người chơi chọn (cái ô, nấm, đèn...)
     private puzzleItems: Phaser.GameObjects.Image[] = [];
+    private debugText!: Phaser.GameObjects.Text;
     
     // Các thành phần UI khi chiến thắng
     private victoryBg!: Phaser.GameObjects.Image;   // Nền popup thắng
@@ -53,6 +54,8 @@ export default class Scene1 extends Phaser.Scene {
 
         // Sự kiện khi Scene được đánh thức lại (ví dụ: quay lại từ scene khác hoặc unmute)
         this.events.on('wake', this.handleWake, this);
+        this.debugText = this.add.text(10, 50, 'FPS: 60', { font: '30px Arial', color: '#00ff00', backgroundColor: '#000000' });
+        this.debugText.setScrollFactor(0).setDepth(9999);
     }
 
     /**
@@ -63,6 +66,10 @@ export default class Scene1 extends Phaser.Scene {
     update(time: number, delta: number) {
         // Cập nhật bộ đếm thời gian rảnh
         this.idleManager.update(delta);
+        
+        const fps = Math.floor(this.game.loop.actualFps);
+        this.debugText.setText(`FPS: ${fps}`);
+        this.debugText.setColor(fps < 30 ? '#ff0000' : (fps < 55 ? '#ffff00' : '#00ff00'));
     }
 
     /**
