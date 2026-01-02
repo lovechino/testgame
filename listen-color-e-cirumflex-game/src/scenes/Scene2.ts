@@ -207,10 +207,16 @@ export default class Scene2 extends Phaser.Scene {
         const cx = GameUtils.pctX(this, config.baseX_pct);
         const cy = GameUtils.pctY(this, config.baseY_pct);
 
+        // Quy định Depth cơ bản: Item (Búp bê) nằm dưới (10), Letter (Chữ) nằm trên (30)
+        const baseDepth = config.outlineKey === 'item_outline' ? 10 : 30;
+
         config.parts.forEach((part: any, index: number) => {
             const id = `${part.frame}_${index}`; // Đổi ID theo tên frame cho dễ debug
             const layerX = cx + part.offsetX;
             const layerY = cy + part.offsetY;
+
+            // 🔥 TÍNH TOÁN DEPTH: Đảm bảo bộ phận sau đè lên bộ phận trước
+            const partDepth = baseDepth + index;
             
             // Tạo vùng tô màu thông qua PaintManager
             const hitArea = this.paintManager.createPaintableLayer(
@@ -219,9 +225,9 @@ export default class Scene2 extends Phaser.Scene {
                 part.key,   // 's2_parts'
                 part.frame, // 'doll_1'
                 part.scale, 
-                id
+                id,
+                partDepth
             );
-
             // --- BEST PRACTICE: LƯU DỮ LIỆU TĨNH ---
             // Lưu các thông số cấu hình vào Data Manager của Game Object.
             // Điều này cực kỳ quan trọng để sửa lỗi lệch vị trí khi lag/tween.

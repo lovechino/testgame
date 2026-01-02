@@ -17,14 +17,8 @@ declare global {
 
 // 1. Check mobile
 const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-// 2. TÍNH TOÁN RESOLUTION THÔNG MINH (BEST PRACTICE)
-// Lấy tỉ lệ màn hình thực tế của thiết bị
 const deviceRatio = window.devicePixelRatio || 1;
-// 🔥 QUAN TRỌNG: Đặt giới hạn trần (Cap) là 1.5
-// Dù màn hình xịn cỡ nào (Retina, 4K), game chỉ render tối đa 1.5 lần điểm ảnh CSS.
-// Mắt thường không phân biệt được sự khác biệt trên màn hình đt bé, nhưng hiệu năng tăng gấp 3-4 lần.
-const maxRatio = 1.5; 
+const maxRatio = 1.0; 
 const realRatio = Math.min(deviceRatio, maxRatio);
 
 // Nếu là mobile nhân 0.6, PC nhân 0.8 (cho nhẹ hẳn)
