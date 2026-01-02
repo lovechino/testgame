@@ -79,9 +79,11 @@ export default class Scene2 extends Phaser.Scene {
             this.idleManager.update(delta);
         }
 
-        const fps = Math.floor(this.game.loop.actualFps);
-        this.debugText.setText(`FPS: ${fps}`);
-        this.debugText.setColor(fps < 30 ? '#ff0000' : (fps < 55 ? '#ffff00' : '#00ff00'));
+        if (this.game.loop.frame % 20 === 0) {
+            const fps = Math.floor(this.game.loop.actualFps);
+            this.debugText.setText(`FPS: ${fps}`);
+            this.debugText.setColor(fps < 30 ? '#ff0000' : (fps < 55 ? '#ffff00' : '#00ff00'));
+        }
     }
 
     shutdown() {
