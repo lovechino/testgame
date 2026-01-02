@@ -33,6 +33,8 @@ export class PaintManager {
     constructor(scene: Phaser.Scene, onComplete: (id: string, rt: Phaser.GameObjects.RenderTexture, usedColors: Set<number>) => void) {
         this.scene = scene;
         this.onPartComplete = onComplete;
+        // 🔥 THÊM DÒNG NÀY: Cho phép Phaser tìm kiếm các object bên dưới nếu object trên bỏ qua
+        this.scene.input.topOnly = false;
         
         // Khởi tạo Canvas tạm 1 lần duy nhất
         this.helperCanvasPaint = document.createElement('canvas');
@@ -108,15 +110,28 @@ export class PaintManager {
             .setAlpha(0.01) // Gần như trong suốt
             .setDepth(50);
             
-        hitArea.setInteractive({ useHandCursor: true, pixelPerfect: true });
+        hitArea.setInteractive({ useHandCursor: true });
 
         hitArea.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+            // 1. Nếu đang vẽ dở cái khác thì thôi
+            if (this.activeRenderTexture) return;
+            // 2. CHECK THỦ CÔNG: Tính toạ độ click trên ảnh gốc
+            // (Chuyển đổi từ toạ độ màn hình -> toạ độ nội bộ của ảnh)
+            const localX = (pointer.x - hitArea.x) / hitArea.scaleX + hitArea.width * hitArea.originX;
+            const localY = (pointer.y - hitArea.y) / hitArea.scaleY + hitArea.height * hitArea.originY;
+            // 3. Lấy độ trong suốt (Alpha) tại điểm đó
+            const alpha = this.scene.textures.getPixelAlpha(localX, localY, key, frameName);
+
+            // 4. Nếu click vào vùng trong suốt (Alpha < 255) -> BỎ QUA NGAY
+            // Để sự kiện trôi xuống layer bên dưới (nhờ topOnly = false)
+            if (alpha < 200) {
+                return; 
+            }
+
+            // 5. Nếu trúng vùng có màu -> Bắt đầu vẽ
             this.activeRenderTexture = rt;
-            
-            // Tính toạ độ chuột tương đối với RT (RT giờ nằm lệch nên phải tính theo rt.x, rt.y)
             this.lastX = pointer.x - rt.x;
             this.lastY = pointer.y - rt.y;
-
             this.totalDistancePainted = 0;
             this.paint(pointer, rt);
         });

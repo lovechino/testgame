@@ -232,7 +232,7 @@ export default class Scene2 extends Phaser.Scene {
         });
 
         // Vẽ viền (Outline) lên trên cùng
-        this.add.image(cx, cy, config.outlineKey).setScale(config.baseScale).setDepth(100).setInteractive({ pixelPerfect: true });
+        this.add.image(cx, cy, config.outlineKey).setScale(config.baseScale).setDepth(100);
     }
 
     // =================================================================

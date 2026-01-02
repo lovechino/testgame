@@ -53,7 +53,7 @@ const config: Phaser.Types.Core.GameConfig & { resolution?: number } = {
         transparent: true,
         roundPixels: false, // Tắt làm tròn để mượt hơn
         antialias: true,    // Vẫn bật khử răng cưa cho đẹp
-        powerPreference: 'high-performance',
+        powerPreference: 'default',
     },
 };
 
