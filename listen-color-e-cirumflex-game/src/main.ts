@@ -18,7 +18,7 @@ declare global {
 // 1. Check mobile
 const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 const deviceRatio = window.devicePixelRatio || 1;
-const maxRatio = 1.0; 
+const maxRatio = 1.0;
 const realRatio = Math.min(deviceRatio, maxRatio);
 
 // Nếu là mobile nhân 0.6, PC nhân 0.8 (cho nhẹ hẳn)
@@ -35,8 +35,9 @@ const config: Phaser.Types.Core.GameConfig & { resolution?: number } = {
     scale: {
         mode: Phaser.Scale.FIT,       // Dùng FIT để co giãn giữ tỉ lệ
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        width: 1920, 
+        width: 1920,
         height: 1080,
+        expandParent: true
     },
     physics: {
         default: 'arcade',
@@ -85,7 +86,7 @@ export function hideGameButtons() {
 
 function attachResetHandler() {
     const resetBtn = document.getElementById('btn-reset') as HTMLImageElement;
-    
+
     if (resetBtn) {
         resetBtn.onclick = () => {
             console.log('Restart button clicked. Stopping all audio and restarting scene.');
@@ -95,18 +96,18 @@ function attachResetHandler() {
             AudioManager.stopAll();
             // 2. PHÁT SFX CLIC
             try {
-                AudioManager.play('sfx-click'); 
+                AudioManager.play('sfx-click');
             } catch (e) {
                 console.error("Error playing sfx-click on restart:", e);
             }
 
             if (window.gameScene && window.gameScene.scene) {
                 window.gameScene.scene.stop();
-                window.gameScene.scene.start('Scene1'); 
+                window.gameScene.scene.start('Scene1');
             } else {
                 console.error('GameScene instance not found on window. Cannot restart.');
             }
-            
+
             hideGameButtons();
         };
     }
