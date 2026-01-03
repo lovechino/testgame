@@ -132,7 +132,10 @@ export default class Scene2 extends Phaser.Scene {
         this.add.image(cx, textY, TextureKeys.S2_TextBanner).setScale(0.7);
 
         const boardY = banner.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
-        this.add.image(cx, boardY, TextureKeys.S2_Board).setOrigin(0.5, 0).setScale(0.7);
+        this.add.image(cx, boardY, TextureKeys.S2_Board)
+            .setOrigin(0.5, 0)
+            .setScale(1, 0.7)
+            .displayWidth = GameUtils.getW(this) * 0.95;
 
         this.createPalette();
 

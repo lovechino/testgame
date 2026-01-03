@@ -35,7 +35,7 @@ export const GameConstants = {
             /** Vị trí Mưa: Nằm ở 45% chiều cao của cái Bảng */
             ILLUSTRATION_OFFSET: 0.45,
             /** Vị trí Thơ: Cách đáy Mưa 17% màn hình */
-            POEM_OFFSET: 0.15,
+            POEM_OFFSET: 0.05,
 
             /** Icon O lệch trái 13% chiều rộng bảng */
             ICON_O_X: 0.13,
@@ -47,8 +47,8 @@ export const GameConstants = {
             ITEM_OFFSET_X_2: -0.17,
             ITEM_OFFSET_X_3: 0.2,
             /** Item lệch trục Y so với tâm bảng (Tỉ lệ chiều rộng bảng) */
-            ITEM_OFFSET_Y_1: -0.35,
-            ITEM_OFFSET_Y_2: 0.35,
+            ITEM_OFFSET_Y_1: -0.3,
+            ITEM_OFFSET_Y_2: 0.3,
             ITEM_OFFSET_Y_3: 0,
         },
         ANIM: {

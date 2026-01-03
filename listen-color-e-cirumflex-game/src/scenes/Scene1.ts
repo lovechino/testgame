@@ -181,23 +181,25 @@ export default class Scene1 extends Phaser.Scene {
         const boardY = this.bannerBg.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
         const boardX = GameUtils.pctX(this, 0.5) - GameUtils.pctY(this, UI.BOARD_MARGIN_X);
 
-        const boardLeft = this.add.image(boardX, boardY, TextureKeys.S1_Board)
-            .setOrigin(1, 0).setScale(0.7); // Origin(1,0) nghĩa là neo ở góc trên bên phải của ảnh
+        // Tách ra để fix lỗi TypeScript nhận diện sai kiểu
+        const boardLeft = this.add.image(boardX, boardY, TextureKeys.S1_Board);
+        boardLeft.setOrigin(1, 0).setScale(1, 0.7);
+        boardLeft.displayWidth = GameUtils.getW(this) * 0.45;
 
         // 2. Tính tâm của bảng trái để đặt các nội dung con
-        const centerX = GameUtils.pctX(this, 0.5 - boardLeft.displayWidth / GameUtils.getW(this) / 2) - GameUtils.pctY(this, UI.BOARD_MARGIN_X);
+        const centerX = boardLeft.x - boardLeft.displayWidth / 2;
         const centerY = boardY + boardLeft.displayHeight / 2;
         const bottomY = boardY + boardLeft.displayHeight;
 
         // 3. Hiệu ứng ẢNH MINH HỌA
         const illustrationY = centerY + (boardLeft.displayHeight * UI.ILLUSTRATION_OFFSET);
         const illustration = this.add.image(centerX, illustrationY, TextureKeys.S1_Illustration)
-            .setScale(0.8).setOrigin(0.5, 1);
+            .setScale(1).setOrigin(0.5, 1);
 
         // 4. Bài thơ (Interactive: click vào sẽ đọc lại câu đố)
         const poemY = bottomY - illustration.displayHeight - GameUtils.pctY(this, UI.POEM_OFFSET);
         const poemText = this.add.image(centerX, poemY, TextureKeys.S1_PoemText)
-            .setScale(0.7).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
+            .setScale(0.9).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
 
         // Hiệu ứng bài thơ trôi nhẹ lên xuống
         this.tweens.add({ targets: poemText, y: '+=10', duration: ANIM.POEM_FLOAT, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
@@ -216,7 +218,7 @@ export default class Scene1 extends Phaser.Scene {
         const iconX = centerX - boardLeft.displayWidth * UI.ICON_O_X;
         const iconY = boardY + GameUtils.pctY(this, UI.ICON_O_Y);
         const iconO = this.add.image(iconX, iconY, TextureKeys.S1_IconOHeader)
-            .setScale(0.8).setOrigin(0.5, 0);
+            .setScale(1).setOrigin(0.5, 0);
 
         // Hiệu ứng lắc lư cho icon O
         this.tweens.add({ targets: iconO, angle: { from: -4, to: 4 }, duration: ANIM.ICON_SHAKE, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
@@ -232,12 +234,13 @@ export default class Scene1 extends Phaser.Scene {
         const boardY = this.bannerBg.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
         const boardX = GameUtils.pctX(this, 0.5) + GameUtils.pctY(this, UI.BOARD_MARGIN_X);
 
-        const boardRight = this.add.image(boardX, boardY, TextureKeys.S1_Board)
-            .setOrigin(0, 0).setScale(0.7);
+        const boardRight = this.add.image(boardX, boardY, TextureKeys.S1_Board);
+        boardRight.setOrigin(0, 0).setScale(1, 0.7);
+        boardRight.displayWidth = GameUtils.getW(this) * 0.45;
 
         // 2. Tính tâm bảng phải
-        const centerX = GameUtils.pctX(this, 0.5 + boardRight.displayWidth / GameUtils.getW(this) / 2) + GameUtils.pctY(this, UI.BOARD_MARGIN_X);
-        const centerY = boardY + boardRight.displayHeight / 2;
+        const centerX = boardRight.x + boardRight.displayWidth / 2;
+        const centerY = boardRight.y + boardRight.displayHeight / 2;
 
         this.puzzleItems = []; // Reset danh sách items
 
@@ -270,7 +273,7 @@ export default class Scene1 extends Phaser.Scene {
      * @param isCorrect Đây có phải đáp án đúng không?
      */
     private createPuzzleItem(x: number, y: number, key: string, isCorrect: boolean) {
-        const item = this.add.image(x, y, key).setInteractive({ useHandCursor: true }).setScale(0.7);
+        const item = this.add.image(x, y, key).setInteractive({ useHandCursor: true }).setScale(0.9);
         // Lưu dữ liệu vào vật thể để biết đúng hay sai
         item.setData('isCorrect', isCorrect);
 
@@ -387,7 +390,7 @@ export default class Scene1 extends Phaser.Scene {
 
         // Hiện popup chiến thắng
         const ANIM = GameConstants.SCENE1.ANIM;
-        this.tweens.add({ targets: this.victoryBg, scale: 0.9, duration: ANIM.WIN_POPUP, ease: 'Back.out' });
+        this.tweens.add({ targets: this.victoryBg, scale: 1, duration: ANIM.WIN_POPUP, ease: 'Back.out' });
         this.tweens.add({ targets: this.victoryText, alpha: 1, y: this.victoryText.y - 20, duration: ANIM.WIN_POPUP });
 
         // Di chuyển đáp án đúng vào giữa popup
@@ -396,11 +399,11 @@ export default class Scene1 extends Phaser.Scene {
             targets: winnerItem,
             x: this.victoryBg.x,
             y: this.victoryBg.y - 100,
-            scale: 0.7,
+            scale: 0.8,
             duration: ANIM.WIN_POPUP,
             ease: 'Back.out',
             onComplete: () => {
-                // Đọc tên vật thể ("Cái Ô")
+                // Đọc tên vật thể
                 playVoiceLocked(null, 'voice_item_win');
 
                 // Đợi 1 chút rồi phát tiếng vỗ tay/khen ngợi
