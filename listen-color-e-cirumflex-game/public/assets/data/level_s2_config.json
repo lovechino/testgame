@@ -1,16 +1,16 @@
 {
   "item": {
-    "baseScale": 0.8,
+    "baseScale": 0.94,
     "outlineKey": "item_outline",
-    "baseX_pct": 0.37,
-    "baseY_pct": 0.5,
+    "baseX_pct": 0.3,
+    "baseY_pct": 0.56,
     "parts": [
       {
         "key": "s2_parts",
         "frame": "doll_1",
         "offsetX": 0,
         "offsetY": 0,
-        "scale": 0.8,
+        "scale": 0.1,
         "hintX": -250,
         "hintY": -150
       },
@@ -19,7 +19,7 @@
         "frame": "doll_2",
         "offsetX": 0,
         "offsetY": 0,
-        "scale": 0.8,
+        "scale": 1,
         "hintX": 50,
         "hintY": -265
       },
@@ -28,7 +28,7 @@
         "frame": "doll_3",
         "offsetX": 0,
         "offsetY": 0,
-        "scale": 0.8,
+        "scale": 1,
         "hintX": 0,
         "hintY": -50
       },
@@ -37,7 +37,7 @@
         "frame": "doll_4",
         "offsetX": 0,
         "offsetY": 0,
-        "scale": 0.8,
+        "scale": 1,
         "hintX": -50,
         "hintY": 250
       },
@@ -46,7 +46,7 @@
         "frame": "doll_5",
         "offsetX": 0,
         "offsetY": 0,
-        "scale": 0.8,
+        "scale": 1,
         "hintX": 0,
         "hintY": 100
       },
@@ -55,7 +55,7 @@
         "frame": "doll_6",
         "offsetX": 0,
         "offsetY": 0,
-        "scale": 0.8,
+        "scale": 1,
         "hintX": -270,
         "hintY": 230
       },
@@ -64,7 +64,7 @@
         "frame": "doll_7",
         "offsetX": 0,
         "offsetY": 0,
-        "scale": 0.8,
+        "scale": 1,
         "hintX": 200,
         "hintY": 200
       },
@@ -73,24 +73,24 @@
         "frame": "doll_8",
         "offsetX": 0,
         "offsetY": 0,
-        "scale": 0.8,
+        "scale": 1,
         "hintX": 100,
         "hintY": 400
       }
     ]
   },
   "letter": {
-    "baseScale": 0.8,
+    "baseScale": 0.95,
     "outlineKey": "e_outline",
     "baseX_pct": 0.65,
-    "baseY_pct": 0.48,
+    "baseY_pct": 0.55,
     "parts": [
       {
         "key": "s2_parts",
         "frame": "e_body",
         "offsetX": 1,
         "offsetY": 4,
-        "scale": 0.8,
+        "scale": 1,
         "hintX": -125,
         "hintY": 0
       },
@@ -99,7 +99,7 @@
         "frame": "e_hat",
         "offsetX": 1,
         "offsetY": 0,
-        "scale": 0.8,
+        "scale": 1,
         "hintX": 50,
         "hintY": -250
       }

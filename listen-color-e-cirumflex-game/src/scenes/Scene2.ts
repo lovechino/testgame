@@ -121,7 +121,6 @@ export default class Scene2 extends Phaser.Scene {
     // =================================================================
 
     private createUI() {
-        // ... (Giữ nguyên logic UI)
         const UI = GameConstants.SCENE2.UI;
         const cx = GameUtils.pctX(this, 0.5);
 
@@ -131,51 +130,62 @@ export default class Scene2 extends Phaser.Scene {
         const textY = bannerY + banner.displayHeight / 2;
         this.add.image(cx, textY, TextureKeys.S2_TextBanner).setScale(0.7);
 
+        // --- CẤU HÌNH BẢNG ---
         const boardY = banner.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
-        this.add.image(cx, boardY, TextureKeys.S2_Board)
-            .setOrigin(0.5, 0)
-            .setScale(1, 0.7)
-            .displayWidth = GameUtils.getW(this) * 0.95;
 
-        this.createPalette();
+        this.add.image(cx, boardY, TextureKeys.S2_Board)
+            .setOrigin(0.5, 0) // Neo ở cạnh trên
+            .setScale(1, 0.7)
+            .displayWidth = GameUtils.getW(this) * 0.95; // Rộng 95% màn hình (đủ chỗ chứa nút)
+
+        // Truyền boardY vào để tính toán vị trí nút màu
+        this.createPalette(boardY);
 
         // Tạo tên item
         this.add.image(GameUtils.pctX(this, GameConstants.SCENE2.UI.NAME_X), GameUtils.pctY(this, GameConstants.SCENE2.UI.NAME_Y), TextureKeys.S2_Text_Item);
 
-        // Tạo bàn tay gợi ý (ẩn đi, set depth cao nhất để đè lên mọi thứ)
+        // Tạo bàn tay gợi ý
         this.handHint = this.add.image(0, 0, TextureKeys.HandHint).setDepth(200).setAlpha(0).setScale(0.7);
     }
 
-    private createPalette() {
-        // ... (Giữ nguyên logic Palette)
-        const UI = GameConstants.SCENE2.UI;
-        const spacing = GameUtils.pctX(this, UI.PALETTE_SPACING);
-        const yPos = GameUtils.pctY(this, UI.PALETTE_Y);
-        const totalItems = this.PALETTE_DATA.length + 1;
-        const startX = (GameUtils.getW(this) - (totalItems - 1) * spacing) / 2;
+    // Thêm tham số boardStartY
+    private createPalette(boardStartY: number) {
+        const xPos = GameUtils.pctX(this, 0.91);
+        const startY = boardStartY + GameUtils.pctY(this, 0.06);
+        const spacing = GameUtils.pctY(this, 0.1);
 
         this.PALETTE_DATA.forEach((item, i) => {
-            const btnX = startX + (i * spacing);
-            const btn = this.add.image(btnX, yPos, item.key).setInteractive();
+            const btnX = xPos;
+            const btnY = startY + (i * spacing);
 
-            // Logic visual: Nút đầu tiên to hơn (đang chọn)
+            const btn = this.add.image(btnX, btnY, item.key).setInteractive();
+
+            // Logic visual: Nút đầu tiên to hơn
             if (i === 0) {
                 this.firstColorBtn = btn;
-                btn.setScale(0.8).setAlpha(1);
+                btn.setScale(0.65).setAlpha(1);
             } else {
-                btn.setAlpha(0.8).setScale(0.6);
+                btn.setAlpha(0.85).setScale(0.55);
             }
 
             btn.on('pointerdown', () => {
                 this.updatePaletteVisuals(btn);
-                this.paintManager.setColor(item.color); // Chuyển màu bút
+                this.paintManager.setColor(item.color);
             });
             this.paletteButtons.push(btn);
         });
 
-        // Tạo nút Tẩy (Eraser)
-        const eraserX = startX + (this.PALETTE_DATA.length * spacing);
-        const eraser = this.add.image(eraserX, yPos, TextureKeys.BtnEraser).setInteractive().setAlpha(0.8).setScale(0.6);
+        // --- TẠO NÚT TẨY (ERASER) ---
+        // Nằm kế tiếp ở dưới cùng hàng dọc
+        const eraserX = xPos;
+        const eraserY = startY + (this.PALETTE_DATA.length * spacing);
+
+
+        const eraser = this.add.image(eraserX, eraserY, TextureKeys.BtnEraser)
+            .setInteractive()
+            .setAlpha(0.85)
+            .setScale(0.55);
+
         eraser.on('pointerdown', () => {
             this.updatePaletteVisuals(eraser);
             this.paintManager.setEraser();
@@ -183,10 +193,12 @@ export default class Scene2 extends Phaser.Scene {
         this.paletteButtons.push(eraser);
     }
 
-    // Cập nhật hiệu ứng to/nhỏ của các nút màu khi được chọn
     private updatePaletteVisuals(activeBtn: Phaser.GameObjects.Image) {
-        this.paletteButtons.forEach(b => b.setScale(0.6).setAlpha(0.8));
-        activeBtn.setScale(0.8).setAlpha(1);
+        // Các nút không chọn: Nhỏ và mờ nhẹ
+        this.paletteButtons.forEach(b => b.setScale(0.55).setAlpha(0.85));
+
+        // Nút đang chọn: To hơn và rõ
+        activeBtn.setScale(0.65).setAlpha(1);
     }
 
     private createLevel() {
