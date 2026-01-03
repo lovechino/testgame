@@ -1,16 +1,15 @@
 import Phaser from 'phaser';
 
 import { SceneKeys, TextureKeys, DataKeys } from '../consts/Keys';
-import { GameConstants } from '../consts/GameConstants'; 
+import { GameConstants } from '../consts/GameConstants';
 import { GameUtils } from '../utils/GameUtils';
 import { IdleManager } from '../utils/IdleManager';
-import { PaintManager } from '../utils/PaintManager'; 
-import { playVoiceLocked, setGameSceneReference, resetVoiceState } from '../utils/rotateOrientation'; 
+import { PaintManager } from '../utils/PaintManager';
+import { playVoiceLocked, setGameSceneReference, resetVoiceState } from '../utils/rotateOrientation';
 import AudioManager from '../audio/AudioManager';
+import { createFPSCounter } from '../utils/DebugUtils';
 
 export default class Scene2 extends Phaser.Scene {
-
-    private debugText!: Phaser.GameObjects.Text;
 
     // --- QUẢN LÝ LOGIC (MANAGERS) ---
     private paintManager!: PaintManager; // Quản lý việc tô màu, cọ vẽ, canvas
@@ -28,19 +27,19 @@ export default class Scene2 extends Phaser.Scene {
     private paletteButtons: Phaser.GameObjects.Image[] = []; // Danh sách nút màu
     private handHint!: Phaser.GameObjects.Image;             // Bàn tay gợi ý
     private firstColorBtn!: Phaser.GameObjects.Image;        // Nút màu đầu tiên (dùng cho Tutorial)
-    
+
     // Tween đang chạy cho gợi ý (lưu lại để stop khi cần)
     private activeHintTween: Phaser.Tweens.Tween | null = null;
 
     // --- CẤU HÌNH MÀU SẮC (CONFIG) ---
     private readonly PALETTE_DATA = [
-        { key: TextureKeys.BtnRed,    color: 0xFF595E },
+        { key: TextureKeys.BtnRed, color: 0xFF595E },
         { key: TextureKeys.BtnYellow, color: 0xFFCA3A },
-        { key: TextureKeys.BtnGreen,  color: 0x8AC926 },
-        { key: TextureKeys.BtnBlue,   color: 0x1982C4 },
+        { key: TextureKeys.BtnGreen, color: 0x8AC926 },
+        { key: TextureKeys.BtnBlue, color: 0x1982C4 },
         { key: TextureKeys.BtnPurple, color: 0x6A4C93 },
-        { key: TextureKeys.BtnCream,  color: 0xFDFCDC },
-        { key: TextureKeys.BtnBlack,  color: 0x000000 }
+        { key: TextureKeys.BtnCream, color: 0xFDFCDC },
+        { key: TextureKeys.BtnBlack, color: 0x000000 }
     ];
 
     constructor() { super(SceneKeys.Scene2); }
@@ -60,29 +59,21 @@ export default class Scene2 extends Phaser.Scene {
         this.setupSystem();       // Cài đặt hệ thống (Paint, Idle)
         this.createUI();          // Tạo giao diện (Bảng màu, Banner)
         this.createLevel();       // Tạo nhân vật và các vùng tô màu
-        
+
         this.setupInput();        // Cài đặt sự kiện chạm/vuốt
         this.playIntroSequence(); // Chạy hướng dẫn đầu game
+        createFPSCounter(this);   // Tạo FPS Counter
 
         // Sự kiện khi quay lại tab game (Wake up)
         this.events.on('wake', () => {
             this.idleManager.reset();
             if (this.input.keyboard) this.input.keyboard.enabled = true;
         });
-
-        this.debugText = this.add.text(10, 50, 'FPS: 60', { font: '30px Arial', color: '#00ff00', backgroundColor: '#000000' });
-        this.debugText.setScrollFactor(0).setDepth(9999);
     }
 
     update(time: number, delta: number) {
         if (!this.paintManager.isPainting() && !this.isIntroActive && this.finishedParts.size < this.totalParts) {
             this.idleManager.update(delta);
-        }
-
-        if (this.game.loop.frame % 20 === 0) {
-            const fps = Math.floor(this.game.loop.actualFps);
-            this.debugText.setText(`FPS: ${fps}`);
-            this.debugText.setColor(fps < 30 ? '#ff0000' : (fps < 55 ? '#ffff00' : '#00ff00'));
         }
     }
 
@@ -105,9 +96,9 @@ export default class Scene2 extends Phaser.Scene {
         this.paintManager = new PaintManager(this, (id, rt, usedColors) => {
             this.handlePartComplete(id, rt, usedColors);
         });
-        
+
         // Mặc định chọn màu đầu tiên
-        this.paintManager.setColor(this.PALETTE_DATA[0].color); 
+        this.paintManager.setColor(this.PALETTE_DATA[0].color);
 
         // Cài đặt Idle Manager: Khi rảnh quá lâu thì gọi showHint()
         this.idleManager = new IdleManager(GameConstants.IDLE.THRESHOLD, () => this.showHint());
@@ -117,7 +108,7 @@ export default class Scene2 extends Phaser.Scene {
         // Chuyển tiếp các sự kiện input sang cho PaintManager xử lý vẽ
         this.input.on('pointermove', (p: Phaser.Input.Pointer) => this.paintManager.handlePointerMove(p));
         this.input.on('pointerup', () => this.paintManager.handlePointerUp());
-        
+
         // Khi chạm vào màn hình -> Reset bộ đếm Idle
         this.input.on('pointerdown', () => {
             this.idleManager.reset();
@@ -133,20 +124,21 @@ export default class Scene2 extends Phaser.Scene {
         // ... (Giữ nguyên logic UI)
         const UI = GameConstants.SCENE2.UI;
         const cx = GameUtils.pctX(this, 0.5);
-        
+
         const bannerY = GameUtils.pctY(this, UI.BANNER_Y);
         const banner = this.add.image(cx, bannerY, TextureKeys.S2_Banner).setOrigin(0.5, 0).setScale(0.7);
 
-        const textY = bannerY + banner.displayHeight/2;
+        const textY = bannerY + banner.displayHeight / 2;
         this.add.image(cx, textY, TextureKeys.S2_TextBanner).setScale(0.7);
-        
+
         const boardY = banner.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
         this.add.image(cx, boardY, TextureKeys.S2_Board).setOrigin(0.5, 0).setScale(0.7);
 
         this.createPalette();
 
-        this.add.image(GameUtils.pctX(this, GameConstants.SCENE2.UI.NAME_X), GameUtils.pctY(this, GameConstants.SCENE2.UI.NAME_Y), TextureKeys.S2_Text_Item).setScale(0.7);
-        
+        // Tạo tên item
+        this.add.image(GameUtils.pctX(this, GameConstants.SCENE2.UI.NAME_X), GameUtils.pctY(this, GameConstants.SCENE2.UI.NAME_Y), TextureKeys.S2_Text_Item);
+
         // Tạo bàn tay gợi ý (ẩn đi, set depth cao nhất để đè lên mọi thứ)
         this.handHint = this.add.image(0, 0, TextureKeys.HandHint).setDepth(200).setAlpha(0).setScale(0.7);
     }
@@ -156,17 +148,17 @@ export default class Scene2 extends Phaser.Scene {
         const UI = GameConstants.SCENE2.UI;
         const spacing = GameUtils.pctX(this, UI.PALETTE_SPACING);
         const yPos = GameUtils.pctY(this, UI.PALETTE_Y);
-        const totalItems = this.PALETTE_DATA.length + 1; 
+        const totalItems = this.PALETTE_DATA.length + 1;
         const startX = (GameUtils.getW(this) - (totalItems - 1) * spacing) / 2;
 
         this.PALETTE_DATA.forEach((item, i) => {
             const btnX = startX + (i * spacing);
             const btn = this.add.image(btnX, yPos, item.key).setInteractive();
-            
+
             // Logic visual: Nút đầu tiên to hơn (đang chọn)
             if (i === 0) {
                 this.firstColorBtn = btn;
-                btn.setScale(0.8).setAlpha(1); 
+                btn.setScale(0.8).setAlpha(1);
             } else {
                 btn.setAlpha(0.8).setScale(0.6);
             }
@@ -217,14 +209,14 @@ export default class Scene2 extends Phaser.Scene {
 
             // 🔥 TÍNH TOÁN DEPTH: Đảm bảo bộ phận sau đè lên bộ phận trước
             const partDepth = baseDepth + index;
-            
+
             // Tạo vùng tô màu thông qua PaintManager
             const hitArea = this.paintManager.createPaintableLayer(
-                layerX, 
-                layerY, 
+                layerX,
+                layerY,
                 part.key,   // 's2_parts'
                 part.frame, // 'doll_1'
-                part.scale, 
+                part.scale,
                 id,
                 partDepth
             );
@@ -234,7 +226,7 @@ export default class Scene2 extends Phaser.Scene {
             hitArea.setData('hintX', part.hintX || 0);
             hitArea.setData('hintY', part.hintY || 0);
             hitArea.setData('originScale', part.scale); // Scale gốc (không đổi)
-            
+
             this.unfinishedPartsMap.set(id, hitArea);
             this.totalParts++;
         });
@@ -253,13 +245,13 @@ export default class Scene2 extends Phaser.Scene {
      */
     private handlePartComplete(id: string, rt: Phaser.GameObjects.RenderTexture, usedColors: Set<number>) {
         this.finishedParts.add(id);
-        
+
         // --- LOGIC AUTO-FILL THÔNG MINH ---
         // Nếu bé chỉ dùng ĐÚNG 1 MÀU -> Game tự động fill màu đó cho đẹp (khen thưởng)
         if (usedColors.size === 1) {
             // FIX TYPESCRIPT: Thêm '|| 0' để đảm bảo không bị lỗi undefined
-            const singleColor = usedColors.values().next().value || 0; 
-            
+            const singleColor = usedColors.values().next().value || 0;
+
             rt.setBlendMode(Phaser.BlendModes.NORMAL);
             rt.fill(singleColor);
         } else {
@@ -269,9 +261,9 @@ export default class Scene2 extends Phaser.Scene {
 
         // Xóa khỏi danh sách chưa tô -> Để gợi ý không chỉ vào cái này nữa
         this.unfinishedPartsMap.delete(id);
-        
+
         AudioManager.play('sfx-ting');
-        
+
         // Hiệu ứng nhấp nháy báo hiệu hoàn thành
         this.tweens.add({ targets: rt, alpha: 0.8, yoyo: true, duration: GameConstants.SCENE2.TIMING.AUTO_FILL, repeat: 2 });
 
@@ -301,7 +293,7 @@ export default class Scene2 extends Phaser.Scene {
 
     private stopIntro() {
         this.isIntroActive = false;
-        this.idleManager.start(); 
+        this.idleManager.start();
         this.tweens.killTweensOf(this.handHint);
         this.handHint.setAlpha(0).setPosition(-200, -200);
     }
@@ -311,10 +303,10 @@ export default class Scene2 extends Phaser.Scene {
      */
     private runHandTutorial() {
         if (!this.firstColorBtn || !this.isIntroActive) return;
-        
+
         const UI = GameConstants.SCENE2.UI;
         const INTRO = GameConstants.SCENE2.INTRO_HAND;
-        
+
         // Tính toán tọa độ
         const startX = this.firstColorBtn.x + 20;
         const startY = this.firstColorBtn.y + 20;
@@ -332,11 +324,13 @@ export default class Scene2 extends Phaser.Scene {
                 { scale: 0.5, duration: INTRO.TAP, yoyo: true, repeat: 0.7 },
                 { x: endX, y: dragY, duration: INTRO.DRAG, delay: 100 },
                 { x: '-=30', y: '-=10', duration: INTRO.RUB, yoyo: true, repeat: 3 },
-                { alpha: 0, duration: 500, onComplete: () => {
-                    this.handHint.setPosition(-200, -200);
-                    // Lặp lại nếu Intro chưa kết thúc
-                    if (this.isIntroActive) this.time.delayedCall(1000, () => this.runHandTutorial());
-                }}
+                {
+                    alpha: 0, duration: 500, onComplete: () => {
+                        this.handHint.setPosition(-200, -200);
+                        // Lặp lại nếu Intro chưa kết thúc
+                        if (this.isIntroActive) this.time.delayedCall(1000, () => this.runHandTutorial());
+                    }
+                }
             ]
         });
     }
@@ -347,12 +341,12 @@ export default class Scene2 extends Phaser.Scene {
     private showHint() {
         const items = Array.from(this.unfinishedPartsMap.values());
         if (items.length === 0) return;
-        
+
         // Random 1 bộ phận
         const target = items[Math.floor(Math.random() * items.length)];
 
         AudioManager.play('hint');
-        
+
         const IDLE_CFG = GameConstants.IDLE;
 
         // Visual 1: Nhấp nháy bộ phận đó
@@ -369,14 +363,14 @@ export default class Scene2 extends Phaser.Scene {
         // Dùng originScale (lấy từ Data) để đảm bảo tính toán vị trí luôn chính xác tuyệt đối.
         const hX = target.getData('hintX') || 0;
         const hY = target.getData('hintY') || 0;
-        const originScale = target.getData('originScale') || 1; 
+        const originScale = target.getData('originScale') || 1;
 
         // Tính tọa độ đích dựa trên scale gốc
         const destX = target.x + (hX * originScale);
         const destY = target.y + (hY * originScale);
 
         this.handHint.setPosition(destX + IDLE_CFG.OFFSET_X, destY + IDLE_CFG.OFFSET_Y).setAlpha(0).setScale(0.7);
-        
+
         this.tweens.chain({
             targets: this.handHint,
             tweens: [

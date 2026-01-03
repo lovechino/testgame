@@ -4,22 +4,21 @@ import { SceneKeys, TextureKeys, AudioKeys } from '../consts/Keys';
 import { GameConstants } from '../consts/GameConstants'; // Import các hằng số cấu hình game
 import { GameUtils } from '../utils/GameUtils';
 import { IdleManager } from '../utils/IdleManager';
-
+import { createFPSCounter } from '../utils/DebugUtils';
 import AudioManager from '../audio/AudioManager';
 import { showGameButtons } from '../main';
-import { playVoiceLocked, setGameSceneReference, resetVoiceState } from '../utils/rotateOrientation'; 
+import { playVoiceLocked, setGameSceneReference, resetVoiceState } from '../utils/rotateOrientation';
 import { changeBackground } from '../utils/BackgroundManager';
 
 export default class Scene1 extends Phaser.Scene {
     // --- KHAI BÁO BIẾN UI & GAME OBJECTS ---
     // Danh sách các vật thể để người chơi chọn (cái ô, nấm, đèn...)
     private puzzleItems: Phaser.GameObjects.Image[] = [];
-    private debugText!: Phaser.GameObjects.Text;
-    
+
     // Các thành phần UI khi chiến thắng
     private victoryBg!: Phaser.GameObjects.Image;   // Nền popup thắng
     private victoryText!: Phaser.GameObjects.Image; // Chữ "Hoan hô" hoặc kết quả
-    
+
     // Các thành phần UI chung
     private bannerBg!: Phaser.GameObjects.Image;    // Nền banner phía trên
     private handHint!: Phaser.GameObjects.Image;    // Bàn tay hướng dẫn (gợi ý)
@@ -27,16 +26,16 @@ export default class Scene1 extends Phaser.Scene {
     // --- KHAI BÁO BIẾN TRẠNG THÁI & HỆ THỐNG ---
     // Cờ kiểm tra game có đang hoạt động không (chặn click khi đang intro hoặc end game)
     private isGameActive: boolean = false;
-    
+
     // Đối tượng âm thanh nền (Background Music)
     private bgm!: Phaser.Sound.BaseSound;
-    
+
     // Quản lý trạng thái rảnh tay (Idle) để hiện gợi ý
     private idleManager!: IdleManager;
-    
+
     // Cờ kiểm tra xem gợi ý có đang hiện hay không (tránh hiện chồng chéo)
     private isHintActive: boolean = false;
-    
+
     // Timer quản lý luồng hướng dẫn (Instruction -> Câu đố), dùng để hủy nếu cần
     private instructionTimer?: Phaser.Time.TimerEvent;
 
@@ -54,8 +53,7 @@ export default class Scene1 extends Phaser.Scene {
 
         // Sự kiện khi Scene được đánh thức lại (ví dụ: quay lại từ scene khác hoặc unmute)
         this.events.on('wake', this.handleWake, this);
-        this.debugText = this.add.text(10, 50, 'FPS: 60', { font: '30px Arial', color: '#00ff00', backgroundColor: '#000000' });
-        this.debugText.setScrollFactor(0).setDepth(9999);
+        createFPSCounter(this);
     }
 
     /**
@@ -66,10 +64,6 @@ export default class Scene1 extends Phaser.Scene {
     update(time: number, delta: number) {
         // Cập nhật bộ đếm thời gian rảnh
         this.idleManager.update(delta);
-        
-        const fps = Math.floor(this.game.loop.actualFps);
-        this.debugText.setText(`FPS: ${fps}`);
-        this.debugText.setColor(fps < 30 ? '#ff0000' : (fps < 55 ? '#ffff00' : '#00ff00'));
     }
 
     /**
@@ -78,7 +72,7 @@ export default class Scene1 extends Phaser.Scene {
     shutdown() {
         // 1. Hủy lắng nghe sự kiện wake (để không bị nhân đôi khi quay lại)
         this.events.off('wake', this.handleWake, this);
-        
+
         // 2. Dừng nhạc nền
         if (this.bgm && this.bgm.isPlaying) {
             this.bgm.stop();
@@ -131,8 +125,8 @@ export default class Scene1 extends Phaser.Scene {
      * Cài đặt hình nền và nhạc nền
      */
     private setupBackgroundAndAudio() {
-        changeBackground('assets/images/bg/backgroud_game.jpg'); 
-        
+        changeBackground('assets/images/bg/backgroud_game.jpg');
+
         // Dừng nhạc nền cũ nếu có (tránh chồng nhạc)
         if (this.sound.get(AudioKeys.BgmNen)) {
             this.sound.stopByKey(AudioKeys.BgmNen);
@@ -151,14 +145,14 @@ export default class Scene1 extends Phaser.Scene {
     private createUI() {
         const UI = GameConstants.SCENE1.UI;
         const cx = GameUtils.pctX(this, 0.5); // Lấy tọa độ X giữa màn hình
-        
+
         // --- TÍNH TOÁN BIẾN TRUNG GIAN ---
         const bannerY = GameUtils.pctY(this, UI.BANNER_Y);
 
         // Tạo nền banner
         this.bannerBg = this.add.image(cx, bannerY, TextureKeys.S1_BannerBg)
             .setOrigin(0.5, 0).setScale(0.7);
-        
+
         // Tạo chữ trên banner (đặt vị trí dựa theo nền banner)
         const textY = bannerY + this.bannerBg.displayHeight / 2;
         this.add.image(cx, textY, TextureKeys.S1_BannerText).setScale(0.7);
@@ -179,14 +173,14 @@ export default class Scene1 extends Phaser.Scene {
     /**
      * Tạo bảng bên trái: Chứa bài thơ, hiệu ứng mưa, icon chữ O
      */
-    private createLeftPanel() { 
+    private createLeftPanel() {
         const UI = GameConstants.SCENE1.UI;
         const ANIM = GameConstants.SCENE1.ANIM;
 
         // 1. Vị trí Bảng (Dựa vào vị trí banner phía trên)
         const boardY = this.bannerBg.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
         const boardX = GameUtils.pctX(this, 0.5) - GameUtils.pctY(this, UI.BOARD_MARGIN_X);
-        
+
         const boardLeft = this.add.image(boardX, boardY, TextureKeys.S1_Board)
             .setOrigin(1, 0).setScale(0.7); // Origin(1,0) nghĩa là neo ở góc trên bên phải của ảnh
 
@@ -207,7 +201,7 @@ export default class Scene1 extends Phaser.Scene {
 
         // Hiệu ứng bài thơ trôi nhẹ lên xuống
         this.tweens.add({ targets: poemText, y: '+=10', duration: ANIM.POEM_FLOAT, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-        
+
         // Sự kiện click vào bài thơ
         poemText.on('pointerdown', () => {
             if (this.isGameActive) {
@@ -237,7 +231,7 @@ export default class Scene1 extends Phaser.Scene {
         // 1. Tạo hình cái Bảng Phải
         const boardY = this.bannerBg.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
         const boardX = GameUtils.pctX(this, 0.5) + GameUtils.pctY(this, UI.BOARD_MARGIN_X);
-        
+
         const boardRight = this.add.image(boardX, boardY, TextureKeys.S1_Board)
             .setOrigin(0, 0).setScale(0.7);
 
@@ -259,7 +253,7 @@ export default class Scene1 extends Phaser.Scene {
         this.createPuzzleItem(item2X, item2Y, TextureKeys.S1_Item_2, false);
 
         // Item 3:
-        const item3X = centerX + boardRight.displayWidth * UI.ITEM_OFFSET_X_3; 
+        const item3X = centerX + boardRight.displayWidth * UI.ITEM_OFFSET_X_3;
         const item3Y = centerY + boardRight.displayWidth * UI.ITEM_OFFSET_Y_3;
         this.createPuzzleItem(item3X, item3Y, TextureKeys.S1_Item_3, false);
 
@@ -286,7 +280,7 @@ export default class Scene1 extends Phaser.Scene {
         // Xử lý sự kiện khi click vào vật thể
         item.on('pointerdown', () => {
             if (!this.isGameActive) return; // Nếu game chưa start (đang intro) thì không bấm được
-            
+
             // Kiểm tra đúng hay sai
             isCorrect ? this.handleCorrect(item) : this.handleWrong(item);
         });
@@ -308,9 +302,9 @@ export default class Scene1 extends Phaser.Scene {
         // Hàm nội bộ: Bắt đầu thực sự sau khi đã load xong âm thanh
         const startAction = () => {
             if (!this.bgm.isPlaying) this.bgm.play();
-            
+
             this.isGameActive = true;
-            
+
             // 1. Phát giọng đọc hướng dẫn ("instruction")
             playVoiceLocked(null, 'instruction');
             const instructionTime = AudioManager.getDuration('instruction') + 0.5;
@@ -324,7 +318,7 @@ export default class Scene1 extends Phaser.Scene {
                     // 3. Đợi đọc xong câu đố -> Bắt đầu đếm ngược Idle (gợi ý)
                     this.time.delayedCall((riddleDuration * 1000) + GameConstants.SCENE1.TIMING.DELAY_IDLE, () => {
                         if (this.isGameActive) {
-                            this.idleManager.start(); 
+                            this.idleManager.start();
                         }
                     });
                 }
@@ -369,13 +363,13 @@ export default class Scene1 extends Phaser.Scene {
      */
     private handleCorrect(winnerItem: Phaser.GameObjects.Image) {
         this.isGameActive = false; // Khóa game, không cho click nữa
-        
+
         // Hủy timer hướng dẫn nếu đang chạy (tránh việc voice chồng voice)
         if (this.instructionTimer) {
             this.instructionTimer.remove(false);
             this.instructionTimer = undefined;
         }
-        this.idleManager.stop(); 
+        this.idleManager.stop();
 
         // Vô hiệu hóa tương tác tất cả vật thể
         this.puzzleItems.forEach(i => i.disableInteractive());
@@ -408,12 +402,12 @@ export default class Scene1 extends Phaser.Scene {
             onComplete: () => {
                 // Đọc tên vật thể ("Cái Ô")
                 playVoiceLocked(null, 'voice_item_win');
-                
+
                 // Đợi 1 chút rồi phát tiếng vỗ tay/khen ngợi
                 this.time.delayedCall(GameConstants.SCENE1.TIMING.DELAY_CORRECT_SFX, () => {
                     AudioManager.play('sfx-correct');
                     const khenTime = AudioManager.getDuration('sfx-correct');
-                    
+
                     // Đợi khen xong thì chuyển Scene
                     this.time.delayedCall(khenTime * 1000, () => {
                         this.scene.start(SceneKeys.Scene2);
@@ -445,29 +439,30 @@ export default class Scene1 extends Phaser.Scene {
      */
     private showIdleHint() {
         if (!this.isGameActive || this.isHintActive) return;
-        
+
         // Tìm vật thể nào là đáp án đúng
         const correctItem = this.puzzleItems.find(i => i.getData('isCorrect') === true);
         if (!correctItem) return;
 
         this.isHintActive = true;
-        
+
         // Đặt vị trí xuất phát cho bàn tay (từ ngoài màn hình bay vào)
         this.handHint.setPosition(GameUtils.getW(this) + 100, GameUtils.getH(this));
         this.handHint.setAlpha(0);
 
         const IDLE = GameConstants.IDLE;
-        
+
         // Chuỗi hiệu ứng: Hiện ra -> Chỉ vào đáp án -> Ấn ấn -> Biến mất
         this.tweens.chain({
             targets: this.handHint,
             tweens: [
                 { alpha: 1, x: correctItem.x + IDLE.OFFSET_X, y: correctItem.y + IDLE.OFFSET_Y, duration: IDLE.FADE_IN, ease: 'Power2' },
                 { scale: 0.5, duration: IDLE.SCALE, yoyo: true, repeat: 2 }, // Ấn 2 lần
-                { alpha: 0, duration: IDLE.FADE_OUT, onComplete: () => {
+                {
+                    alpha: 0, duration: IDLE.FADE_OUT, onComplete: () => {
                         // Kết thúc gợi ý -> Reset lại vòng lặp idle
                         this.isHintActive = false;
-                        this.idleManager.reset(); 
+                        this.idleManager.reset();
                         this.handHint.setPosition(-200, -200);
                     }
                 }
@@ -480,8 +475,8 @@ export default class Scene1 extends Phaser.Scene {
      */
     public restartIntro() {
         if (this.instructionTimer) { this.instructionTimer.remove(false); this.instructionTimer = undefined; }
-        this.resetIdleState(); 
-        this.idleManager.stop(); 
+        this.resetIdleState();
+        this.idleManager.stop();
         this.initGameFlow(); // Chạy lại từ đầu luồng game
     }
 

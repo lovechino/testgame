@@ -36,16 +36,16 @@ export const GameConstants = {
             ILLUSTRATION_OFFSET: 0.45,
             /** Vị trí Thơ: Cách đáy Mưa 17% màn hình */
             POEM_OFFSET: 0.15,
-            
+
             /** Icon O lệch trái 13% chiều rộng bảng */
             ICON_O_X: 0.13,
             /** Icon O lệch xuống 6% chiều cao màn hình */
             ICON_O_Y: 0.05,
-            
+
             /** Item lệch trục X so với tâm bảng (Tỉ lệ chiều rộng bảng) */
-            ITEM_OFFSET_X_1: -0.17, 
-            ITEM_OFFSET_X_2: -0.17, 
-            ITEM_OFFSET_X_3: 0.2,  
+            ITEM_OFFSET_X_1: -0.17,
+            ITEM_OFFSET_X_2: -0.17,
+            ITEM_OFFSET_X_3: 0.2,
             /** Item lệch trục Y so với tâm bảng (Tỉ lệ chiều rộng bảng) */
             ITEM_OFFSET_Y_1: -0.35,
             ITEM_OFFSET_Y_2: 0.35,
@@ -84,13 +84,13 @@ export const GameConstants = {
             PALETTE_Y: 0.89,
             /** Khoảng cách giữa các nút màu (Tỉ lệ màn hình) */
             PALETTE_SPACING: 0.07,
-            
+
             // Tọa độ đích cho bàn tay hướng dẫn Intro
             HAND_INTRO_END_X: 0.35,
             HAND_INTRO_END_Y: 0.6,
             // Toạ độ text đồ vật
-            NAME_X: 0.45,
-            NAME_Y: 0.3,
+            NAME_X: 0.5,
+            NAME_Y: 0.2,
         },
         TIMING: {
             /** Chờ bao lâu mới bắt đầu Intro (ms) */
