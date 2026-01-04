@@ -89,8 +89,8 @@ export const GameConstants = {
             HAND_INTRO_END_X: 0.35,
             HAND_INTRO_END_Y: 0.6,
             // Toạ độ text đồ vật
-            NAME_X: 0.5,
-            NAME_Y: 0.2,
+            TEXT_MARGIN_LEFT: 0.05,
+            TEXT_MARGIN_TOP: 0.11,
         },
         TIMING: {
             /** Chờ bao lâu mới bắt đầu Intro (ms) */

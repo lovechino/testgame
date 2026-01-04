@@ -53,7 +53,7 @@ export default class Scene1 extends Phaser.Scene {
 
         // Sự kiện khi Scene được đánh thức lại (ví dụ: quay lại từ scene khác hoặc unmute)
         this.events.on('wake', this.handleWake, this);
-        createFPSCounter(this);
+        //createFPSCounter(this);
     }
 
     /**

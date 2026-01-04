@@ -62,7 +62,7 @@ export default class Scene2 extends Phaser.Scene {
 
         this.setupInput();        // Cài đặt sự kiện chạm/vuốt
         this.playIntroSequence(); // Chạy hướng dẫn đầu game
-        createFPSCounter(this);   // Tạo FPS Counter
+        //createFPSCounter(this);   // Tạo FPS Counter
 
         // Sự kiện khi quay lại tab game (Wake up)
         this.events.on('wake', () => {
@@ -133,16 +133,24 @@ export default class Scene2 extends Phaser.Scene {
         // --- CẤU HÌNH BẢNG ---
         const boardY = banner.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
 
-        this.add.image(cx, boardY, TextureKeys.S2_Board)
-            .setOrigin(0.5, 0) // Neo ở cạnh trên
-            .setScale(1, 0.7)
-            .displayWidth = GameUtils.getW(this) * 0.95; // Rộng 95% màn hình (đủ chỗ chứa nút)
+        // 1. Lưu biến 'board' để dùng tính toán
+        const board = this.add.image(cx, boardY, TextureKeys.S2_Board)
+            .setOrigin(0.5, 0)
+            .setScale(1, 0.7);
+
+        board.displayWidth = GameUtils.getW(this) * 0.95;
 
         // Truyền boardY vào để tính toán vị trí nút màu
         this.createPalette(boardY);
 
-        // Tạo tên item
-        this.add.image(GameUtils.pctX(this, GameConstants.SCENE2.UI.NAME_X), GameUtils.pctY(this, GameConstants.SCENE2.UI.NAME_Y), TextureKeys.S2_Text_Item);
+
+        // Tính X mong muốn: Mép trái + 45% chiều rộng bảng
+        const nameX = board.x - (board.displayWidth * GameConstants.SCENE2.UI.TEXT_MARGIN_LEFT);
+
+        // Tính Y: Mép trên bảng + 11% chiều cao bảng (như cũ)
+        const nameY = board.y + (board.displayHeight * GameConstants.SCENE2.UI.TEXT_MARGIN_TOP);
+
+        this.add.image(nameX, nameY, TextureKeys.S2_Text_Item);
 
         // Tạo bàn tay gợi ý
         this.handHint = this.add.image(0, 0, TextureKeys.HandHint).setDepth(200).setAlpha(0).setScale(0.7);
