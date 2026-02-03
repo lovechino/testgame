@@ -1,0 +1,30 @@
+{
+  "goalkeeper": {
+    "baseScale": 0.75,
+    "outlineKey": "S2_player",
+    "baseX_pct": 0.37,
+    "baseY_pct": 0.48,
+    "parts": [
+      { "key": "S2_vector", "offsetX": 0, "offsetY": 0, "scale": 0.751, "hintX": -160, "hintY": 400 },
+      { "key": "S2_vector2", "offsetX": 0, "offsetY": 0, "scale": 0.751, "hintX": 400, "hintY": -30 },
+      { "key": "S2_vector3", "offsetX": 0, "offsetY": 0, "scale": 0.751, "hintX": -50, "hintY": -100 },
+      { "key": "S2_vector4", "offsetX": 0, "offsetY": 0, "scale": 0.751, "hintX": -30, "hintY": 200 },
+      { "key": "S2_vector5", "offsetX": 0, "offsetY": 0, "scale": 0.751, "hintX": -230, "hintY": 230 },
+      { "key": "S2_vector6", "offsetX": 0, "offsetY": 0, "scale": 0.751, "hintX": -100, "hintY": -350 },
+      { "key": "S2_vector7", "offsetX": 0, "offsetY": 0, "scale": 0.751, "hintX": -100, "hintY": -350 },
+      { "key": "S2_vector8", "offsetX": 0, "offsetY": 0, "scale": 0.751, "hintX": -100, "hintY": -350 },
+      { "key": "S2_vector9", "offsetX": 0, "offsetY": 0, "scale": 0.751, "hintX": -100, "hintY": -350 }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.7,
+    "outlineKey": "u_outline",
+    "baseX_pct": 0.72,
+    "baseY_pct": 0.48,
+    "parts": [
+      { "key": "o_body", "offsetX": 0, "offsetY": 0, "scale": 0.7, "hintX": -130, "hintY": 0 },
+      { "key": "o_hat", "offsetX": 0, "offsetY": 0, "scale": 0.78, "hintX": 40, "hintY": -260 },
+      { "key": "S2_text_relust", "offsetX": 20, "offsetY": 80, "scale": 0.5, "hintX": 0, "hintY": 0 }
+    ]
+  }
+}
