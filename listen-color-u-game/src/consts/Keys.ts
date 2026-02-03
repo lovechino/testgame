@@ -65,6 +65,7 @@ export enum TextureKeys {
     S1_enginer = "S1_enginer",
     S1_doctor = "S1_doctor",
     S2_goal = "S2_goal",
+    S2_rectangle = "s2_rectangle",
     S2_player = "S2_player",
     S2_text = "S2_text",
     S2_vector = "S2_vector",
@@ -77,7 +78,7 @@ export enum TextureKeys {
     S2_vector9 = "S2_vector9",
     S2_vector8 = "S2_vector8",
     S2_text_relust = "S2_text_relust",
-    S2_U_Outline = "u_outline"
+    S2_U_Outline = "u_outline",
 }
 
 // 3. Tên Âm thanh (Audio)

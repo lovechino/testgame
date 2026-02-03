@@ -43,7 +43,7 @@ export class PaintManager {
             const canvas = this.scene.textures.createCanvas(this.brushTexture, this.brushSize, this.brushSize);
             if (canvas) {
                 const ctx = canvas.context;
-                const grd = ctx.createRadialGradient(this.brushSize/2, this.brushSize/2, 0, this.brushSize/2, this.brushSize/2, this.brushSize/2);
+                const grd = ctx.createRadialGradient(this.brushSize / 2, this.brushSize / 2, 0, this.brushSize / 2, this.brushSize / 2, this.brushSize / 2);
                 grd.addColorStop(0, 'rgba(255, 255, 255, 1)');
                 grd.addColorStop(1, 'rgba(255, 255, 255, 0)');
                 ctx.fillStyle = grd;
@@ -75,9 +75,11 @@ export class PaintManager {
 
         const rtW = maskImage.width * finalScale;
         const rtH = maskImage.height * finalScale;
-        const rt = this.scene.add.renderTexture(x - rtW / 2, y - rtH / 2, rtW, rtH);
+        // const rt = this.scene.add.renderTexture(x - rtW / 2, y - rtH / 2, rtW, rtH);
 
-        rt.setOrigin(0, 0).setMask(mask).setDepth(10);
+        // rt.setOrigin(0, 0).setMask(mask).setDepth(10);
+        const rt = this.scene.add.renderTexture(x, y, rtW, rtH);
+        rt.setOrigin(0.5, 0.5).setMask(mask).setDepth(10);
         rt.setData('id', uniqueId);
         rt.setData('key', key);
         rt.setData('isFinished', false);

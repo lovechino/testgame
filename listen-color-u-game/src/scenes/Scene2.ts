@@ -24,13 +24,13 @@ export default class Scene2 extends Phaser.Scene {
     private activeHintTween: Phaser.Tweens.Tween | null = null;
 
     private readonly PALETTE_DATA = [
-        { key: TextureKeys.BtnRed,    color: 0xFF595E },
+        { key: TextureKeys.BtnRed, color: 0xFF595E },
         { key: TextureKeys.BtnYellow, color: 0xFFCA3A },
-        { key: TextureKeys.BtnGreen,  color: 0x8AC926 },
-        { key: TextureKeys.BtnBlue,   color: 0x1982C4 },
+        { key: TextureKeys.BtnGreen, color: 0x8AC926 },
+        { key: TextureKeys.BtnBlue, color: 0x1982C4 },
         { key: TextureKeys.BtnPurple, color: 0x6A4C93 },
-        { key: TextureKeys.BtnCream,  color: 0xFDFCDC },
-        { key: TextureKeys.BtnBlack,  color: 0x000000 }
+        { key: TextureKeys.BtnCream, color: 0xFDFCDC },
+        { key: TextureKeys.BtnBlack, color: 0x000000 }
     ];
 
     constructor() { super(SceneKeys.Scene2); }
@@ -106,7 +106,12 @@ export default class Scene2 extends Phaser.Scene {
 
         const boardY = banner.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
         const boardScale = (UI as any).BOARD_SCALE ?? 0.75;
-        this.add.image(cx, boardY, TextureKeys.S2_goal).setOrigin(0.5, 0).setScale(boardScale);
+        this.add.image(cx, boardY, TextureKeys.S2_rectangle).setOrigin(0.5, 0).setScale(boardScale);
+
+        // Goal net shifted to left side
+        const goalX = GameUtils.getW(this) * 0.14;
+        const goalY = boardY + GameUtils.pctY(this, 0.08);
+        this.add.image(goalX, goalY, TextureKeys.S2_goal).setOrigin(0, 0).setScale(boardScale);
 
         this.createPalette();
 
@@ -182,14 +187,57 @@ export default class Scene2 extends Phaser.Scene {
             hitArea.setData('hintX', part.hintX || 0);
             hitArea.setData('hintY', part.hintY || 0);
             hitArea.setData('originScale', part.scale);
+            hitArea.setData('baseX', cx);
+            hitArea.setData('baseY', cy);
+            hitArea.setData('partKey', part.key);
+
+            // Log initial keys for user
+            console.log(`[INITIAL] Key: "${part.key}" => offsetX: ${part.offsetX || 0}, offsetY: ${part.offsetY || 0}`);
+
+
 
             this.unfinishedPartsMap.set(id, hitArea);
             this.totalParts++;
         });
 
         this.add.image(cx, cy, config.outlineKey).setScale(config.baseScale).setDepth(100).setInteractive({ pixelPerfect: true });
+
+        // Key P to dump config
+        this.input.keyboard?.on('keydown-P', () => {
+            this.dumpDebugConfig();
+        });
     }
 
+    private dumpDebugConfig() {
+        console.log("===== GENERATING CONFIG JSON =====");
+        const parts: any[] = [];
+
+        this.unfinishedPartsMap.forEach((hitArea) => {
+            const ghost = hitArea.getData('ghostPart') as Phaser.GameObjects.Image;
+            const cx = hitArea.getData('baseX');
+            const cy = hitArea.getData('baseY');
+            const key = hitArea.getData('partKey');
+            const hintX = hitArea.getData('hintX');
+            const hintY = hitArea.getData('hintY');
+
+            if (ghost) {
+                const offX = Math.round(ghost.x - cx);
+                const offY = Math.round(ghost.y - cy);
+
+                parts.push({
+                    key: key,
+                    offsetX: offX,
+                    offsetY: offY,
+                    hintX: hintX,
+                    hintY: hintY
+                    // Note: You can add other fields if needed, but this is the core for alignment
+                });
+            }
+        });
+
+        console.log(JSON.stringify(parts, null, 2));
+        alert("Config dumped to Console! Press F12 to view.");
+    }
     private handlePartComplete(id: string, rt: Phaser.GameObjects.RenderTexture, usedColors: Set<number>) {
         this.finishedParts.add(id);
 
@@ -254,10 +302,12 @@ export default class Scene2 extends Phaser.Scene {
                 { scale: 0.5, duration: INTRO.TAP, yoyo: true, repeat: 0.7 },
                 { x: endX, y: dragY, duration: INTRO.DRAG, delay: 100 },
                 { x: '-=30', y: '-=10', duration: INTRO.RUB, yoyo: true, repeat: 3 },
-                { alpha: 0, duration: 500, onComplete: () => {
-                    this.handHint.setPosition(-200, -200);
-                    if (this.isIntroActive) this.time.delayedCall(1000, () => this.runHandTutorial());
-                }}
+                {
+                    alpha: 0, duration: 500, onComplete: () => {
+                        this.handHint.setPosition(-200, -200);
+                        if (this.isIntroActive) this.time.delayedCall(1000, () => this.runHandTutorial());
+                    }
+                }
             ]
         });
     }

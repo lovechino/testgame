@@ -41,14 +41,16 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image(TextureKeys.S2_text_relust, 'assets/images/S2/Frame 76.png');
         this.load.image(TextureKeys.S2_U_Outline, 'assets/images/S2/Frame 73.png');
 
-        this.load.image(TextureKeys.S2_Co_Outline, 'assets/images/S2/teacher.png');
-        this.load.image(TextureKeys.S2_Co_Face, 'assets/images/S2/face.png');
-        this.load.image(TextureKeys.S2_Co_Hair, 'assets/images/S2/hair.png');
-        this.load.image(TextureKeys.S2_Co_Shirt, 'assets/images/S2/body.png');
-        this.load.image(TextureKeys.S2_Co_HandL, 'assets/images/S2/left_hand.png');
-        this.load.image(TextureKeys.S2_Co_HandR, 'assets/images/S2/right_hand.png');
-        this.load.image(TextureKeys.S2_Co_Book, 'assets/images/S2/book.png');
+        // this.load.image(TextureKeys.S2_Co_Outline, 'assets/images/S2/teacher.png');
+        // this.load.image(TextureKeys.S2_Co_Face, 'assets/images/S2/face.png');
+        // this.load.image(TextureKeys.S2_Co_Hair, 'assets/images/S2/hair.png');
+        // this.load.image(TextureKeys.S2_Co_Shirt, 'assets/images/S2/body.png');
+        // this.load.image(TextureKeys.S2_Co_HandL, 'assets/images/S2/left_hand.png');
+        // this.load.image(TextureKeys.S2_Co_HandR, 'assets/images/S2/right_hand.png');
+        // this.load.image(TextureKeys.S2_Co_Book, 'assets/images/S2/book.png');
+
         this.load.image(TextureKeys.S2_vector, 'assets/images/S2/Vector.png');
+        this.load.image(TextureKeys.S2_rectangle, 'assets/images/S2/Rectangle 1.png');
         this.load.image(TextureKeys.S2_vector2, 'assets/images/S2/Vector (1).png');
         this.load.image(TextureKeys.S2_vector3, 'assets/images/S2/Vector (2).png');
         this.load.image(TextureKeys.S2_vector4, 'assets/images/S2/Vector (3).png');
@@ -57,7 +59,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image(TextureKeys.S2_vector7, 'assets/images/S2/Vector (6).png');
         this.load.image(TextureKeys.S2_vector8, 'assets/images/S2/Vector (7).png');
         this.load.image(TextureKeys.S2_vector9, 'assets/images/S2/Vector (8).png');
-      
+
         // - Nút màu
         this.load.image(TextureKeys.BtnRed, 'assets/images/color/red.png');
         this.load.image(TextureKeys.BtnYellow, 'assets/images/color/yellow.png');
