@@ -224,12 +224,12 @@ import { GameConstants } from '../consts/GameConstants';
 
 export class PaintManager {
     private scene: Phaser.Scene;
-    
+
     // Config
     private brushColor: number = GameConstants.PAINT.DEFAULT_COLOR;
     private brushSize: number = GameConstants.PAINT.BRUSH_SIZE;
     private brushTexture: string = 'brush_circle';
-    
+
     // State
     private isErasing: boolean = false;
     private activeRenderTexture: Phaser.GameObjects.RenderTexture | null = null;
@@ -251,11 +251,11 @@ export class PaintManager {
     constructor(scene: Phaser.Scene, onComplete: (id: string, rt: Phaser.GameObjects.RenderTexture, usedColors: Set<number>) => void) {
         this.scene = scene;
         this.onPartComplete = onComplete;
-        
+
         // Khởi tạo Canvas tạm 1 lần duy nhất
         this.helperCanvasPaint = document.createElement('canvas');
         this.helperCanvasMask = document.createElement('canvas');
-        
+
         this.createBrushTexture();
     }
 
@@ -264,7 +264,7 @@ export class PaintManager {
             const canvas = this.scene.textures.createCanvas(this.brushTexture, this.brushSize, this.brushSize);
             if (canvas) {
                 const ctx = canvas.context;
-                const grd = ctx.createRadialGradient(this.brushSize/2, this.brushSize/2, 0, this.brushSize/2, this.brushSize/2, this.brushSize/2);
+                const grd = ctx.createRadialGradient(this.brushSize / 2, this.brushSize / 2, 0, this.brushSize / 2, this.brushSize / 2, this.brushSize / 2);
                 grd.addColorStop(0, 'rgba(255, 255, 255, 1)');
                 grd.addColorStop(1, 'rgba(255, 255, 255, 0)');
                 ctx.fillStyle = grd;
@@ -293,11 +293,11 @@ export class PaintManager {
 
         const rtW = maskImage.width * scale;
         const rtH = maskImage.height * scale;
-        const rt = this.scene.add.renderTexture(x - rtW/2, y - rtH/2, rtW, rtH);
-        
+        const rt = this.scene.add.renderTexture(x - rtW / 2, y - rtH / 2, rtW, rtH);
+
         rt.setOrigin(0, 0).setMask(mask).setDepth(10);
         rt.setData('id', uniqueId);
-        rt.setData('key', key); 
+        rt.setData('key', key);
         rt.setData('isFinished', false);
 
         const hitArea = this.scene.add.image(x, y, key).setScale(scale).setAlpha(0.01).setDepth(50);
@@ -305,7 +305,7 @@ export class PaintManager {
 
         hitArea.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
             this.activeRenderTexture = rt;
-            
+
             // ✅ QUAN TRỌNG: Lưu vị trí bắt đầu để tính toán LERP
             this.lastX = pointer.x - rt.x;
             this.lastY = pointer.y - rt.y;
@@ -367,7 +367,7 @@ export class PaintManager {
             rt.erase(this.brushTexture, currentX - offset, currentY - offset);
         } else {
             rt.draw(this.brushTexture, currentX - offset, currentY - offset, 1.0, this.brushColor);
-            
+
             // ✅ LOGIC LƯU MÀU: Thêm màu hiện tại vào danh sách
             const id = rt.getData('id');
             if (!this.partColors.has(id)) {
@@ -384,13 +384,13 @@ export class PaintManager {
     // ✅ HÀM CHECK PROGRESS MỚI: TỐI ƯU BỘ NHỚ
     private checkProgress(rt: Phaser.GameObjects.RenderTexture) {
         if (rt.getData('isFinished')) return;
-        
+
         const id = rt.getData('id');
         const key = rt.getData('key');
 
         rt.snapshot((snapshot) => {
             if (!(snapshot instanceof HTMLImageElement)) return;
-            
+
             const w = snapshot.width;
             const h = snapshot.height;
             const checkW = Math.floor(w / 4);
@@ -418,14 +418,14 @@ export class PaintManager {
             }
 
             const percentage = total > 0 ? match / total : 0;
-            
+
             if (percentage > GameConstants.PAINT.WIN_PERCENT) {
                 rt.setData('isFinished', true);
-                
+
                 // ✅ GỬI DANH SÁCH MÀU VỀ SCENE
                 const usedColors = this.partColors.get(id) || new Set([this.brushColor]);
                 this.onPartComplete(id, rt, usedColors);
-                
+
                 // Clear bộ nhớ màu của phần này cho nhẹ
                 this.partColors.delete(id);
             }
