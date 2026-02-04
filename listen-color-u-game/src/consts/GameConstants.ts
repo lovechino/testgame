@@ -16,7 +16,7 @@ export const GameConstants = {
         /** Thời gian hiệu ứng ẩn bàn tay đi (ms) */
         FADE_OUT: 500,
         /** Bàn tay lệch trục X so với vật thể (px) */
-        OFFSET_X: 500,
+        OFFSET_X: 700,
         /** Bàn tay lệch trục Y so với vật thể (px) */
         OFFSET_Y: 700,
     },
