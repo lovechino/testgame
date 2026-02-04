@@ -127,11 +127,11 @@ export default class Scene2 extends Phaser.Scene {
 
         // Goal net shifted to left side
         const goalX = GameUtils.getW(this) * 0.128;
-        const goalY = boardY + GameUtils.pctY(this, 0.08);
+        const goalY = boardY + GameUtils.pctY(this, 0.12);
         this.add.image(goalX, goalY, TextureKeys.S2_goal).setOrigin(0, 0).setScale(boardScale);
 
         const ballX = GameUtils.getW(this) * 0.55;
-        const ballY = boardY + GameUtils.pctY(this, 0.12);
+        const ballY = boardY + GameUtils.pctY(this, 0.05);
         this.add.image(ballX, ballY, TextureKeys.S2_ball).setOrigin(0, 0).setScale(boardScale);
 
         const textsX = GameUtils.getW(this) * 0.5;
