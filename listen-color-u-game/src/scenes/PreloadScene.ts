@@ -33,13 +33,15 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image(TextureKeys.S2_Board, 'assets/images/bg/board_scene_2.png');
         this.load.image(TextureKeys.S2_goal, 'assets/images/S2/goal.png');
         this.load.image(TextureKeys.S2_player, 'assets/images/S2/Layer_1.png');
-        this.load.image(TextureKeys.S2_text, 'assets/images/S2/Frame 73.png');
+        this.load.image(TextureKeys.S2_text, 'assets/images/S2/Frame_73.png');
+        this.load.image(TextureKeys.S2_ball, 'assets/images/S2/ball.png');
+        this.load.image(TextureKeys.S2_text_scene2, 'assets/images/S2/text_scene2.png');
         // - Các bộ phận nhân vật/chữ
         // this.load.image(TextureKeys.S2_O_Outline, 'assets/images/S2/o_outline.png');
         // this.load.image(TextureKeys.S2_O_Hat, 'assets/images/S2/o_hat.png');
         // this.load.image(TextureKeys.S2_O_Body, 'assets/images/S2/o_body.png');
-        this.load.image(TextureKeys.S2_text_relust, 'assets/images/S2/Frame 76.png');
-        this.load.image(TextureKeys.S2_U_Outline, 'assets/images/S2/Frame 73.png');
+        this.load.image(TextureKeys.S2_text_relust, 'assets/images/S2/Frame_76.png');
+        this.load.image(TextureKeys.S2_U_Outline, 'assets/images/S2/Frame_73.png');
 
         // this.load.image(TextureKeys.S2_Co_Outline, 'assets/images/S2/teacher.png');
         // this.load.image(TextureKeys.S2_Co_Face, 'assets/images/S2/face.png');
@@ -50,15 +52,15 @@ export default class PreloadScene extends Phaser.Scene {
         // this.load.image(TextureKeys.S2_Co_Book, 'assets/images/S2/book.png');
 
         this.load.image(TextureKeys.S2_vector, 'assets/images/S2/Vector.png');
-        this.load.image(TextureKeys.S2_rectangle, 'assets/images/S2/Rectangle 1.png');
-        this.load.image(TextureKeys.S2_vector2, 'assets/images/S2/Vector (1).png');
-        this.load.image(TextureKeys.S2_vector3, 'assets/images/S2/Vector (2).png');
-        this.load.image(TextureKeys.S2_vector4, 'assets/images/S2/Vector (3).png');
-        this.load.image(TextureKeys.S2_vector5, 'assets/images/S2/Vector (4).png');
-        this.load.image(TextureKeys.S2_vector6, 'assets/images/S2/Vector (5).png');
-        this.load.image(TextureKeys.S2_vector7, 'assets/images/S2/Vector (6).png');
-        this.load.image(TextureKeys.S2_vector8, 'assets/images/S2/Vector (7).png');
-        this.load.image(TextureKeys.S2_vector9, 'assets/images/S2/Vector (8).png');
+        this.load.image(TextureKeys.S2_rectangle, 'assets/images/S2/Rectangle_1.png');
+        this.load.image(TextureKeys.S2_vector2, 'assets/images/S2/Vector_1.png');
+        this.load.image(TextureKeys.S2_vector3, 'assets/images/S2/Vector_2.png');
+        this.load.image(TextureKeys.S2_vector4, 'assets/images/S2/Vector_3.png');
+        this.load.image(TextureKeys.S2_vector5, 'assets/images/S2/Vector_4.png');
+        this.load.image(TextureKeys.S2_vector6, 'assets/images/S2/Vector_5.png');
+        this.load.image(TextureKeys.S2_vector7, 'assets/images/S2/Vector_6.png');
+        this.load.image(TextureKeys.S2_vector8, 'assets/images/S2/Vector_7.png');
+        this.load.image(TextureKeys.S2_vector9, 'assets/images/S2/Vector_8.png');
 
         // - Nút màu
         this.load.image(TextureKeys.BtnRed, 'assets/images/color/red.png');

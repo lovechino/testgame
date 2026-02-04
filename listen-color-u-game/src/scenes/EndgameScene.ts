@@ -20,6 +20,11 @@ export const EndGameScene = createEndGameScene({
         replayBtn: { key: 'btn_reset', url: 'assets/images/ui/btn_reset.png' },
         exitBtn: { key: 'btn_exit', url: 'assets/images/ui/btn_exit.png' },
     },
+    onLeave : ()=>{
+        reportComplete: (payload: { score?: number; timeMs: number; extras?: any; }) => {
+        sdk.complete(payload)
+        }
+    },
     audio: {
         play: (k) => AudioManager.play(k),
         stopAll: () => AudioManager.stopAll(),
@@ -31,10 +36,7 @@ export const EndGameScene = createEndGameScene({
         click: 'sfx-click',
     },
     replaySceneKey: 'Scene1',
-    onEnter: () => hideGameButtons(),
-    reportComplete: (payload) => {
-        sdk.complete(payload);
-    },
+    onEnter: () => {hideGameButtons(),game.retryFromStart() }
 });
 
 export default EndGameScene;

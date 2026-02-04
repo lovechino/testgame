@@ -13,7 +13,7 @@
         "scale": 0.75,
         "scaleAdjust": 0.97,
         "hintX": -90,
-        "hintY": 80
+        "hintY": 130
       },
       {
         "key": "S2_vector2",
@@ -22,18 +22,18 @@
         "offsetY": 77,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 110,
-        "hintY": 110
+        "hintX": -5,
+        "hintY": 12
       },
       {
         "key": "S2_vector3",
         "note": "găng tay (glove 1)",
-        "offsetX": -221,
+        "offsetX": -215,
         "offsetY": -133,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 150,
-        "hintY": -60
+        "hintX": 4,
+        "hintY": 6
       },
       {
         "key": "S2_vector4",
@@ -42,8 +42,8 @@
         "offsetY": -203,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 170,
-        "hintY": -40
+        "hintX": 17,
+        "hintY": 13
       },
       {
         "key": "S2_vector5",
@@ -52,28 +52,28 @@
         "offsetY": -67,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 130,
-        "hintY": 200
+        "hintX": 30,
+        "hintY": 7
       },
       {
         "key": "S2_vector6",
         "note": "tóc (hair)",
-        "offsetX": 93,
-        "offsetY": -126,
+        "offsetX": 95,
+        "offsetY": -127,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 200,
-        "hintY": 170
+        "hintX": 24,
+        "hintY": 0
       },
       {
         "key": "S2_vector7",
         "note": "phần tay (arm)",
-        "offsetX": 224,
+        "offsetX": 228,
         "offsetY": -35,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 540,
-        "hintY": -10
+        "hintX": 40,
+        "hintY": -8
       },
       {
         "key": "S2_vector8",
@@ -82,18 +82,18 @@
         "offsetY": -116,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 220,
-        "hintY": -120
+        "hintX": 30,
+        "hintY": 10
       },
       {
         "key": "S2_vector9",
         "note": "tay áo (sleeve)",
-        "offsetX": -152,
-        "offsetY": -61,
+        "offsetX": -148,
+        "offsetY": -55,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": -120,
-        "hintY": -50
+        "hintX": 10,
+        "hintY": 10
       }
     ]
   },

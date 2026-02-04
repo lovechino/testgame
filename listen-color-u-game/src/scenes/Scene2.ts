@@ -67,6 +67,10 @@ export default class Scene2 extends Phaser.Scene {
             this.idleManager.reset();
             if (this.input.keyboard) this.input.keyboard.enabled = true;
         });
+
+        // DEBUG: Show all hints
+        // this.debugShowAllHints();
+        // this.debugIntroHandPosition();
     }
 
     update(time: number, delta: number) {
@@ -122,10 +126,17 @@ export default class Scene2 extends Phaser.Scene {
         this.add.image(cx, boardY, TextureKeys.S2_rectangle).setOrigin(0.5, 0).setScale(boardScale);
 
         // Goal net shifted to left side
-        const goalX = GameUtils.getW(this) * 0.14;
+        const goalX = GameUtils.getW(this) * 0.128;
         const goalY = boardY + GameUtils.pctY(this, 0.08);
         this.add.image(goalX, goalY, TextureKeys.S2_goal).setOrigin(0, 0).setScale(boardScale);
 
+        const ballX = GameUtils.getW(this) * 0.5;
+        const ballY = boardY + GameUtils.pctY(this, 0.12);
+        this.add.image(ballX, ballY, TextureKeys.S2_ball).setOrigin(0, 0).setScale(boardScale);
+
+        const textsX = GameUtils.getW(this) * 0.5;
+        const textsY = boardY + GameUtils.pctY(this, 0.55);
+        this.add.image(textsX, textsY, TextureKeys.S2_text_scene2).setOrigin(0, 0).setScale(boardScale);
         this.createPalette();
 
         this.handHint = this.add.image(0, 0, TextureKeys.HandHint).setDepth(200).setAlpha(0).setScale(0.7);
@@ -391,4 +402,86 @@ export default class Scene2 extends Phaser.Scene {
             ]
         });
     }
+
+    // private debugShowAllHints() {
+    //     console.log("--- DEBUG HINTS (INTERACTIVE) ---");
+
+    //     this.unfinishedPartsMap.forEach((part, id) => {
+    //         const hX = part.getData('hintX') || 0;
+    //         const hY = part.getData('hintY') || 0;
+    //         const originScale = part.getData('originScale') || 1;
+    //         // Note: originScale in this system seems to be the scale of the part itself defined in JSON
+
+    //         const destX = part.x + (hX * originScale);
+    //         const destY = part.y + (hY * originScale);
+
+    //         console.log(`[INIT] Hint for ${id}: x=${destX}, y=${destY} (local: ${hX}, ${hY})`);
+
+    //         // Creates a draggable red circle
+    //         const debugPoint = this.add.circle(destX, destY, 8, 0xff0000)
+    //             .setDepth(300)
+    //             .setInteractive({ draggable: true });
+
+    //         // Label
+    //         const label = this.add.text(destX, destY + 10, id, {
+    //             color: '#ffff00',
+    //             fontSize: '12px',
+    //             backgroundColor: '#000000'
+    //         }).setDepth(301).setOrigin(0.5, 0);
+
+    //         debugPoint.on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+    //             debugPoint.x = dragX;
+    //             debugPoint.y = dragY;
+    //             label.setPosition(dragX, dragY + 10);
+    //         });
+
+    //         debugPoint.on('dragend', () => {
+    //             // Calculate new local hintX/hintY based on part position and scale
+    //             // Formula: world = part + (local * scale)  =>  local = (world - part) / scale
+    //             const newLocalX = Math.round((debugPoint.x - part.x) / originScale);
+    //             const newLocalY = Math.round((debugPoint.y - part.y) / originScale);
+
+    //             console.log(`%c[UPDATED] ${id} => hintX: ${newLocalX}, hintY: ${newLocalY}`, "color: #00ff00; font-weight: bold");
+
+    //             // Update data so 'P' dump works correctly
+    //             part.setData('hintX', newLocalX);
+    //             part.setData('hintY', newLocalY);
+    //         });
+    //     });
+    // }
+
+    // private debugIntroHandPosition() {
+    //     const UI = GameConstants.SCENE2.UI;
+    //     const startX = GameUtils.pctX(this, UI.HAND_INTRO_END_X);
+    //     const startY = GameUtils.pctY(this, UI.HAND_INTRO_END_Y);
+
+    //     console.log(`[INIT] Intro Hand: x=${startX}, y=${startY} (pct: ${UI.HAND_INTRO_END_X}, ${UI.HAND_INTRO_END_Y})`);
+
+    //     const debugPoint = this.add.circle(startX, startY, 15, 0x00ff00)
+    //         .setDepth(350)
+    //         .setInteractive({ draggable: true });
+
+    //     const label = this.add.text(startX, startY - 30, "INTRO HAND TARGET", {
+    //         color: '#00ff00',
+    //         fontSize: '14px',
+    //         backgroundColor: '#000000',
+    //         fontStyle: 'bold'
+    //     }).setDepth(351).setOrigin(0.5, 1);
+
+    //     debugPoint.on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+    //         debugPoint.x = dragX;
+    //         debugPoint.y = dragY;
+    //         label.setPosition(dragX, dragY - 30);
+    //     });
+
+    //     debugPoint.on('dragend', () => {
+    //         const w = GameUtils.getW(this);
+    //         const h = GameUtils.getH(this);
+
+    //         const newPctX = Number((debugPoint.x / w).toFixed(3));
+    //         const newPctY = Number((debugPoint.y / h).toFixed(3));
+
+    //         console.log(`%c[UPDATED] Intro Hand => HAND_INTRO_END_X: ${newPctX}, HAND_INTRO_END_Y: ${newPctY}`, "color: #00ff00; font-weight: bold");
+    //     });
+    // }
 }

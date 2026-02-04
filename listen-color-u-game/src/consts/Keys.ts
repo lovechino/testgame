@@ -79,6 +79,8 @@ export enum TextureKeys {
     S2_vector8 = "S2_vector8",
     S2_text_relust = "S2_text_relust",
     S2_U_Outline = "u_outline",
+    S2_ball = "S2_ball",
+    S2_text_scene2 = "S2_text_scene2",
 }
 
 // 3. Tên Âm thanh (Audio)
