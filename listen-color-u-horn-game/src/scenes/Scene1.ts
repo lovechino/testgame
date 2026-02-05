@@ -1,12 +1,13 @@
 import Phaser from 'phaser';
-
+// 
 import { SceneKeys, TextureKeys, AudioKeys } from '../consts/Keys';
 import { GameConstants } from '../consts/GameConstants'; // Import các hằng số cấu hình game
 import { GameUtils } from '../utils/GameUtils';
 import { IdleManager } from '../utils/IdleManager';
 
 import AudioManager from '../audio/AudioManager';
-import { showGameButtons } from '../main';
+import { showGameButtons, hideGameButtons, sdk } from '../main';
+import { game } from "@iruka-edu/mini-game-sdk";
 import { playVoiceLocked, setGameSceneReference, resetVoiceState } from '../utils/rotateOrientation';
 import { changeBackground } from '../utils/BackgroundManager';
 
@@ -170,15 +171,15 @@ export default class Scene1 extends Phaser.Scene {
 
         const item1X = centerX - boardRight.displayWidth * UI.ITEM_OFFSET_X;
         const item1Y = centerY - boardRight.displayWidth * UI.ITEM_OFFSET_Y;
-        this.createPuzzleItem(item1X, item1Y, TextureKeys.S1_enginer, false);
+        this.createPuzzleItem(item1X, item1Y, TextureKeys.S1_Engineer, true);
 
         const item2X = centerX - boardRight.displayWidth * UI.ITEM_OFFSET_X;
         const item2Y = centerY + boardRight.displayWidth * UI.ITEM_OFFSET_Y;
-        this.createPuzzleItem(item2X, item2Y, TextureKeys.S1_soccer, true);
+        this.createPuzzleItem(item2X, item2Y, TextureKeys.S1_soccer, false);
 
         const item3X = centerX + boardRight.displayWidth * 0.25;
         const item3Y = centerY;
-        this.createPuzzleItem(item3X, item3Y, TextureKeys.S1_doctor, false);
+        this.createPuzzleItem(item3X, item3Y, TextureKeys.S1_Police, true);
 
         this.victoryBg = this.add.image(centerX, centerY, TextureKeys.BgPopup).setScale(0).setDepth(20);
         this.victoryText = this.add.image(centerX, centerY + 220, TextureKeys.S1_TextResult).setAlpha(0).setDepth(21).setScale(0.8);
@@ -225,7 +226,18 @@ export default class Scene1 extends Phaser.Scene {
             });
 
             if (this.input.keyboard) this.input.keyboard.enabled = true;
+
             showGameButtons();
+
+            // SDK Start
+            game.setTotal(2); // Total 2 levels (Scene1, Scene2)
+            (window as any).irukaGameState = {
+                startTime: Date.now(),
+                currentScore: 0,
+            };
+            sdk.score(0, 0);
+            sdk.progress({ levelIndex: 0, total: 2 });
+            game.startQuestionTimer();
         };
 
         AudioManager.loadAll().then(() => {
@@ -254,6 +266,26 @@ export default class Scene1 extends Phaser.Scene {
 
     private handleCorrect(winnerItem: Phaser.GameObjects.Image) {
         this.isGameActive = false;
+
+        // SDK Correct
+        game.recordCorrect({ scoreDelta: 1 });
+        if ((window as any).irukaGameState) {
+            (window as any).irukaGameState.currentScore = 1;
+        }
+        sdk.score(1, 1);
+
+        // Save & Progress to next level
+        sdk.requestSave({
+            score: 1,
+            levelIndex: 0,
+        });
+
+        sdk.progress({
+            levelIndex: 1,
+            total: 2,
+            score: 1,
+        });
+        game.finishQuestionTimer();
 
         if (this.instructionTimer) {
             this.instructionTimer.remove(false);
@@ -318,6 +350,9 @@ export default class Scene1 extends Phaser.Scene {
 
         this.handHint.setPosition(GameUtils.getW(this) + 100, GameUtils.getH(this));
         this.handHint.setAlpha(0);
+
+        // SDK Hint
+        game.addHint();
 
         const IDLE = GameConstants.IDLE;
 

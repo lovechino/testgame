@@ -8,7 +8,7 @@ export const GameConstants = {
     // =========================================
     IDLE: {
         /** Thời gian chờ trước khi hiện gợi ý (ms). 10000 = 10 giây */
-        THRESHOLD: 10000,
+        THRESHOLD: 5000,
         /** Thời gian hiệu ứng hiện bàn tay (ms) */
         FADE_IN: 800,
         /** Thời gian hiệu ứng ấn xuống (Scale nhỏ lại) (ms) */
@@ -16,9 +16,9 @@ export const GameConstants = {
         /** Thời gian hiệu ứng ẩn bàn tay đi (ms) */
         FADE_OUT: 500,
         /** Bàn tay lệch trục X so với vật thể (px) */
-        OFFSET_X: 50,
+        OFFSET_X: 150,
         /** Bàn tay lệch trục Y so với vật thể (px) */
-        OFFSET_Y: 50,
+        OFFSET_Y: 100,
     },
 
     // =========================================
@@ -82,8 +82,8 @@ export const GameConstants = {
             PALETTE_SPACING: 0.07,
 
             // Tọa độ đích cho bàn tay hướng dẫn Intro
-            HAND_INTRO_END_X: 0.37,
-            HAND_INTRO_END_Y: 0.48,
+            HAND_INTRO_END_X: 0.47,
+            HAND_INTRO_END_Y: 0.5,
         },
         TIMING: {
             /** Chờ bao lâu mới bắt đầu Intro (ms) */

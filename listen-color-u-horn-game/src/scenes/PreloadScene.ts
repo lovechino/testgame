@@ -18,47 +18,42 @@ export default class PreloadScene extends Phaser.Scene {
         // 2. Scene 1 Assets
         this.load.image(TextureKeys.S1_BannerBg, 'assets/images/S1/banner_1.png');
         this.load.image(TextureKeys.S1_BannerText, 'assets/images/S1/text_banner_1.png');
-        this.load.image(TextureKeys.S1_Board, 'assets/images/bg/board_Scene_1.png');
+        this.load.image(TextureKeys.S1_Board, 'assets/images/bg/board_Scene_1.png'); // Note: Make sure file exists, user pointed to S1 dir but this is in bg
         this.load.image(TextureKeys.S1_PoemText, 'assets/images/S1/doc_tho.png');
-        this.load.image(TextureKeys.S1_IconOHeader, 'assets/images/ui/ellipse.png');
+        this.load.image(TextureKeys.S1_IconOHeader, 'assets/images/ui/ellipse.png'); // Keep commented if unsure or confirm path
         this.load.image(TextureKeys.S1_TextResult, 'assets/images/S1/text_result.png');
-        this.load.image(TextureKeys.S1_Player, 'assets/images/S1/Group 272.png');
+        this.load.image(TextureKeys.S1_Player, 'assets/images/S1/example.png');
         this.load.image(TextureKeys.S1_soccer, 'assets/images/S1/soccer.png');
-        this.load.image(TextureKeys.S1_enginer, 'assets/images/S1/enginer.png');
+        this.load.image(TextureKeys.S1_Engineer, 'assets/images/S1/engineer.png');
         this.load.image(TextureKeys.S1_doctor, 'assets/images/S1/doctor.png');
+        this.load.image(TextureKeys.S1_Example, 'assets/images/S1/example.png');
+        this.load.image(TextureKeys.S1_Police, 'assets/images/S1/police.png');
+        this.load.image(TextureKeys.S1_TextUmbrella, 'assets/images/S1/text_umbrella.png');
 
         // 3. Scene 2 Assets
         this.load.image(TextureKeys.S2_Banner, 'assets/images/S2/banner.png');
         this.load.image(TextureKeys.S2_TextBanner, 'assets/images/S2/text_banner.png');
         this.load.image(TextureKeys.S2_Board, 'assets/images/bg/board_scene_2.png');
-        this.load.image(TextureKeys.S2_goal, 'assets/images/S2/goal.png');
-        this.load.image(TextureKeys.S2_player, 'assets/images/S2/Layer_1.png');
-        this.load.image(TextureKeys.S2_text, 'assets/images/S2/Frame 73.png');
-        // - Các bộ phận nhân vật/chữ
-        // this.load.image(TextureKeys.S2_O_Outline, 'assets/images/S2/o_outline.png');
-        // this.load.image(TextureKeys.S2_O_Hat, 'assets/images/S2/o_hat.png');
-        // this.load.image(TextureKeys.S2_O_Body, 'assets/images/S2/o_body.png');
-        this.load.image(TextureKeys.S2_text_relust, 'assets/images/S2/Frame 76.png');
-        this.load.image(TextureKeys.S2_U_Outline, 'assets/images/S2/Frame 73.png');
+        // this.load.image(TextureKeys.S2_Frame73, 'assets/images/S2/Frame 73.png');
+        // this.load.image(TextureKeys.S2_Frame76, 'assets/images/S2/Frame 76.png');
+        // this.load.image(TextureKeys.S2_Group287, 'assets/images/S2/Group 287.png');
+        this.load.image(TextureKeys.S2_Layer1, 'assets/images/S2/Layer_1.png');
+        this.load.image(TextureKeys.S2_Rectangle1, 'assets/images/S2/Rectangle_1.png');
+        this.load.image(TextureKeys.S2_UW, 'assets/images/S2/uw.png');
 
-        // this.load.image(TextureKeys.S2_Co_Outline, 'assets/images/S2/teacher.png');
-        // this.load.image(TextureKeys.S2_Co_Face, 'assets/images/S2/face.png');
-        // this.load.image(TextureKeys.S2_Co_Hair, 'assets/images/S2/hair.png');
-        // this.load.image(TextureKeys.S2_Co_Shirt, 'assets/images/S2/body.png');
-        // this.load.image(TextureKeys.S2_Co_HandL, 'assets/images/S2/left_hand.png');
-        // this.load.image(TextureKeys.S2_Co_HandR, 'assets/images/S2/right_hand.png');
-        // this.load.image(TextureKeys.S2_Co_Book, 'assets/images/S2/book.png');
+        this.load.image(TextureKeys.S2_Bowl, 'assets/images/S2/bowl.png');
+        this.load.image(TextureKeys.S2_Face, 'assets/images/S2/face.png');
+        this.load.image(TextureKeys.S2_Hair, 'assets/images/S2/hair.png');
+        this.load.image(TextureKeys.S2_Hat, 'assets/images/S2/hat.png');
+        this.load.image(TextureKeys.S2_Shirt, 'assets/images/S2/shirt.png');
+        this.load.image(TextureKeys.S2_Skirt, 'assets/images/S2/skirt.png');
+        this.load.image(TextureKeys.S2_UResult, 'assets/images/S2/u_result.png');
+        this.load.image(TextureKeys.S2_Vaso, 'assets/images/S2/vaso.png');
+        this.load.image(TextureKeys.S2_Arm1, 'assets/images/S2/arm.png');
+        this.load.image(TextureKeys.S2_Arm2, 'assets/images/S2/arm2.png');
+        this.load.image(TextureKeys.S2_Khay, 'assets/images/S2/Group_287.png');
 
-        this.load.image(TextureKeys.S2_vector, 'assets/images/S2/Vector.png');
-        this.load.image(TextureKeys.S2_rectangle, 'assets/images/S2/Rectangle 1.png');
-        this.load.image(TextureKeys.S2_vector2, 'assets/images/S2/Vector (1).png');
-        this.load.image(TextureKeys.S2_vector3, 'assets/images/S2/Vector (2).png');
-        this.load.image(TextureKeys.S2_vector4, 'assets/images/S2/Vector (3).png');
-        this.load.image(TextureKeys.S2_vector5, 'assets/images/S2/Vector (4).png');
-        this.load.image(TextureKeys.S2_vector6, 'assets/images/S2/Vector (5).png');
-        this.load.image(TextureKeys.S2_vector7, 'assets/images/S2/Vector (6).png');
-        this.load.image(TextureKeys.S2_vector8, 'assets/images/S2/Vector (7).png');
-        this.load.image(TextureKeys.S2_vector9, 'assets/images/S2/Vector (8).png');
+
 
         // - Nút màu
         this.load.image(TextureKeys.BtnRed, 'assets/images/color/red.png');

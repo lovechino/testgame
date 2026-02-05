@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { SceneKeys, TextureKeys, DataKeys } from '../consts/Keys';
+import { DataKeys, SceneKeys, TextureKeys } from '../consts/Keys';
 import { GameConstants } from '../consts/GameConstants';
 import { GameUtils } from '../utils/GameUtils';
 import { IdleManager } from '../utils/IdleManager';
@@ -56,13 +56,14 @@ export default class Scene2 extends Phaser.Scene {
             currentScore: 0,
         };
         sdk.score(0, 0); // initial score
-        sdk.progress({ levelIndex: 0, total: 1 }); // Assuming 1 level for this scene
+        sdk.progress({ levelIndex: 1, total: 2 }); // Level 2 (index 1) of 2
 
         game.startQuestionTimer();
 
         this.setupInput();
         this.playIntroSequence();
-
+        // this.debugShowAllHints();
+        // this.debugShowAllOffsets();
         this.events.on('wake', () => {
             this.idleManager.reset();
             if (this.input.keyboard) this.input.keyboard.enabled = true;
@@ -93,8 +94,14 @@ export default class Scene2 extends Phaser.Scene {
 
         this.paintManager.setColor(this.PALETTE_DATA[0].color);
 
-        this.idleManager = new IdleManager(GameConstants.IDLE.THRESHOLD, () => this.showHint());
+        this.idleManager = new IdleManager(GameConstants.IDLE.THRESHOLD, () => {
+            console.log("Idle Manager Triggered!"); // Debug log
+            this.showHint();
+        });
     }
+
+    // ... (rest of setupInput, createUI, etc. - skipping unchanged parts to find stopIntro)
+
 
     private setupInput() {
         this.input.on('pointermove', (p: Phaser.Input.Pointer) => this.paintManager.handlePointerMove(p));
@@ -119,12 +126,26 @@ export default class Scene2 extends Phaser.Scene {
 
         const boardY = banner.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
         const boardScale = (UI as any).BOARD_SCALE ?? 0.75;
-        this.add.image(cx, boardY, TextureKeys.S2_rectangle).setOrigin(0.5, 0).setScale(boardScale);
+        const boardRight = this.add.image(cx, boardY, TextureKeys.S2_Rectangle1).setOrigin(0.5, 0).setScale(boardScale);
 
         // Goal net shifted to left side
-        const goalX = GameUtils.getW(this) * 0.14;
-        const goalY = boardY + GameUtils.pctY(this, 0.08);
-        this.add.image(goalX, goalY, TextureKeys.S2_goal).setOrigin(0, 0).setScale(boardScale);
+        // const goalX = GameUtils.getW(this) * 0.14;
+        // const goalY = boardY + GameUtils.pctY(this, 0.08);
+        // this.add.image(goalX, goalY, TextureKeys.S2_goal).setOrigin(0, 0).setScale(boardScale);
+
+        // Character (Left)
+        const charX = cx - boardRight.displayWidth * 0.25;
+        const charY = boardY + boardRight.displayHeight * 0.1;
+        this.add.image(charX, charY, TextureKeys.S2_Layer1).setOrigin(0.5, 0).setScale(boardScale * 0.9);
+
+        // Letter U (Right)
+        const uwX = cx + boardRight.displayWidth * 0.25;
+        const uwY = boardY + boardRight.displayHeight * 0.15;
+        this.add.image(uwX, uwY, TextureKeys.S2_UW).setOrigin(0.5, 0).setScale(boardScale * 0.9);
+
+        // Text "cô cấp dưỡng" (Bottom Center)
+        // const textResultY = boardY + boardRight.displayHeight * 0.75;
+        // this.add.image(cx, textResultY, TextureKeys.S2_Frame76).setOrigin(0.5, 0).setScale(boardScale * 0.8);
 
         this.createPalette();
 
@@ -176,44 +197,61 @@ export default class Scene2 extends Phaser.Scene {
 
     private createLevel() {
         const data = this.cache.json.get(DataKeys.LevelS2Config);
+        console.log("Level Data:", data); // Debug log
+
         if (data) {
-            if (data.goalkeeper) this.spawnCharacter(data.goalkeeper);
-            else if (data.teacher) this.spawnCharacter(data.teacher);
-            if (data.letter) this.spawnCharacter(data.letter);
+            if (data.goalkeeper && data.goalkeeper.parts) {
+                this.spawnParts(data.goalkeeper.parts, data.goalkeeper.baseX_pct, data.goalkeeper.baseY_pct);
+            }
+            if (data.letter && data.letter.parts) {
+                this.spawnParts(data.letter.parts, data.letter.baseX_pct, data.letter.baseY_pct);
+            }
+            // Fallback for flat structure if needed
+            if (data.parts) {
+                this.spawnParts(data.parts);
+            }
         }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    private spawnCharacter(config: any) {
-        const cx = GameUtils.pctX(this, config.baseX_pct);
-        const cy = GameUtils.pctY(this, config.baseY_pct);
-
+    private spawnParts(parts: any[], baseXPct: number = 0.5, baseYPct: number = 0.5) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        config.parts.forEach((part: any, index: number) => {
-            const id = `${part.key}_${index}`;
-            const layerX = cx + part.offsetX;
-            const layerY = cy + part.offsetY;
+        parts.forEach((part: any, index: number) => {
+            const id = part.id || `${part.key}_${index}`;
+
+            const cx = GameUtils.getW(this) * baseXPct;
+            const cy = GameUtils.getH(this) * baseYPct;
+
+            // Updated to match flat JSON structure (offsetX, offsetY)
+            const layerX = cx + (part.offsetX || 0);
+            const layerY = cy + (part.offsetY || 0);
 
             const scaleAdjust = part.scaleAdjust !== undefined ? part.scaleAdjust : 1;
-            const hitArea = this.paintManager.createPaintableLayer(layerX, layerY, part.key, part.scale, id, scaleAdjust);
+            const scale = part.scale || 1.0;
 
+            // Note: PaintManager.createPaintableLayer expects (x, y, key, scale, id, scaleAdjust)
+            const hitArea = this.paintManager.createPaintableLayer(layerX, layerY, part.key, scale, id, scaleAdjust);
+
+            // Updated to match flat JSON structure (hintX, hintY)
             hitArea.setData('hintX', part.hintX || 0);
             hitArea.setData('hintY', part.hintY || 0);
-            hitArea.setData('originScale', part.scale);
+            hitArea.setData('originScale', scale);
             hitArea.setData('baseX', cx);
             hitArea.setData('baseY', cy);
             hitArea.setData('partKey', part.key);
-
-            // Log initial keys for user
-            console.log(`[INITIAL] Key: "${part.key}" => offsetX: ${part.offsetX || 0}, offsetY: ${part.offsetY || 0}`);
-
-
+            hitArea.setData('partId', id);
 
             this.unfinishedPartsMap.set(id, hitArea);
             this.totalParts++;
-        });
 
-        this.add.image(cx, cy, config.outlineKey).setScale(config.baseScale).setDepth(100).setInteractive({ pixelPerfect: true });
+            // Enable Debug Mode for this part
+            hitArea.setInteractive();
+            hitArea.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+                if (pointer.rightButtonDown()) { // Right click to debug
+                    this.enableHintDebug(hitArea);
+                }
+            });
+        });
 
         // Key P to dump config
         this.input.keyboard?.on('keydown-P', () => {
@@ -221,36 +259,94 @@ export default class Scene2 extends Phaser.Scene {
         });
     }
 
+    private enableHintDebug(target: Phaser.GameObjects.Image) {
+        console.log(`[DEBUG] Selected part: ${target.getData('partId')}`);
+        this.logHintTarget(target);
+
+        // Show hand at current hint pos (Global offset from center)
+        const hX = target.getData('hintX');
+        const hY = target.getData('hintY');
+        const cx = target.getData('baseX');
+        const cy = target.getData('baseY');
+
+        const worldX = cx + hX;
+        const worldY = cy + hY;
+
+        this.handHint.setPosition(worldX, worldY).setAlpha(1).setScale(0.7).setDepth(300);
+
+        // Enable drag on hand
+        this.handHint.setInteractive({ draggable: true });
+        this.input.setDraggable(this.handHint);
+
+        this.handHint.off('drag');
+        this.handHint.on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+            this.handHint.setPosition(dragX, dragY);
+
+            // Calculate new relative hint position (Global offset from center)
+            const newHintX = Math.round(dragX - cx);
+            const newHintY = Math.round(dragY - cy);
+
+            console.log(`Hint Pos: x=${newHintX}, y=${newHintY}`);
+            target.setData('hintX', newHintX);
+            target.setData('hintY', newHintY);
+        });
+    }
+
     private dumpDebugConfig() {
         console.log("===== GENERATING CONFIG JSON =====");
-        const parts: any[] = [];
+
+        // Deep clone the full config to preserve structure
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const fullConfig = JSON.parse(JSON.stringify(this.cache.json.get(DataKeys.LevelS2Config)));
 
         this.unfinishedPartsMap.forEach((hitArea) => {
-            const ghost = hitArea.getData('ghostPart') as Phaser.GameObjects.Image;
-            const cx = hitArea.getData('baseX');
-            const cy = hitArea.getData('baseY');
+            const id = hitArea.getData('partId');
             const key = hitArea.getData('partKey');
+
             const hintX = hitArea.getData('hintX');
             const hintY = hitArea.getData('hintY');
+            const cx = hitArea.getData('baseX');
+            const cy = hitArea.getData('baseY');
 
-            if (ghost) {
-                const offX = Math.round(ghost.x - cx);
-                const offY = Math.round(ghost.y - cy);
+            const offsetX = Math.round(hitArea.x - cx);
+            const offsetY = Math.round(hitArea.y - cy);
 
-                parts.push({
-                    key: key,
-                    offsetX: offX,
-                    offsetY: offY,
-                    hintX: hintX,
-                    hintY: hintY
-                    // Note: You can add other fields if needed, but this is the core for alignment
+            // Find in goalkeeper
+            let found = false;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            if (fullConfig.goalkeeper && fullConfig.goalkeeper.parts) {
+                const p = fullConfig.goalkeeper.parts.find((item: any) => {
+                    return (item.id === id) || (item.key === key);
                 });
+
+                if (p) {
+                    p.offsetX = offsetX;
+                    p.offsetY = offsetY;
+                    p.hintX = hintX;
+                    p.hintY = hintY;
+                    found = true;
+                }
+            }
+
+            // Find in letter (if not found in goalkeeper, or checking both?)
+            if (!found && fullConfig.letter && fullConfig.letter.parts) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const p = fullConfig.letter.parts.find((item: any) => {
+                    return (item.id === id) || (item.key === key);
+                });
+                if (p) {
+                    p.offsetX = offsetX;
+                    p.offsetY = offsetY;
+                    p.hintX = hintX;
+                    p.hintY = hintY;
+                    found = true;
+                }
             }
         });
 
-        console.log(JSON.stringify(parts, null, 2));
-        alert("Config dumped to Console! Press F12 to view.");
+        console.log(JSON.stringify(fullConfig, null, 2));
     }
+
     private handlePartComplete(id: string, rt: Phaser.GameObjects.RenderTexture, usedColors: Set<number>) {
         this.finishedParts.add(id);
 
@@ -261,7 +357,7 @@ export default class Scene2 extends Phaser.Scene {
         }
         sdk.score(this.finishedParts.size, 1);
         sdk.progress({
-            levelIndex: 0,
+            levelIndex: 1,
             score: this.finishedParts.size,
         });
 
@@ -288,11 +384,11 @@ export default class Scene2 extends Phaser.Scene {
             game.finalizeAttempt();
             sdk.requestSave({
                 score: this.finishedParts.size,
-                levelIndex: 0,
+                levelIndex: 1,
             });
             sdk.progress({
-                levelIndex: 1, // Next level index (effectively "done" for this single scene)
-                total: 1,
+                levelIndex: 1, // Current level completed
+                total: 2,
                 score: this.finishedParts.size,
             });
 
@@ -318,6 +414,9 @@ export default class Scene2 extends Phaser.Scene {
     }
 
     private stopIntro() {
+        if (this.isIntroActive) {
+            console.log("[DEBUG] stopIntro called - Intro ending, Idle starting.");
+        }
         this.isIntroActive = false;
         this.idleManager.start();
         this.tweens.killTweensOf(this.handHint);
@@ -325,10 +424,15 @@ export default class Scene2 extends Phaser.Scene {
     }
 
     private runHandTutorial() {
-        if (!this.firstColorBtn || !this.isIntroActive) return;
+        if (!this.firstColorBtn || !this.isIntroActive) {
+            console.warn("[INTRO] Aborting - firstColorBtn missing or Intro inactive");
+            return;
+        }
 
         const UI = GameConstants.SCENE2.UI;
         const INTRO = GameConstants.SCENE2.INTRO_HAND;
+
+        console.log("%c[INTRO] Playing Hand Tutorial Sequence", "color: #e6007e; font-weight: bold;");
 
         const startX = this.firstColorBtn.x + 20;
         const startY = this.firstColorBtn.y + 20;
@@ -336,7 +440,14 @@ export default class Scene2 extends Phaser.Scene {
         const endY = GameUtils.pctY(this, UI.HAND_INTRO_END_Y);
         const dragY = endY + 100;
 
-        this.handHint.setPosition(startX, startY).setAlpha(0).setScale(0.7);
+        console.log(`[INTRO] Coordinates: Start(${startX}, ${startY}) -> End(${endX}, ${endY})`);
+
+        if (!this.handHint) {
+            console.error("[INTRO] FATAL: handHint is UNDEFINED!");
+            return;
+        }
+
+        this.handHint.setPosition(startX, startY).setAlpha(0).setScale(0.7).setFlipX(false);
 
         this.tweens.chain({
             targets: this.handHint,
@@ -355,11 +466,17 @@ export default class Scene2 extends Phaser.Scene {
         });
     }
 
+    private logHintTarget(target: Phaser.GameObjects.Image) {
+        const id = target.getData('partId');
+        console.log(`%c[HINT] Hand is pointing to: ${id}`, "color: #e6007e; font-weight: bold; font-size: 14px;");
+    }
+
     private showHint() {
         const items = Array.from(this.unfinishedPartsMap.values());
         if (items.length === 0) return;
 
         const target = items[Math.floor(Math.random() * items.length)];
+        this.logHintTarget(target);
 
         AudioManager.play('hint');
         game.addHint();
@@ -375,20 +492,107 @@ export default class Scene2 extends Phaser.Scene {
 
         const hX = target.getData('hintX') || 0;
         const hY = target.getData('hintY') || 0;
-        const originScale = target.getData('originScale') || 1;
+        const cx = target.getData('baseX');
+        const cy = target.getData('baseY');
 
-        const destX = target.x + (hX * originScale);
-        const destY = target.y + (hY * originScale);
+        const destX = cx + hX;
+        const destY = cy + hY;
 
-        this.handHint.setPosition(destX + IDLE_CFG.OFFSET_X, destY + IDLE_CFG.OFFSET_Y).setAlpha(0).setScale(0.7);
+        // Calculate start position (Right side)
+        const startX = destX + IDLE_CFG.OFFSET_X;
+        const startY = destY + IDLE_CFG.OFFSET_Y;
+
+        this.handHint.setPosition(startX, startY).setAlpha(0).setScale(0.7).setDepth(300).setFlipX(true);
+
+        // Ensure hand points to the left (assuming default hand points up/left, we might need rotation?)
+        // If default hand points top-left (standard pointer), we might want to rotate it or just place it.
+        // Let's assume standard hand. If we want it "pointing into hint" from right:
+        // If it's a finger, usually points Up-Left. 
+        // Placing it at Bottom-Right pointing Up-Left is good.
+        // No extra rotation needed if default is standard pointer.
 
         this.tweens.chain({
             targets: this.handHint,
             tweens: [
-                { alpha: 1, x: destX, y: destY, duration: IDLE_CFG.FADE_IN },
+                { alpha: 1, x: destX, y: destY, duration: IDLE_CFG.FADE_IN, ease: 'Power2' },
                 { scale: 0.5, duration: IDLE_CFG.SCALE, yoyo: true, repeat: 3 },
                 { alpha: 0, duration: IDLE_CFG.FADE_OUT }
             ]
+        });
+    }
+
+    private debugShowAllHints() {
+        console.log("--- DEBUG HINTS (INTERACTIVE) ---");
+
+        this.unfinishedPartsMap.forEach((part, id) => {
+            const hX = part.getData('hintX') || 0;
+            const hY = part.getData('hintY') || 0;
+            const cx = part.getData('baseX');
+            const cy = part.getData('baseY');
+
+            const destX = cx + hX;
+            const destY = cy + hY;
+
+            console.log(`[INIT] Hint for ${id}: x=${destX}, y=${destY} (global offset: ${hX}, ${hY})`);
+
+            // Creates a draggable red circle
+            const debugPoint = this.add.circle(destX, destY, 8, 0xff0000)
+                .setDepth(300)
+                .setInteractive({ draggable: true });
+
+            // Label
+            const label = this.add.text(destX, destY + 10, id, {
+                color: '#ffff00',
+                fontSize: '12px',
+                backgroundColor: '#000000'
+            }).setDepth(301).setOrigin(0.5, 0);
+
+            debugPoint.on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                debugPoint.x = dragX;
+                debugPoint.y = dragY;
+                label.setPosition(dragX, dragY + 10);
+            });
+
+            debugPoint.on('dragend', () => {
+                // Calculate new global hintX/hintY based on center
+                const newHintX = Math.round(debugPoint.x - cx);
+                const newHintY = Math.round(debugPoint.y - cy);
+
+                console.log(`%c[UPDATED] ${id} => hintX: ${newHintX}, hintY: ${newHintY}`, "color: #00ff00; font-weight: bold");
+
+                // Update data so 'P' dump works correctly
+                part.setData('hintX', newHintX);
+                part.setData('hintY', newHintY);
+            });
+        });
+    }
+
+    private debugShowAllOffsets() {
+        console.log("--- DEBUG OFFSETS (INTERACTIVE) ---");
+
+        this.unfinishedPartsMap.forEach((part, id) => {
+            const cx = part.getData('baseX');
+            const cy = part.getData('baseY');
+
+            // 1. Force draggable & Visible
+            part.setInteractive({ draggable: true, pixelPerfect: false });
+            part.setAlpha(1); // Make visible for debugging
+            this.input.setDraggable(part);
+
+            // 2. Drag Logic
+            part.on('drag', (_pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                part.setPosition(dragX, dragY);
+            });
+
+            part.on('dragend', () => {
+                const newOffsetX = Math.round(part.x - cx);
+                const newOffsetY = Math.round(part.y - cy);
+
+                console.log(`%c[UPDATED OFFSET] "${id}": { offsetX: ${newOffsetX}, offsetY: ${newOffsetY} }`, "color: #00ffff; font-weight: bold");
+
+                part.setData('offsetX', newOffsetX);
+                part.setData('offsetY', newOffsetY);
+            });
         });
     }
 }

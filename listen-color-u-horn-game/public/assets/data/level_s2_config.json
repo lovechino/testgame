@@ -1,116 +1,127 @@
 {
   "goalkeeper": {
-    "baseScale": 0.75,
-    "outlineKey": "S2_player",
+    "baseScale": 0.73,
+    "outlineKey": "S2_Layer1",
     "baseX_pct": 0.32,
     "baseY_pct": 0.48,
     "parts": [
       {
-        "key": "S2_vector",
-        "note": "quần (pants)",
-        "offsetX": -236,
-        "offsetY": 147,
-        "scale": 0.75,
+        "key": "S2_Bowl",
+        "note": "",
+        "offsetX": -6,
+        "offsetY": 190,
+        "scale": 0.73,
         "scaleAdjust": 0.97,
-        "hintX": -90,
-        "hintY": 80
+        "hintX": -7,
+        "hintY": 189
       },
       {
-        "key": "S2_vector2",
-        "note": "áo (shirt)",
-        "offsetX": 12,
-        "offsetY": 77,
-        "scale": 0.75,
+        "key": "S2_Face",
+        "note": "",
+        "offsetX": -62,
+        "offsetY": -94,
+        "scale": 0.73,
         "scaleAdjust": 0.97,
-        "hintX": 110,
-        "hintY": 110
+        "hintX": -39,
+        "hintY": -102
       },
       {
-        "key": "S2_vector3",
-        "note": "găng tay (glove 1)",
-        "offsetX": -221,
-        "offsetY": -133,
-        "scale": 0.75,
+        "key": "S2_Khay",
+        "note": "",
+        "offsetX": 32,
+        "offsetY": 242,
+        "scale": 0.73,
         "scaleAdjust": 0.97,
-        "hintX": 150,
-        "hintY": -60
+        "hintX": 19,
+        "hintY": 284
       },
       {
-        "key": "S2_vector4",
-        "note": "găng tay còn lại (glove 2)",
-        "offsetX": 287,
-        "offsetY": -203,
-        "scale": 0.75,
+        "key": "S2_Hair",
+        "note": "",
+        "offsetX": -57,
+        "offsetY": -98,
+        "scale": 0.73,
         "scaleAdjust": 0.97,
-        "hintX": 170,
-        "hintY": -40
+        "hintX": -210,
+        "hintY": -4
       },
       {
-        "key": "S2_vector5",
-        "note": "mặt (face)",
-        "offsetX": 81,
-        "offsetY": -67,
-        "scale": 0.75,
+        "key": "S2_Hat",
+        "note": "",
+        "offsetX": -80,
+        "offsetY": -187,
+        "scale": 0.73,
         "scaleAdjust": 0.97,
-        "hintX": 130,
-        "hintY": 200
+        "hintX": -76,
+        "hintY": -210
       },
       {
-        "key": "S2_vector6",
-        "note": "tóc (hair)",
-        "offsetX": 93,
-        "offsetY": -126,
-        "scale": 0.75,
+        "key": "S2_Shirt",
+        "note": "",
+        "offsetX": -74,
+        "offsetY": 105,
+        "scale": 0.73,
         "scaleAdjust": 0.97,
-        "hintX": 200,
-        "hintY": 170
+        "hintX": -57,
+        "hintY": 102
       },
       {
-        "key": "S2_vector7",
-        "note": "phần tay (arm)",
-        "offsetX": 224,
-        "offsetY": -35,
-        "scale": 0.75,
+        "key": "S2_Skirt",
+        "note": "",
+        "offsetX": -66,
+        "offsetY": 326,
+        "scale": 0.73,
         "scaleAdjust": 0.97,
-        "hintX": 540,
-        "hintY": -10
+        "hintX": -34,
+        "hintY": 357
       },
       {
-        "key": "S2_vector8",
-        "note": "phần dưới găng tay (wrist)",
-        "offsetX": 265,
-        "offsetY": -116,
-        "scale": 0.75,
+        "key": "S2_Vaso",
+        "note": "",
+        "offsetX": 132,
+        "offsetY": 205,
+        "scale": 0.73,
         "scaleAdjust": 0.97,
-        "hintX": 220,
-        "hintY": -120
+        "hintX": 101,
+        "hintY": 229
       },
       {
-        "key": "S2_vector9",
-        "note": "tay áo (sleeve)",
-        "offsetX": -152,
-        "offsetY": -61,
-        "scale": 0.75,
+        "key": "S2_Arm1",
+        "note": "",
+        "offsetX": -158,
+        "offsetY": 232,
+        "scale": 0.73,
         "scaleAdjust": 0.97,
-        "hintX": -120,
-        "hintY": -50
+        "hintX": -228,
+        "hintY": 252
+      },
+      {
+        "key": "S2_Arm2",
+        "note": "",
+        "offsetX": 189,
+        "offsetY": 244,
+        "scale": 0.73,
+        "scaleAdjust": 0.97,
+        "hintX": 186,
+        "hintY": 273
       }
     ]
   },
   "letter": {
     "baseScale": 0.7,
-    "outlineKey": "u_outline",
-    "baseX_pct": 0.75,
+    "outlineKey": "S2_UW",
+    "baseX_pct": 0.73,
     "baseY_pct": 0.48,
     "parts": [
       {
-        "key": "S2_text_relust",
-        "offsetX": 0,
-        "offsetY": -2,
-        "scale": 0.7,
-        "scaleAdjust": 0.98,
-        "hintX": 10,
-        "hintY": 200
+        "key": "S2_UResult",
+        "note": "",
+        "offsetX": -82,
+        "offsetY": 8,
+        "scale": 0.73,
+        "scaleAdjust": 0.97,
+        "hintX": -158,
+        "hintY": 177
       }
     ]
   }
