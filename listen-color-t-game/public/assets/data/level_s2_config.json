@@ -1,0 +1,121 @@
+{
+  "goalkeeper": {
+    "baseScale": 0.73,
+    "outlineKey": "S2_Octopus",
+    "baseX_pct": 0.32,
+    "baseY_pct": 0.48,
+    "parts": [
+      {
+        "key": "S2_OcBody",
+        "note": "",
+        "offsetX": 27,
+        "offsetY": 36,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": 40,
+        "hintY": 83
+      },
+      {
+        "key": "S2_Oc1",
+        "note": "",
+        "offsetX": 32,
+        "offsetY": 37,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": 262,
+        "hintY": -42
+      },
+      {
+        "key": "S2_Oc2",
+        "note": "",
+        "offsetX": 29,
+        "offsetY": 36,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": 305,
+        "hintY": -17
+      },
+      {
+        "key": "S2_Oc3",
+        "note": "",
+        "offsetX": 26,
+        "offsetY": 39,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": 356,
+        "hintY": 85
+      },
+      {
+        "key": "S2_Oc4",
+        "note": "",
+        "offsetX": 31,
+        "offsetY": 36,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": -260,
+        "hintY": 224
+      },
+      {
+      
+        "key": "S2_Oc5",
+        "note": "",
+        "offsetX": 31,
+        "offsetY": 36,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": -113,
+        "hintY": 96
+      },
+      {
+        
+        "key": "S2_Oc6",
+        "note": "",
+        "offsetX": 27,
+        "offsetY": 37,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": 169,
+        "hintY": 46
+      },
+      {
+        "key": "S2_Oc7",
+        "note": "",
+        "offsetX": 34,
+        "offsetY": 37,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": -271,
+        "hintY": -74
+      },
+      {
+       
+        "key": "S2_Oc8",
+        "note": "",
+        "offsetX": 31,
+        "offsetY": 34,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": -239,
+        "hintY": 117
+      }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.7,
+    "outlineKey": "S2_T",
+    "baseX_pct": 0.73,
+    "baseY_pct": 0.48,
+    "parts": [
+      {
+        "key": "S2_TResult",
+        "note": "",
+        "offsetX": -82,
+        "offsetY": 39,
+        "scale": 0.69,
+        "scaleAdjust": 0.97,
+        "hintX": -109,
+        "hintY": 131
+      }
+    ]
+  }
+}

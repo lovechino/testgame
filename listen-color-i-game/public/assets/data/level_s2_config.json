@@ -1,0 +1,48 @@
+{
+  "goalkeeper": {
+    "baseScale": 0.73,
+    "outlineKey": "S2_DuckResult",
+    "baseX_pct": 0.32,
+    "baseY_pct": 0.48,
+    "parts": [
+      {
+        "key": "S2_DuckBody",
+        "note": "",
+        "offsetX": 63,
+        "offsetY": 99,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": -7,
+        "hintY": 189
+      },
+      {
+        "key": "S2_Speculum",
+        "note": "",
+        "offsetX": 339,
+        "offsetY": 10,
+        "scale": 0.70,
+        "scaleAdjust": 0.97,
+        "hintX": 332,
+        "hintY": 45
+      }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.7,
+    "outlineKey": "S2_IconNew",
+    "baseX_pct": 0.73,
+    "baseY_pct": 0.48,
+    "parts": [
+      {
+        "key": "S2_IconResult",
+        "note": "",
+        "offsetX": -83,
+        "offsetY": 30,
+        "scale": 0.69,
+        "scaleAdjust": 0.97,
+        "hintX": -158,
+        "hintY": 177
+      }
+    ]
+  }
+}

@@ -1,46 +1,52 @@
 import Phaser from 'phaser';
 
-import { SceneKeys, TextureKeys, AudioKeys } from '../consts/Keys';
-import { GameConstants } from '../consts/GameConstants'; // Import các hằng số cấu hình game
-import { GameUtils } from '../utils/GameUtils';
+import { SceneKeys, AudioKeys } from '../consts/Keys';
+import { GameConstants } from '../consts/GameConstants';
 import { IdleManager } from '../utils/IdleManager';
 
 import AudioManager from '../audio/AudioManager';
-import { showGameButtons } from '../main';
+import { showGameButtons, sdk } from '../main';
 import { playVoiceLocked, setGameSceneReference, resetVoiceState } from '../utils/rotateOrientation';
 import { changeBackground } from '../utils/BackgroundManager';
+import { game } from '@iruka-edu/mini-game-sdk';
+import { Scene1UI } from './components/scene1/Scene1UI';
 
 export default class Scene1 extends Phaser.Scene {
-    // --- KHAI BÁO BIẾN UI & GAME OBJECTS ---
-    private puzzleItems: Phaser.GameObjects.Image[] = [];
+    // UI Component
+    private ui!: Scene1UI;
 
-    private victoryBg!: Phaser.GameObjects.Image;   // Nền popup thắng
-    private victoryText!: Phaser.GameObjects.Image; // Chữ "Hoan hô" hoặc kết quả
-
-    private bannerBg!: Phaser.GameObjects.Image;    // Nền banner phía trên
-    private handHint!: Phaser.GameObjects.Image;    // Bàn tay hướng dẫn (gợi ý)
-
-    // --- KHAI BÁO BIẾN TRẠNG THÁI & HỆ THỐNG ---
+    // Logic State
     private isGameActive: boolean = false;
-
-    private bgm!: Phaser.Sound.BaseSound;
-
-    private idleManager!: IdleManager;
-
     private isHintActive: boolean = false;
 
+    // System
+    private bgm!: Phaser.Sound.BaseSound;
+    private idleManager!: IdleManager;
     private instructionTimer?: Phaser.Time.TimerEvent;
 
     constructor() { super(SceneKeys.Scene1); }
 
     create() {
-        this.setupSystem();             // Cài đặt hệ thống (Idle, Input...)
-        this.setupBackgroundAndAudio(); // Cài đặt hình nền và nhạc nền
-        this.createUI();                // Tạo các UI tĩnh (Banner, Hand)
-        this.createGameObjects();       // Tạo các vật thể trong game (Bảng, Câu đố)
-        this.initGameFlow();            // Bắt đầu luồng game (Intro voice -> Start)
+        this.setupSystem();
+        this.setupBackgroundAndAudio();
+
+        this.ui.create();
+
+        // SDK Integration
+        game.setTotal(1);
+        (window as any).irukaGameState = {
+            startTime: Date.now(),
+            currentScore: 0,
+        };
+        sdk.score(0, 0);
+        sdk.progress({ levelIndex: 0, total: 2 });
+        game.startQuestionTimer();
+
+        this.initGameFlow();
 
         this.events.on('wake', this.handleWake, this);
+        this.events.on('poem-clicked', (msg: any) => this.handlePoemClick(msg));
+        this.events.on('hint-finished', () => { this.isHintActive = false; this.idleManager.reset(); });
     }
 
     update(time: number, delta: number) {
@@ -49,6 +55,8 @@ export default class Scene1 extends Phaser.Scene {
 
     shutdown() {
         this.events.off('wake', this.handleWake, this);
+        this.events.off('poem-clicked');
+        this.events.off('hint-finished');
 
         if (this.bgm && this.bgm.isPlaying) {
             this.bgm.stop();
@@ -72,6 +80,7 @@ export default class Scene1 extends Phaser.Scene {
 
     private setupSystem() {
         resetVoiceState();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).gameScene = this;
         setGameSceneReference(this);
 
@@ -82,6 +91,12 @@ export default class Scene1 extends Phaser.Scene {
         this.input.on('pointerdown', () => {
             this.resetIdleState();
         });
+
+        this.ui = new Scene1UI(this, (item) => {
+            if (!this.isGameActive) return;
+            const isCorrect = item.getData('isCorrect');
+            isCorrect ? this.handleCorrect(item) : this.handleWrong(item);
+        });
     }
 
     private setupBackgroundAndAudio() {
@@ -91,113 +106,6 @@ export default class Scene1 extends Phaser.Scene {
             this.sound.stopByKey(AudioKeys.BgmNen);
         }
         this.bgm = this.sound.add(AudioKeys.BgmNen, { loop: true, volume: 0.25 });
-    }
-
-    private createUI() {
-        const UI = GameConstants.SCENE1.UI;
-        const cx = GameUtils.pctX(this, 0.5);
-
-        const bannerY = GameUtils.pctY(this, UI.BANNER_Y);
-
-        this.bannerBg = this.add.image(cx, bannerY, TextureKeys.S1_BannerBg)
-            .setOrigin(0.5, 0).setScale(0.7);
-
-        const textY = bannerY + this.bannerBg.displayHeight / 2;
-        this.add.image(cx, textY, TextureKeys.S1_BannerText).setScale(0.7);
-
-        this.handHint = this.add.image(0, 0, TextureKeys.HandHint)
-            .setDepth(200).setAlpha(0).setScale(0.7);
-    }
-
-    private createGameObjects() {
-        this.createLeftPanel();
-        this.createRightPanel();
-    }
-
-    private createLeftPanel() {
-        const UI = GameConstants.SCENE1.UI;
-        const ANIM = GameConstants.SCENE1.ANIM;
-
-        const boardY = this.bannerBg.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
-        const boardX = GameUtils.pctX(this, 0.5) - GameUtils.pctY(this, UI.BOARD_MARGIN_X);
-
-        const boardLeft = this.add.image(boardX, boardY, TextureKeys.S1_Board)
-            .setOrigin(1, 0).setScale(0.7);
-
-        const centerX = GameUtils.pctX(this, 0.5 - boardLeft.displayWidth / GameUtils.getW(this) / 2) - GameUtils.pctY(this, UI.BOARD_MARGIN_X);
-        const centerY = boardY + boardLeft.displayHeight / 2;
-        const bottomY = boardY + boardLeft.displayHeight;
-
-        const playerY = centerY + (boardLeft.displayHeight * UI.RAIN_OFFSET);
-        const player = this.add.image(centerX, playerY, TextureKeys.S1_Player)
-            .setScale(0.7).setOrigin(0.5, 1);
-
-        const poemY = bottomY - player.displayHeight - GameUtils.pctY(this, UI.POEM_OFFSET);
-        const poemText = this.add.image(centerX, poemY, TextureKeys.S1_PoemText)
-            .setScale(0.7).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
-
-        this.tweens.add({ targets: poemText, y: '+=10', duration: ANIM.POEM_FLOAT, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-
-        poemText.on('pointerdown', () => {
-            if (this.isGameActive) {
-                AudioManager.stopAll();
-                AudioManager.play('cau_do');
-                this.tweens.add({ targets: poemText, scale: 0.6, duration: 100, yoyo: true, ease: 'Sine.easeInOut' });
-            }
-        });
-
-        const iconX = centerX - boardLeft.displayWidth * UI.ICON_O_X;
-        const iconY = boardY + GameUtils.pctY(this, UI.ICON_O_Y);
-        const iconO = this.add.image(iconX, iconY, TextureKeys.S1_IconOHeader)
-            .setScale(0.7).setOrigin(0.5, 0);
-
-        this.tweens.add({ targets: iconO, angle: { from: -4, to: 4 }, duration: ANIM.ICON_SHAKE, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-    }
-
-    private createRightPanel() {
-        const UI = GameConstants.SCENE1.UI;
-
-        const boardY = this.bannerBg.displayHeight + GameUtils.pctY(this, UI.BOARD_OFFSET);
-        const boardX = GameUtils.pctX(this, 0.5) + GameUtils.pctY(this, UI.BOARD_MARGIN_X);
-
-        const boardRight = this.add.image(boardX, boardY, TextureKeys.S1_Board)
-            .setOrigin(0, 0).setScale(0.7);
-
-        const centerX = GameUtils.pctX(this, 0.5 + boardRight.displayWidth / GameUtils.getW(this) / 2) + GameUtils.pctY(this, UI.BOARD_MARGIN_X);
-        const centerY = boardY + boardRight.displayHeight / 2;
-
-        this.puzzleItems = [];
-
-        const item1X = centerX - boardRight.displayWidth * UI.ITEM_OFFSET_X;
-        const item1Y = centerY - boardRight.displayWidth * UI.ITEM_OFFSET_Y;
-        this.createPuzzleItem(item1X, item1Y, TextureKeys.S1_enginer, false);
-
-        const item2X = centerX - boardRight.displayWidth * UI.ITEM_OFFSET_X;
-        const item2Y = centerY + boardRight.displayWidth * UI.ITEM_OFFSET_Y;
-        this.createPuzzleItem(item2X, item2Y, TextureKeys.S1_soccer, true);
-
-        const item3X = centerX + boardRight.displayWidth * 0.25;
-        const item3Y = centerY;
-        this.createPuzzleItem(item3X, item3Y, TextureKeys.S1_doctor, false);
-
-        this.victoryBg = this.add.image(centerX, centerY, TextureKeys.BgPopup).setScale(0).setDepth(20);
-        this.victoryText = this.add.image(centerX, centerY + 220, TextureKeys.S1_TextResult).setAlpha(0).setDepth(21).setScale(0.8);
-    }
-
-    private createPuzzleItem(x: number, y: number, key: string, isCorrect: boolean) {
-        const item = this.add.image(x, y, key).setInteractive({ useHandCursor: true }).setScale(0.7);
-        item.setData('isCorrect', isCorrect);
-
-        this.tweens.add({ targets: item, y: y - 10, duration: GameConstants.SCENE1.ANIM.FLOAT, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-
-        item.on('pointerdown', () => {
-            if (!this.isGameActive) return;
-
-            isCorrect ? this.handleCorrect(item) : this.handleWrong(item);
-        });
-
-        this.puzzleItems.push(item);
-        return item;
     }
 
     private initGameFlow() {
@@ -240,20 +148,31 @@ export default class Scene1 extends Phaser.Scene {
         });
     }
 
-    handleWrong(item: Phaser.GameObjects.Image) {
+    private handlePoemClick(poemText: Phaser.GameObjects.Image) {
+        if (this.isGameActive) {
+            AudioManager.stopAll();
+            AudioManager.play('cau_do');
+            this.ui.animatePoemClick(poemText);
+        }
+    }
+
+    private handleWrong(item: Phaser.GameObjects.Image) {
+        game.recordWrong();
         AudioManager.play('sfx-wrong');
-        this.tweens.add({
-            targets: item,
-            angle: { from: -10, to: 10 },
-            duration: GameConstants.SCENE1.ANIM.WRONG_SHAKE,
-            yoyo: true,
-            repeat: 3,
-            onComplete: () => { item.angle = 0; }
-        });
+        this.ui.animateWrong(item);
     }
 
     private handleCorrect(winnerItem: Phaser.GameObjects.Image) {
         this.isGameActive = false;
+
+        // SDK Integration
+        game.recordCorrect({ scoreDelta: 1 });
+        if ((window as any).irukaGameState) {
+            (window as any).irukaGameState.currentScore = 1;
+        }
+        sdk.score(1, 1);
+        sdk.progress({ levelIndex: 0, score: 1 });
+        game.finishQuestionTimer();
 
         if (this.instructionTimer) {
             this.instructionTimer.remove(false);
@@ -261,80 +180,41 @@ export default class Scene1 extends Phaser.Scene {
         }
         this.idleManager.stop();
 
-        this.puzzleItems.forEach(i => i.disableInteractive());
-        this.tweens.killTweensOf(winnerItem);
-
         AudioManager.stop('instruction');
         AudioManager.stop('cau_do');
         AudioManager.play('sfx-ting');
 
-        this.puzzleItems.forEach(i => {
-            if (i !== winnerItem) this.tweens.add({ targets: i, alpha: 0, scale: 0, duration: 300 });
-        });
+        this.ui.animateVictory(winnerItem, () => {
+            playVoiceLocked(null, 'voice_cai_o');
 
-        const ANIM = GameConstants.SCENE1.ANIM;
-        this.tweens.add({ targets: this.victoryBg, scale: 0.9, duration: ANIM.WIN_POPUP, ease: 'Back.out' });
-        this.tweens.add({ targets: this.victoryText, alpha: 1, y: this.victoryText.y - 20, duration: ANIM.WIN_POPUP });
+            this.time.delayedCall(GameConstants.SCENE1.TIMING.DELAY_CORRECT_SFX, () => {
+                AudioManager.play('sfx-correct');
+                const khenTime = AudioManager.getDuration('sfx-correct');
 
-        winnerItem.setDepth(100);
-        this.tweens.add({
-            targets: winnerItem,
-            x: this.victoryBg.x,
-            y: this.victoryBg.y - 100,
-            scale: 0.7,
-            duration: ANIM.WIN_POPUP,
-            ease: 'Back.out',
-            onComplete: () => {
-                playVoiceLocked(null, 'voice_cai_o');
-
-                this.time.delayedCall(GameConstants.SCENE1.TIMING.DELAY_CORRECT_SFX, () => {
-                    AudioManager.play('sfx-correct');
-                    const khenTime = AudioManager.getDuration('sfx-correct');
-
-                    this.time.delayedCall(khenTime * 1000, () => {
-                        this.nextScene();
-                    });
+                this.time.delayedCall(khenTime * 1000, () => {
+                    this.nextScene();
                 });
-            }
+            });
         });
     }
 
     private resetIdleState() {
         this.idleManager.reset();
-        if (this.isHintActive && this.handHint) {
+        if (this.isHintActive) {
             this.isHintActive = false;
-            this.tweens.killTweensOf(this.handHint);
-            this.handHint.setAlpha(0).setPosition(-200, -200);
+            this.ui.hideHandHint();
         }
     }
 
     private showIdleHint() {
         if (!this.isGameActive || this.isHintActive) return;
 
-        const correctItem = this.puzzleItems.find(i => i.getData('isCorrect') === true);
+        const correctItem = this.ui.getPuzzleItems().find(i => i.getData('isCorrect') === true);
         if (!correctItem) return;
 
+        game.addHint();
         this.isHintActive = true;
-
-        this.handHint.setPosition(GameUtils.getW(this) + 100, GameUtils.getH(this));
-        this.handHint.setAlpha(0);
-
-        const IDLE = GameConstants.IDLE;
-
-        this.tweens.chain({
-            targets: this.handHint,
-            tweens: [
-                { alpha: 1, x: correctItem.x + IDLE.OFFSET_X, y: correctItem.y + IDLE.OFFSET_Y, duration: IDLE.FADE_IN, ease: 'Power2' },
-                { scale: 0.5, duration: IDLE.SCALE, yoyo: true, repeat: 2 },
-                {
-                    alpha: 0, duration: IDLE.FADE_OUT, onComplete: () => {
-                        this.isHintActive = false;
-                        this.idleManager.reset();
-                        this.handHint.setPosition(-200, -200);
-                    }
-                }
-            ]
-        });
+        this.ui.showIdleHint(correctItem);
     }
 
     public restartIntro() {
@@ -345,6 +225,9 @@ export default class Scene1 extends Phaser.Scene {
     }
 
     private nextScene() {
+        sdk.requestSave({ score: 1, levelIndex: 0 });
+        sdk.progress({ levelIndex: 1, total: 2, score: 1 });
+
         this.time.delayedCall(GameConstants.SCENE1.TIMING.DELAY_NEXT, () => {
             this.scene.start(SceneKeys.Scene2);
         });
