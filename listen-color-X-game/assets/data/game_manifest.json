@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "title": "Game giải đố và tô màu chữ X",
+    "version": "1.0.0"
+  },
+  "common": {
+    "background": "assets/reskin/background_game.jpg"
+  },
+  "scenes": {
+    "scene1": {
+      "banner": "assets/reskin/s1_banner.png",
+      "board": "assets/reskin/s1_board.png",
+      "resultBg": "assets/reskin/s1_result_bg.png",
+      "items": [
+        {
+          "key": "s1_item_spring_correct",
+          "path": "assets/reskin/s1_item_spring_correct.png",
+          "isCorrect": true
+        },
+        {
+          "key": "s1_item_summer",
+          "path": "assets/reskin/s1_item_summer.png",
+          "isCorrect": false
+        },
+        {
+          "key": "s1_item_winter",
+          "path": "assets/reskin/s1_item_winter.png",
+          "isCorrect": false
+        }
+      ],
+      "refImage": "assets/reskin/s1_example.png",
+      "poem": "assets/reskin/s1_poem.png",
+      "ellipse": "assets/reskin/s1_ellipse.png",
+      "textResult": "assets/reskin/s1_text_result.png"
+    },
+    "scene2": {
+      "banner": "assets/reskin/s2_banner.png",
+      "board": "assets/reskin/s2_board.png",
+      "outlines": [
+        {
+          "key": "s2_outline_1",
+          "path": "assets/reskin/s2_outline_1.png"
+        },
+        {
+          "key": "s2_outline_2",
+          "path": "assets/reskin/s2_outline_2.png"
+        }
+      ],
+      "parts": {
+        "group1": [
+          {
+            "key": "s2_part_1_1",
+            "path": "assets/reskin/s2_part_1_1.png"
+          },
+          {
+            "key": "s2_part_1_2",
+            "path": "assets/reskin/s2_part_1_2.png"
+          },
+          {
+            "key": "s2_part_1_3",
+            "path": "assets/reskin/s2_part_1_3.png"
+          },
+          {
+            "key": "s2_part_1_4",
+            "path": "assets/reskin/s2_part_1_4.png"
+          }
+        ],
+        "group2": [
+          {
+            "key": "s2_part_2_1",
+            "path": "assets/reskin/s2_part_2_1.png"
+          }
+        ]
+      }
+    }
+  },
+  "audio": {
+    "bgm": "assets/audio/sfx/nhac_nen.mp3",
+    "cau_do": "assets/reskin/s1_audio_poem.mp3",
+    "voice_cai_o": "assets/reskin/s1_audio_correct.mp3",
+    "voice_intro_s2": "assets/reskin/s2_audio_intro.mp3"
+  }
+}

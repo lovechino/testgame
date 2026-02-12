@@ -2,7 +2,6 @@ import Phaser from 'phaser';
 import { GameConstants } from '../../../consts/GameConstants';
 import { TextureKeys } from '../../../consts/Keys';
 import { GameUtils } from '../../../utils/GameUtils';
-import AudioManager from '../../../audio/AudioManager';
 
 export class Scene1UI {
     private scene: Phaser.Scene;
@@ -68,7 +67,7 @@ export class Scene1UI {
         const poemText = this.scene.add.image(centerX, poemY, TextureKeys.S1_PoemText)
             .setScale(0.7).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
 
-        this.scene.tweens.add({ targets: poemText, y: '+=10', duration: ANIM.POEM_FLOAT, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+        this.scene.tweens.add({ targets: poemText, y: '-=20', duration: ANIM.POEM_FLOAT, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
         poemText.on('pointerdown', () => {
             // Dispatch event or call a handler passed in? 
@@ -181,7 +180,10 @@ export class Scene1UI {
             targets: this.handHint,
             tweens: [
                 { alpha: 1, x: correctItem.x + IDLE.OFFSET_X, y: correctItem.y + IDLE.OFFSET_Y, duration: IDLE.FADE_IN, ease: 'Power2' },
-                { scale: 0.5, duration: IDLE.SCALE, yoyo: true, repeat: 2 },
+                {
+                    scale: 0.5, duration: IDLE.SCALE, yoyo: true, repeat: 2,
+                    onStart: () => console.log("[HINT] Pointing to:", correctItem.texture.key)
+                },
                 {
                     alpha: 0, duration: IDLE.FADE_OUT, onComplete: () => {
                         this.scene.events.emit('hint-finished');

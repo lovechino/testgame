@@ -95,6 +95,14 @@ export default class Scene2 extends Phaser.Scene {
         this.input.keyboard?.on('keydown-P', () => {
             Scene2Debug.dumpDebugConfig(this.levelManager.getUnfinishedPartsMap());
         });
+
+        this.input.keyboard?.on('keydown-O', () => {
+            Scene2Debug.showAllOffsets(this, this.levelManager.getUnfinishedPartsMap());
+        });
+
+        this.input.keyboard?.on('keydown-H', () => {
+            Scene2Debug.showAllHints(this, this.levelManager.getUnfinishedPartsMap());
+        });
     }
 
     public restartIntro() {

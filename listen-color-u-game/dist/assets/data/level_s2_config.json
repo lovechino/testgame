@@ -12,8 +12,8 @@
         "offsetY": 147,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": -90,
-        "hintY": 130
+        "hintX": 70,
+        "hintY": 119
       },
       {
         "key": "S2_vector2",
@@ -32,8 +32,8 @@
         "offsetY": -131,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 4,
-        "hintY": 6
+        "hintX": 67,
+        "hintY": 69
       },
       {
         "key": "S2_vector4",
@@ -42,14 +42,14 @@
         "offsetY": -203,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 17,
-        "hintY": 13
+        "hintX": 85,
+        "hintY": 97
       },
       {
         "key": "S2_vector5",
         "note": "mặt (face)",
         "offsetX": 77,
-        "offsetY": -60,
+        "offsetY": -64,
         "scale": 0.75,
         "scaleAdjust": 0.97,
         "hintX": 30,
@@ -62,8 +62,8 @@
         "offsetY": -125,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 24,
-        "hintY": 0
+        "hintX": 56,
+        "hintY": 34
       },
       {
         "key": "S2_vector7",
@@ -72,8 +72,8 @@
         "offsetY": -35,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 40,
-        "hintY": -8
+        "hintX": 74,
+        "hintY": 65
       },
       {
         "key": "S2_vector8",
@@ -82,8 +82,8 @@
         "offsetY": -116,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 30,
-        "hintY": 10
+        "hintX": 57,
+        "hintY": 58
       },
       {
         "key": "S2_vector9",
@@ -92,13 +92,13 @@
         "offsetY": -60,
         "scale": 0.75,
         "scaleAdjust": 0.97,
-        "hintX": 10,
-        "hintY": 10
+        "hintX": 71,
+        "hintY": 63
       }
     ]
   },
   "letter": {
-    "baseScale": 0.7,
+    "baseScale": 0.74,
     "outlineKey": "u_outline",
     "baseX_pct": 0.75,
     "baseY_pct": 0.48,
@@ -107,7 +107,7 @@
         "key": "S2_text_relust",
         "offsetX": 0,
         "offsetY": -2,
-        "scale": 0.7,
+        "scale": 0.74,
         "scaleAdjust": 0.98,
         "hintX": 10,
         "hintY": 200

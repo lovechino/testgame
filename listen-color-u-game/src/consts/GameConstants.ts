@@ -16,9 +16,9 @@ export const GameConstants = {
         /** Thời gian hiệu ứng ẩn bàn tay đi (ms) */
         FADE_OUT: 500,
         /** Bàn tay lệch trục X so với vật thể (px) */
-        OFFSET_X: 700,
+        OFFSET_X: 50,
         /** Bàn tay lệch trục Y so với vật thể (px) */
-        OFFSET_Y: 700,
+        OFFSET_Y: 500,
     },
 
     // =========================================
@@ -35,7 +35,7 @@ export const GameConstants = {
             /** Vị trí Mưa: Nằm ở 45% chiều cao của cái Bảng */
             RAIN_OFFSET: 0.45,
             /** Vị trí Thơ: Cách đáy Mưa 5% màn hình */
-            POEM_OFFSET: 0.05,
+            POEM_OFFSET: 0.07,
 
             /** Icon O lệch trái 13% chiều rộng bảng */
             ICON_O_X: 0.13,
@@ -77,9 +77,9 @@ export const GameConstants = {
             BANNER_Y: 0.01,
             BOARD_OFFSET: 0.03,
             /** Vị trí Y của bảng màu (Tỉ lệ màn hình) */
-            PALETTE_Y: 0.89,
+            PALETTE_Y: 0.84,
             /** Khoảng cách giữa các nút màu (Tỉ lệ màn hình) */
-            PALETTE_SPACING: 0.07,
+            PALETTE_SPACING: 0.06,
 
             // Tọa độ đích cho bàn tay hướng dẫn Intro
             HAND_INTRO_END_X: 0.47,

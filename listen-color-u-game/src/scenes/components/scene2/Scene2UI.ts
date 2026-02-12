@@ -45,13 +45,13 @@ export class Scene2UI {
         const boardY = banner.displayHeight + GameUtils.pctY(this.scene, UI.BOARD_OFFSET);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const boardScale = (UI as any).BOARD_SCALE ?? 0.75;
-        this.scene.add.image(cx, boardY, TextureKeys.S2_rectangle).setOrigin(0.5, 0).setScale(boardScale);
+        this.scene.add.image(cx, boardY, TextureKeys.S2_rectangle).setOrigin(0.5, 0.1).setScale(boardScale);
 
         const ballX = GameUtils.getW(this.scene) * 0.55;
         const ballY = boardY + GameUtils.pctY(this.scene, 0.05);
         this.scene.add.image(ballX, ballY, TextureKeys.S2_ball).setOrigin(0, 0).setScale(boardScale);
 
-        const textsX = GameUtils.getW(this.scene) * 0.5;
+        const textsX = GameUtils.getW(this.scene) * 0.4;
         const textsY = boardY + GameUtils.pctY(this.scene, 0.55);
         this.scene.add.image(textsX, textsY, TextureKeys.S2_text_scene2).setOrigin(0, 0).setScale(boardScale);
 

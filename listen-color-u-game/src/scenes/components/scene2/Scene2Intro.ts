@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import { GameConstants } from '../../../consts/GameConstants';
 import { TextureKeys } from '../../../consts/Keys';
-import { GameUtils } from '../../../utils/GameUtils';
 import { IdleManager } from '../../../utils/IdleManager';
 import { playVoiceLocked } from '../../../utils/rotateOrientation';
 import AudioManager from '../../../audio/AudioManager';
@@ -17,6 +16,7 @@ export class Scene2Intro {
 
     private handHint!: Phaser.GameObjects.Image;
     private isIntroActive: boolean = false;
+    private tutorialItemIndex: number = 0;
     private activeHintTween: Phaser.Tweens.Tween | null = null;
 
     constructor(scene: Phaser.Scene, ui: Scene2UI, levelManager: Scene2LevelManager, idleManager: IdleManager) {
@@ -52,15 +52,27 @@ export class Scene2Intro {
 
     private runHandTutorial() {
         const firstBtn = this.ui.getFirstColorBtn();
-        if (!firstBtn || !this.isIntroActive) return;
+        const items = this.levelManager.getUnfinishedParts();
 
-        const UI = GameConstants.SCENE2.UI;
+        if (!firstBtn || items.length === 0 || !this.isIntroActive) {
+            if (this.isIntroActive) {
+                this.scene.time.delayedCall(1000, () => this.runHandTutorial());
+            }
+            return;
+        }
+
+        const target = items[this.tutorialItemIndex % items.length];
         const INTRO = GameConstants.SCENE2.INTRO_HAND;
 
         const startX = firstBtn.x + 20;
         const startY = firstBtn.y + 20;
-        const endX = GameUtils.pctX(this.scene, UI.HAND_INTRO_END_X);
-        const endY = GameUtils.pctY(this.scene, UI.HAND_INTRO_END_Y);
+
+        const hX = target.getData('hintX') || 0;
+        const hY = target.getData('hintY') || 0;
+        const originScale = target.getData('originScale') || 1;
+
+        const endX = target.x + (hX * originScale);
+        const endY = target.y + (hY * originScale);
         const dragY = endY + 100;
 
         this.handHint.setPosition(startX, startY).setAlpha(0).setScale(0.7);
@@ -69,12 +81,16 @@ export class Scene2Intro {
             targets: this.handHint,
             tweens: [
                 { alpha: 1, x: startX, y: startY, duration: INTRO.MOVE, ease: 'Power2' },
-                { scale: 0.5, duration: INTRO.TAP, yoyo: true, repeat: 0.7 },
+                {
+                    scale: 0.5, duration: INTRO.TAP, yoyo: true, repeat: 0.7,
+                    onStart: () => console.log("[INTRO HINT] Pointing to:", target.getData('partKey'))
+                },
                 { x: endX, y: dragY, duration: INTRO.DRAG, delay: 100 },
                 { x: '-=30', y: '-=10', duration: INTRO.RUB, yoyo: true, repeat: 3 },
                 {
                     alpha: 0, duration: 500, onComplete: () => {
                         this.handHint.setPosition(-200, -200);
+                        this.tutorialItemIndex++;
                         if (this.isIntroActive) this.scene.time.delayedCall(1000, () => this.runHandTutorial());
                     }
                 }
@@ -113,7 +129,10 @@ export class Scene2Intro {
             targets: this.handHint,
             tweens: [
                 { alpha: 1, x: destX, y: destY, duration: IDLE_CFG.FADE_IN },
-                { scale: 0.5, duration: IDLE_CFG.SCALE, yoyo: true, repeat: 3 },
+                {
+                    scale: 0.5, duration: IDLE_CFG.SCALE, yoyo: true, repeat: 3,
+                    onStart: () => console.log("[HINT] Pointing to:", target.getData('partKey'))
+                },
                 { alpha: 0, duration: IDLE_CFG.FADE_OUT }
             ]
         });
