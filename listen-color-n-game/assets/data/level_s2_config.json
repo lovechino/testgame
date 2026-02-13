@@ -10,18 +10,18 @@
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": 43,
-        "hintY": 54
+        "scaleAdjust": 1.004,
+        "hintX": 42,
+        "hintY": 52
       },
       {
         "key": "s2_part_1_2",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": -303,
-        "hintY": 4,
+        "scaleAdjust": 1.004,
+        "hintX": -254,
+        "hintY": -11,
         "min_region_coverage": 0.7
       },
       {
@@ -30,17 +30,17 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 273,
-        "hintY": -186
+        "hintX": 309,
+        "hintY": -162
       },
       {
         "key": "s2_part_1_4",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": 80,
-        "hintY": -256
+        "scaleAdjust": 0.695,
+        "hintX": 97,
+        "hintY": -306
       }
     ]
   },
@@ -54,8 +54,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 43,
-        "hintY": -207
+        "hintX": 25,
+        "hintY": -189
       }
     ]
   }

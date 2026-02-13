@@ -10,18 +10,18 @@
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": -146,
-        "hintY": -46
+        "scaleAdjust": 1.004,
+        "hintX": -183,
+        "hintY": 32
       },
       {
         "key": "s2_part_1_2",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": -8,
-        "hintY": -153,
+        "scaleAdjust": 1.004,
+        "hintX": -5,
+        "hintY": -156,
         "min_region_coverage": 0.7
       }
     ]
@@ -36,8 +36,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -51,
-        "hintY": 44
+        "hintX": -57,
+        "hintY": 67
       }
     ]
   }
