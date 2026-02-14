@@ -10,9 +10,9 @@
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": -49,
-        "hintY": -12
+        "scaleAdjust": 1.004,
+        "hintX": -79,
+        "hintY": 41
       }
     ]
   },
@@ -26,8 +26,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 11,
-        "hintY": -58
+        "hintX": -11,
+        "hintY": 113
       }
     ]
   }

@@ -1,0 +1,107 @@
+{
+  "min_region_coverage": 0.7,
+  "max_spill_ratio": 0,
+  "goalkeeper": {
+    "baseY_pct": 0.4,
+    "baseScale": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_1_1",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": -291,
+        "hintY": -256
+      },
+      {
+        "key": "s2_part_1_2",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": -29,
+        "hintY": -351,
+        "min_region_coverage": 0.7
+      },
+      {
+        "key": "s2_part_1_3",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -41,
+        "hintY": -135
+      },
+      {
+        "key": "s2_part_1_4",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": -50,
+        "hintY": 194
+      },
+      {
+        "key": "s2_part_1_5",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": -69,
+        "hintY": 35
+      },
+      {
+        "key": "s2_part_1_6",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": 123,
+        "hintY": 133
+      },
+      {
+        "key": "s2_part_1_7",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": -344,
+        "hintY": 157
+      },
+      {
+        "key": "s2_part_1_8",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": 103,
+        "hintY": 350
+      }
+    ]
+  },
+  "letter": {
+    "baseY_pct": 0.4,
+    "baseScale": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_2_1",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -10,
+        "hintY": -111
+      },
+      {
+        "key": "s2_part_2_2",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": -12,
+        "scaleAdjust": 0.964,
+        "hintX": 12,
+        "hintY": -318
+      }
+    ]
+  }
+}

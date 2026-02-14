@@ -30,6 +30,7 @@
       ],
       "refImage": "assets/reskin/s1_example.png",
       "poem": "assets/reskin/s1_poem.png",
+      "ellipse": "assets/reskin/s1_ellipse.png",
       "textResult": "assets/reskin/s1_text_result.png"
     },
     "scene2": {

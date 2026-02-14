@@ -1,0 +1,71 @@
+{
+  "min_region_coverage": 0.7,
+  "max_spill_ratio": 0,
+  "goalkeeper": {
+    "baseY_pct": 0.4,
+    "baseScale": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_1_1",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": -149,
+        "hintY": -421
+      },
+      {
+        "key": "s2_part_1_2",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": -108,
+        "hintY": -242,
+        "min_region_coverage": 0.7
+      },
+      {
+        "key": "s2_part_1_3",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": 314,
+        "hintY": -62
+      },
+      {
+        "key": "s2_part_1_4",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.004,
+        "hintX": -42,
+        "hintY": 111
+      }
+    ]
+  },
+  "letter": {
+    "baseY_pct": 0.4,
+    "baseScale": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_2_1",
+        "note": "",
+        "offsetX": 2,
+        "offsetY": 23,
+        "scaleAdjust": 1,
+        "hintX": -151,
+        "hintY": -146
+      },
+      {
+        "key": "s2_part_2_2",
+        "note": "",
+        "offsetX": -3,
+        "offsetY": -312,
+        "scaleAdjust": 1,
+        "hintX": 16,
+        "hintY": -312
+      }
+    ]
+  }
+}

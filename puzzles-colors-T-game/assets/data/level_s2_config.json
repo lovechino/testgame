@@ -1,0 +1,55 @@
+{
+  "goalkeeper": {
+    "baseScale": 0.75,
+    "outlineKey": "S2_player",
+    "baseX_pct": 0.32,
+    "baseY_pct": 0.48,
+    "parts": [
+      {
+        "key": "s2_part_1_1",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 69,
+        "hintY": 0
+      },
+      {
+        "key": "s2_part_1_2",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -333,
+        "hintY": 25,
+        "min_region_coverage": 0.7
+      },
+      {
+        "key": "s2_part_1_3",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 348,
+        "hintY": 8
+      }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.74,
+    "outlineKey": "u_outline",
+    "baseX_pct": 0.75,
+    "baseY_pct": 0.48,
+    "parts": [
+      {
+        "key": "s2_part_2_1",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 0,
+        "hintY": 0
+      }
+    ]
+  }
+}

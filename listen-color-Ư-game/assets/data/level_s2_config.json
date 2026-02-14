@@ -1,0 +1,116 @@
+{
+  "min_region_coverage": 0.7,
+  "max_spill_ratio": 0,
+  "goalkeeper": {
+    "baseY_pct": 0.4,
+    "baseScale": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_1_1",
+        "note": "",
+        "offsetX": -97,
+        "offsetY": -375,
+        "scaleAdjust": 1,
+        "hintX": -87,
+        "hintY": -418
+      },
+      {
+        "key": "s2_part_1_10",
+        "note": "",
+        "offsetX": 9,
+        "offsetY": 192,
+        "scaleAdjust": 1,
+        "hintX": 24,
+        "hintY": 202
+      },
+      {
+        "key": "s2_part_1_2",
+        "note": "",
+        "offsetX": -70,
+        "offsetY": -238,
+        "scaleAdjust": 1,
+        "hintX": -175,
+        "hintY": -161,
+        "min_region_coverage": 0.7
+      },
+      {
+        "key": "s2_part_1_3",
+        "note": "",
+        "offsetX": 70,
+        "offsetY": 275,
+        "scaleAdjust": 1,
+        "hintX": 102,
+        "hintY": 264
+      },
+      {
+        "key": "s2_part_1_4",
+        "note": "",
+        "offsetX": -72,
+        "offsetY": -228,
+        "scaleAdjust": 1,
+        "hintX": -22,
+        "hintY": -225
+      },
+      {
+        "key": "s2_part_1_5",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -248,
+        "hintY": 277
+      },
+      {
+        "key": "s2_part_1_6",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 321,
+        "hintY": 243
+      },
+      {
+        "key": "s2_part_1_7",
+        "note": "",
+        "offsetX": -87,
+        "offsetY": 64,
+        "scaleAdjust": 1,
+        "hintX": -16,
+        "hintY": 78
+      },
+      {
+        "key": "s2_part_1_8",
+        "note": "",
+        "offsetX": -85,
+        "offsetY": 404,
+        "scaleAdjust": 1,
+        "hintX": -47,
+        "hintY": 410
+      },
+      {
+        "key": "s2_part_1_9",
+        "note": "",
+        "offsetX": 207,
+        "offsetY": 218,
+        "scaleAdjust": 1,
+        "hintX": -2,
+        "hintY": -12
+      }
+    ]
+  },
+  "letter": {
+    "baseY_pct": 0.4,
+    "baseScale": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_2_1",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -77,
+        "hintY": 257
+      }
+    ]
+  }
+}

@@ -11,8 +11,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1.004,
-        "hintX": -14,
-        "hintY": -190
+        "hintX": 71,
+        "hintY": -9
       },
       {
         "key": "s2_part_1_2",
@@ -20,8 +20,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1.004,
-        "hintX": -341,
-        "hintY": 208,
+        "hintX": -215,
+        "hintY": 282,
         "min_region_coverage": 0.7
       },
       {
@@ -30,8 +30,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 340,
-        "hintY": 169
+        "hintX": 358,
+        "hintY": -172
       }
     ]
   },
@@ -45,8 +45,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -151,
-        "hintY": -146
+        "hintX": -36,
+        "hintY": -165
       }
     ]
   }
