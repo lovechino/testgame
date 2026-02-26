@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Game tô màu  chữ Ư",
+    "title": "New Game",
     "version": "1.0.0"
   },
   "common": {
@@ -53,10 +53,6 @@
             "path": "assets/reskin/s2_part_1_1.png"
           },
           {
-            "key": "s2_part_1_10",
-            "path": "assets/reskin/s2_part_1_10.png"
-          },
-          {
             "key": "s2_part_1_2",
             "path": "assets/reskin/s2_part_1_2.png"
           },
@@ -75,18 +71,6 @@
           {
             "key": "s2_part_1_6",
             "path": "assets/reskin/s2_part_1_6.png"
-          },
-          {
-            "key": "s2_part_1_7",
-            "path": "assets/reskin/s2_part_1_7.png"
-          },
-          {
-            "key": "s2_part_1_8",
-            "path": "assets/reskin/s2_part_1_8.png"
-          },
-          {
-            "key": "s2_part_1_9",
-            "path": "assets/reskin/s2_part_1_9.png"
           }
         ],
         "group2": [
@@ -95,7 +79,8 @@
             "path": "assets/reskin/s2_part_2_1.png"
           }
         ]
-      }
+      },
+      "footerText": "assets/reskin/s2_text_footer.png"
     }
   },
   "audio": {
