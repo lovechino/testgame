@@ -8,20 +8,20 @@
       {
         "key": "s2_part_1_1",
         "note": "",
-        "offsetX": 0,
-        "offsetY": 0,
+        "offsetX": -1,
+        "offsetY": -2,
         "scaleAdjust": 1.004,
-        "hintX": -183,
-        "hintY": 32
+        "hintX": 8,
+        "hintY": -34
       },
       {
         "key": "s2_part_1_2",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": -5,
-        "hintY": -156,
+        "scaleAdjust": 1,
+        "hintX": -2,
+        "hintY": -166,
         "min_region_coverage": 0.7
       }
     ]
@@ -34,10 +34,10 @@
         "key": "s2_part_2_1",
         "note": "",
         "offsetX": 0,
-        "offsetY": 0,
+        "offsetY": 2,
         "scaleAdjust": 1,
-        "hintX": -57,
-        "hintY": 67
+        "hintX": 2,
+        "hintY": 116
       }
     ]
   }

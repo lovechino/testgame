@@ -30,8 +30,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -42,
-        "hintY": -213
+        "hintX": -32,
+        "hintY": -215
       },
       {
         "key": "s2_part_1_4",
@@ -39,8 +39,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 59,
-        "hintY": -329
+        "hintX": 55,
+        "hintY": -331
       },
       {
         "key": "s2_part_1_5",
@@ -74,8 +74,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -70,
-        "hintY": 258
+        "hintX": -50,
+        "hintY": 235
       }
     ]
   }

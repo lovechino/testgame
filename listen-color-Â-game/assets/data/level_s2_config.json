@@ -8,20 +8,20 @@
       {
         "key": "s2_part_1_1",
         "note": "",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": -16,
-        "hintY": 7
+        "offsetX": -1,
+        "offsetY": -2,
+        "scaleAdjust": 1,
+        "hintX": -23,
+        "hintY": 18
       },
       {
         "key": "s2_part_1_2",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": -205,
-        "hintY": -345,
+        "scaleAdjust": 1,
+        "hintX": -249,
+        "hintY": -385,
         "min_region_coverage": 0.7
       },
       {
@@ -29,18 +29,18 @@
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": -339,
-        "hintY": 93
+        "scaleAdjust": 1,
+        "hintX": -344,
+        "hintY": 33
       },
       {
         "key": "s2_part_1_4",
         "note": "",
-        "offsetX": 2,
-        "offsetY": 2,
-        "scaleAdjust": 1.004,
-        "hintX": -90,
-        "hintY": -140
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -70,
+        "hintY": -93
       }
     ]
   },
@@ -51,20 +51,20 @@
       {
         "key": "s2_part_2_1",
         "note": "",
-        "offsetX": 0,
-        "offsetY": 0,
+        "offsetX": -1,
+        "offsetY": 1,
         "scaleAdjust": 1,
-        "hintX": -5,
-        "hintY": -103
+        "hintX": -195,
+        "hintY": 70
       },
       {
         "key": "s2_part_2_2",
         "note": "",
         "offsetX": 0,
-        "offsetY": -17,
-        "scaleAdjust": 0.967,
-        "hintX": 1,
-        "hintY": -332
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -7,
+        "hintY": -294
       }
     ]
   }

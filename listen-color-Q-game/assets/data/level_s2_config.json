@@ -11,8 +11,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1.004,
-        "hintX": -14,
-        "hintY": -190
+        "hintX": 9,
+        "hintY": 130
       }
     ]
   },
@@ -26,8 +26,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -151,
-        "hintY": -146
+        "hintX": 6,
+        "hintY": 113
       }
     ]
   }

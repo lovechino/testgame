@@ -8,11 +8,11 @@
       {
         "key": "s2_part_1_1",
         "note": "",
-        "offsetX": 0,
-        "offsetY": 0,
+        "offsetX": -1,
+        "offsetY": -2,
         "scaleAdjust": 1.004,
-        "hintX": -79,
-        "hintY": 41
+        "hintX": -74,
+        "hintY": 2
       }
     ]
   },
@@ -24,10 +24,10 @@
         "key": "s2_part_2_1",
         "note": "",
         "offsetX": 0,
-        "offsetY": 0,
+        "offsetY": 2,
         "scaleAdjust": 1,
-        "hintX": -11,
-        "hintY": 113
+        "hintX": -8,
+        "hintY": 104
       }
     ]
   }

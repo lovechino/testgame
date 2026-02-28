@@ -18,14 +18,14 @@
           "isCorrect": false
         },
         {
-          "key": "s1_item_1_correct",
-          "path": "assets/reskin/s1_item_1_correct.png",
-          "isCorrect": true
-        },
-        {
           "key": "s1_item_2",
           "path": "assets/reskin/s1_item_2.png",
           "isCorrect": false
+        },
+        {
+          "key": "s1_item_dap_correct",
+          "path": "assets/reskin/s1_item_dap_correct.png",
+          "isCorrect": true
         }
       ],
       "refImage": "assets/reskin/s1_example.png",

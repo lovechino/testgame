@@ -1,0 +1,37 @@
+name: Iruka Audit
+
+on:
+  pull_request:
+    branches: [ "main", "master" ]
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch: {}
+
+jobs:
+  audit_pr:
+    if: github.event_name == 'pull_request'
+    uses: iruka-edu/Tool/.github/workflows/reusable-audit.yml@master
+    with:
+      game_dir: "."
+      base_sha: ${{ github.event.pull_request.base.sha }}
+      head_sha: ${{ github.event.pull_request.head.sha }}
+      tool_version: "latest"
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      DISCORD_DEV_ROLE_ID: ${{ secrets.DISCORD_DEV_ROLE_ID }}
+
+  audit_push:
+    if: >
+      github.event_name == 'push' &&
+      github.event.before != '0000000000000000000000000000000000000000'
+    uses: iruka-edu/Tool/.github/workflows/reusable-audit.yml@master
+    with:
+      game_dir: "."
+      base_sha: ${{ github.event.before }}
+      head_sha: ${{ github.sha }}
+      tool_version: "latest"
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      DISCORD_DEV_ROLE_ID: ${{ secrets.DISCORD_DEV_ROLE_ID }}

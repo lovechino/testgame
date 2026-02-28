@@ -11,17 +11,17 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1.004,
-        "hintX": -14,
-        "hintY": -190
+        "hintX": 2,
+        "hintY": -89
       },
       {
         "key": "s2_part_1_2",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": -341,
-        "hintY": 208,
+        "scaleAdjust": 1,
+        "hintX": -335,
+        "hintY": 220,
         "min_region_coverage": 0.7
       },
       {
@@ -30,8 +30,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 340,
-        "hintY": 169
+        "hintX": 338,
+        "hintY": 219
       }
     ]
   },
@@ -45,8 +45,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -151,
-        "hintY": -146
+        "hintX": 0,
+        "hintY": 0
       }
     ]
   }

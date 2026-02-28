@@ -8,20 +8,20 @@
       {
         "key": "s2_part_1_1",
         "note": "",
-        "offsetX": 0,
-        "offsetY": 0,
+        "offsetX": -1,
+        "offsetY": -2,
         "scaleAdjust": 1.004,
-        "hintX": -291,
-        "hintY": -256
+        "hintX": -276,
+        "hintY": -291
       },
       {
         "key": "s2_part_1_2",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": -29,
-        "hintY": -351,
+        "scaleAdjust": 1,
+        "hintX": -65,
+        "hintY": -346,
         "min_region_coverage": 0.7
       },
       {
@@ -30,53 +30,53 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -41,
-        "hintY": -135
+        "hintX": -59,
+        "hintY": -182
       },
       {
         "key": "s2_part_1_4",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": -50,
-        "hintY": 194
+        "scaleAdjust": 1,
+        "hintX": -78,
+        "hintY": 183
       },
       {
         "key": "s2_part_1_5",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": -69,
-        "hintY": 35
+        "scaleAdjust": 1,
+        "hintX": -72,
+        "hintY": 26
       },
       {
         "key": "s2_part_1_6",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": 123,
-        "hintY": 133
+        "scaleAdjust": 1,
+        "hintX": 119,
+        "hintY": 129
       },
       {
         "key": "s2_part_1_7",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": -344,
-        "hintY": 157
+        "scaleAdjust": 1,
+        "hintX": -339,
+        "hintY": 149
       },
       {
         "key": "s2_part_1_8",
         "note": "",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1.004,
-        "hintX": 103,
-        "hintY": 350
+        "scaleAdjust": 1,
+        "hintX": 19,
+        "hintY": 346
       }
     ]
   },
@@ -87,20 +87,20 @@
       {
         "key": "s2_part_2_1",
         "note": "",
-        "offsetX": 0,
-        "offsetY": 0,
+        "offsetX": -1,
+        "offsetY": 1,
         "scaleAdjust": 1,
-        "hintX": -10,
-        "hintY": -111
+        "hintX": 0,
+        "hintY": 91
       },
       {
         "key": "s2_part_2_2",
         "note": "",
         "offsetX": 0,
-        "offsetY": -12,
-        "scaleAdjust": 0.964,
-        "hintX": 12,
-        "hintY": -318
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -1,
+        "hintY": -294
       }
     ]
   }

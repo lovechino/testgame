@@ -1,49 +1,52 @@
 {
+  "min_region_coverage": 0.7,
+  "max_spill_ratio": 0,
   "goalkeeper": {
-    "baseScale": 0.73,
-    "outlineKey": "S2_DuckResult",
-    "baseX_pct": 0.32,
-    "baseY_pct": 0.48,
+    "baseY_pct": 0.4,
+    "baseScale": 0.9,
     "parts": [
       {
-
-        "key": "S2_DuckBody",
+        "key": "s2_part_1_1",
         "note": "",
-        "offsetX": 63,
-        "offsetY": 99,
-        "scale": 0.70,
-        "scaleAdjust": 0.97,
-        "hintX": 28,
-        "hintY": 111
+        "offsetX": -1,
+        "offsetY": -2,
+        "scaleAdjust": 1.004,
+        "hintX": 8,
+        "hintY": 67
       },
       {
-
-        "key": "S2_Speculum",
+        "key": "s2_part_1_2",
         "note": "",
-        "offsetX": 339,
-        "offsetY": 10,
-        "scale": 0.70,
-        "scaleAdjust": 0.97,
-        "hintX": 436,
-        "hintY": -54
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 412,
+        "hintY": -63,
+        "min_region_coverage": 0.7
       }
     ]
   },
   "letter": {
-    "baseScale": 0.7,
-    "outlineKey": "S2_IconNew",
-    "baseX_pct": 0.73,
-    "baseY_pct": 0.48,
+    "baseY_pct": 0.4,
+    "baseScale": 0.9,
     "parts": [
       {
-        "key": "S2_IconResult",
+        "key": "s2_part_2_1",
         "note": "",
-        "offsetX": -83,
-        "offsetY": 30,
-        "scale": 0.69,
-        "scaleAdjust": 0.97,
-        "hintX": -158,
-        "hintY": 177
+        "offsetX": 3,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 0,
+        "hintY": 88
+      },
+      {
+        "key": "s2_part_2_2",
+        "note": "",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 0,
+        "hintY": -297
       }
     ]
   }

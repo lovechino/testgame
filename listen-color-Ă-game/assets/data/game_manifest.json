@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Game tô màu  chữ Ă",
+    "title": "New Game",
     "version": "1.0.0"
   },
   "common": {
@@ -57,9 +57,14 @@
           {
             "key": "s2_part_2_1",
             "path": "assets/reskin/s2_part_2_1.png"
+          },
+          {
+            "key": "s2_part_2_2",
+            "path": "assets/reskin/s2_part_2_2.png"
           }
         ]
-      }
+      },
+      "footerText": "assets/reskin/s2_text_footer.png"
     }
   },
   "audio": {

@@ -1,18 +1,18 @@
 {
+  "min_region_coverage": 0.7,
+  "max_spill_ratio": 0,
   "goalkeeper": {
-    "baseScale": 0.75,
-    "outlineKey": "S2_player",
-    "baseX_pct": 0.32,
-    "baseY_pct": 0.48,
+    "baseY_pct": 0.4,
+    "baseScale": 0.9,
     "parts": [
       {
         "key": "s2_part_1_1",
         "note": "",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": -290,
-        "hintY": 285
+        "offsetX": -1,
+        "offsetY": -2,
+        "scaleAdjust": 1.004,
+        "hintX": -316,
+        "hintY": 135
       },
       {
         "key": "s2_part_1_2",
@@ -57,7 +57,7 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 153,
+        "hintX": 151,
         "hintY": -197
       },
       {
@@ -90,19 +90,17 @@
     ]
   },
   "letter": {
-    "baseScale": 0.74,
-    "outlineKey": "u_outline",
-    "baseX_pct": 0.75,
-    "baseY_pct": 0.48,
+    "baseY_pct": 0.4,
+    "baseScale": 0.9,
     "parts": [
       {
         "key": "s2_part_2_1",
         "note": "",
-        "offsetX": 0,
-        "offsetY": 0,
+        "offsetX": -1,
+        "offsetY": 1,
         "scaleAdjust": 1,
-        "hintX": -2,
-        "hintY": 184
+        "hintX": -137,
+        "hintY": 19
       }
     ]
   }
