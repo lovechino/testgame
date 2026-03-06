@@ -1,0 +1,45 @@
+{
+  "name": "listen-color-u-game",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Game giải đố và tô màu chữ U",
+  "homepage": ".",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "node server/index.js",
+    "lint": "eslint .",
+    "test": "vitest",
+    "reskin": "node scripts/sync-assets.cjs"
+  },
+  "dependencies": {
+    "@iruka-edu/game-core": "^0.3.0",
+    "@iruka-edu/iruka-audit": "^1.0.0",
+    "@iruka-edu/mini-game-sdk": "^0.7.11",
+    "adm-zip": "^0.5.16",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "fs-extra": "^11.3.3",
+    "howler": "^2.2.4",
+    "image-size": "^2.0.2",
+    "multer": "^2.0.2",
+    "phaser": "^3.90.0",
+    "sharp": "^0.34.5",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/howler": "^2.2.12",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "prettier": "3.6.2",
+    "typescript-eslint": "^8.46.4",
+    "vitest": "^4.0.18"
+  }
+}
