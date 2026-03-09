@@ -15,6 +15,7 @@ export class GameScoreManager {
     private scene1Tracker: any | null = null;
     private selectIndex: number = 0;
     private currentScore: number = 0;
+    private scene1WrongCount: number = 0;
 
     private constructor() {
         this.resetFull();
@@ -25,6 +26,7 @@ export class GameScoreManager {
         this.currentScore = 0;
         this.scene1Tracker = null;
         this.selectIndex = 0;
+        this.scene1WrongCount = 0;
     }
 
     reset() {
@@ -68,6 +70,7 @@ export class GameScoreManager {
         this.abandonScene1Item();
 
         this.selectIndex++;
+        this.scene1WrongCount = 0; // Reset số lần sai khi bắt đầu item mới
         const itemId = `select_${this.selectIndex.toString().padStart(2, '0')}`;
 
         // Chèn runSeq từ global state
@@ -131,6 +134,7 @@ export class GameScoreManager {
             this.scene1Tracker = null;
         } else {
             console.log("recordScene1Attempt: Wrong answer, adding to history via retryAttempt.");
+            this.scene1WrongCount++; // Tăng biến đếm số lần sai
             // Chuẩn bị attempt mới cho lần chọn tiếp theo trên CÙNG item_id
             this.scene1Tracker.retryAttempt(Date.now());
         }
@@ -140,11 +144,17 @@ export class GameScoreManager {
      * Khi user rời Scene 1 giữa chừng (shutdown hoặc quit).
      * Bắt buộc finalize để item vẫn xuất hiện trong JSON với error_code="USER_ABANDONED".
      */
-    abandonScene1Item() {
+    abandonScene1Item(isReset: boolean = false) {
         if (!this.scene1Tracker) return;
-        this.scene1Tracker.onQuit(Date.now());
+
+        // Nếu KHÔNG phải là reset, hoặc (lÀ reset VÀ đã sai >= 2 lần) => Ghi nhận USER_ABANDONED
+        if (!isReset || (isReset && this.scene1WrongCount >= 2)) {
+            this.scene1Tracker.onQuit(Date.now());
+        }
+
         this.scene1Tracker.finalize();
         this.scene1Tracker = null;
+        this.scene1WrongCount = 0;
     }
 
     /**

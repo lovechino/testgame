@@ -1,0 +1,40 @@
+{
+  "goalkeeper": {
+    "baseScale": 0.9,
+    "outlineKey": "S2_player",
+    "baseX_pct": 0.32,
+    "baseY_pct": 0.48,
+    "min_region_coverage": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_1_1",
+        "note": "Shape_01",
+        "item_label": "Ảnh trái",
+        "offsetX": 1,
+        "offsetY": -3,
+        "scaleAdjust": 1,
+        "hintX": 55,
+        "hintY": 132
+      }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.74,
+    "outlineKey": "u_outline",
+    "baseX_pct": 0.75,
+    "baseY_pct": 0.48,
+    "min_region_coverage": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_2_1",
+        "note": "Char_01",
+        "item_label": "Chữ r",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -95,
+        "hintY": -100
+      }
+    ]
+  }
+}

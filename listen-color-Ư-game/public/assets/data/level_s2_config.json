@@ -1,0 +1,90 @@
+{
+  "goalkeeper": {
+    "baseScale": 0.9,
+    "outlineKey": "S2_player",
+    "baseX_pct": 0.32,
+    "baseY_pct": 0.48,
+    "min_region_coverage": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_1_1",
+        "note": "Shape_01",
+        "item_label": "Áo",
+        "offsetX": 1,
+        "offsetY": -3,
+        "scaleAdjust": 1,
+        "hintX": -88,
+        "hintY": 64
+      },
+      {
+        "key": "s2_part_1_2",
+        "note": "Shape_02",
+        "item_label": "Chân váy",
+        "offsetX": 1,
+        "offsetY": -3,
+        "scaleAdjust": 1,
+        "hintX": -82,
+        "hintY": 403
+      },
+      {
+        "key": "s2_part_1_3",
+        "note": "Shape_03",
+        "item_label": "Mặt",
+        "offsetX": -2,
+        "offsetY": -1,
+        "scaleAdjust": 1,
+        "hintX": -11,
+        "hintY": -228
+      },
+      {
+        "key": "s2_part_1_4",
+        "note": "Shape_04",
+        "item_label": "Tóc",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 63,
+        "hintY": -327
+      },
+      {
+        "key": "s2_part_1_5",
+        "note": "Shape_05",
+        "item_label": "Mũ",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -100,
+        "hintY": -370
+      },
+      {
+        "key": "s2_part_1_6",
+        "note": "Shape_06",
+        "item_label": "Khay",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 65,
+        "hintY": 273
+      }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.74,
+    "outlineKey": "u_outline",
+    "baseX_pct": 0.75,
+    "baseY_pct": 0.48,
+    "min_region_coverage": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_2_1",
+        "note": "Char_01",
+        "item_label": "Chữ ư",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -54,
+        "hintY": 243
+      }
+    ]
+  }
+}

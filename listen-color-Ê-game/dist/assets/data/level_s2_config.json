@@ -1,0 +1,120 @@
+{
+  "goalkeeper": {
+    "baseScale": 0.9,
+    "outlineKey": "S2_player",
+    "baseX_pct": 0.32,
+    "baseY_pct": 0.48,
+    "min_region_coverage": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_1_1",
+        "note": "Shape_01",
+        "item_label": "Cái nơ",
+        "offsetX": 1,
+        "offsetY": -3,
+        "scaleAdjust": 1,
+        "hintX": -276,
+        "hintY": -291
+      },
+      {
+        "key": "s2_part_1_2",
+        "note": "Shape_02",
+        "item_label": "Tóc",
+        "offsetX": 1,
+        "offsetY": -3,
+        "scaleAdjust": 1,
+        "hintX": -74,
+        "hintY": -368
+      },
+      {
+        "key": "s2_part_1_3",
+        "note": "Shape_03",
+        "item_label": "Mặt",
+        "offsetX": -2,
+        "offsetY": -1,
+        "scaleAdjust": 1,
+        "hintX": -59,
+        "hintY": -182
+      },
+      {
+        "key": "s2_part_1_4",
+        "note": "Shape_04",
+        "item_label": "Áo",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -78,
+        "hintY": 183
+      },
+      {
+        "key": "s2_part_1_5",
+        "note": "Shape_05",
+        "item_label": "Yếm",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -72,
+        "hintY": 26
+      },
+      {
+        "key": "s2_part_1_6",
+        "note": "Shape_06",
+        "item_label": "Tay phải",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 119,
+        "hintY": 129
+      },
+      {
+        "key": "s2_part_1_7",
+        "note": "Shape_07",
+        "item_label": "Tay trái",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -339,
+        "hintY": 149
+      },
+      {
+        "key": "s2_part_1_8",
+        "note": "Shape_08",
+        "item_label": "Giày",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 19,
+        "hintY": 346
+      }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.74,
+    "outlineKey": "u_outline",
+    "baseX_pct": 0.75,
+    "baseY_pct": 0.48,
+    "min_region_coverage": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_2_1",
+        "note": "Char_01",
+        "item_label": "Chữ e",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 0,
+        "hintY": 91
+      },
+      {
+        "key": "s2_part_2_2",
+        "note": "Char_02",
+        "item_label": "Dấu mũ",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -1,
+        "hintY": -294
+      }
+    ]
+  }
+}

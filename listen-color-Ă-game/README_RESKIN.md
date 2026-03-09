@@ -1,4 +1,4 @@
-# Game giải đố tô màu chữ Ă — Game Source Code
+# Game tô màu chữ Ă — Game Source Code
 
 > Source code đã được reskin sẵn. Để chỉnh UI và build:
 

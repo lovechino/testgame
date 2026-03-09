@@ -1,0 +1,70 @@
+{
+  "goalkeeper": {
+    "baseScale": 0.9,
+    "outlineKey": "S2_player",
+    "baseX_pct": 0.32,
+    "baseY_pct": 0.48,
+    "min_region_coverage": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_1_1",
+        "note": "Shape_01",
+        "item_label": "Quần phải",
+        "offsetX": 2,
+        "offsetY": -2,
+        "scaleAdjust": 1,
+        "hintX": 22,
+        "hintY": 19
+      },
+      {
+        "key": "s2_part_1_2",
+        "note": "Shape_02",
+        "item_label": "Chun quần",
+        "offsetX": 1,
+        "offsetY": -3,
+        "scaleAdjust": 1,
+        "hintX": -249,
+        "hintY": -385
+      },
+      {
+        "key": "s2_part_1_3",
+        "note": "Shape_03",
+        "item_label": "Mảnh quần bên trái",
+        "offsetX": -2,
+        "offsetY": -1,
+        "scaleAdjust": 1,
+        "hintX": -344,
+        "hintY": 33
+      }
+    ]
+  },
+  "letter": {
+    "baseScale": 0.74,
+    "outlineKey": "u_outline",
+    "baseX_pct": 0.75,
+    "baseY_pct": 0.48,
+    "min_region_coverage": 0.9,
+    "parts": [
+      {
+        "key": "s2_part_2_1",
+        "note": "Char_01",
+        "item_label": "Chữ a",
+        "offsetX": 0,
+        "offsetY": 4,
+        "scaleAdjust": 1,
+        "hintX": -38,
+        "hintY": -130
+      },
+      {
+        "key": "s2_part_2_2",
+        "note": "Char_02",
+        "item_label": "Dấu mũ",
+        "offsetX": 1,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -4,
+        "hintY": -330
+      }
+    ]
+  }
+}
