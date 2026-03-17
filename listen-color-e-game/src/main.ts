@@ -70,7 +70,6 @@ function attachResetHandler() {
     
     if (resetBtn) {
         resetBtn.onclick = () => {
-            console.log('Restart button clicked. Stopping all audio and restarting scene.');
 
             //game.sound.stopAll();
             game.sound.stopByKey('bgm-nen');

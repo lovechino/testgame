@@ -36,7 +36,6 @@ export class Scene2Intro {
 
     public stopIntro() {
         if (this.isIntroActive) {
-            console.log("[DEBUG] stopIntro called - Intro ending, Idle starting.");
         }
         this.isIntroActive = false;
         this.idleManager.start();
@@ -101,7 +100,6 @@ export class Scene2Intro {
                     }
                 }
 
-                console.log(`[INTRO] Target: ${pId}, destX: ${destX}, destY: ${destY}`);
             }
         }
 
@@ -146,7 +144,6 @@ export class Scene2Intro {
         const UI = GameConstants.SCENE2.UI;
         const INTRO = GameConstants.SCENE2.INTRO_HAND;
 
-        console.log("%c[INTRO] Playing Hand Tutorial Sequence", "color: #e6007e; font-weight: bold;");
 
         const startX = this.firstColorBtn.x + (GameConstants.IDLE.TIP_OFFSET_X || 0);
         const startY = this.firstColorBtn.y + (GameConstants.IDLE.TIP_OFFSET_Y || 0);

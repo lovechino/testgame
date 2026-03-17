@@ -102,7 +102,6 @@ export class PaintManager {
         hitArea.setInteractive({ useHandCursor: true, pixelPerfect: true });
 
         hitArea.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-            console.log(`[PaintManager] CLICKED on hitArea ${uniqueId}`);
             this.activeRenderTexture = rt;
 
             // ✅ QUAN TRỌNG: Lưu vị trí bắt đầu để tính toán LERP
@@ -126,7 +125,6 @@ export class PaintManager {
     }
 
     public handlePointerUp() {
-        console.log(`[PaintManager] POINTER UP! ActiveRT=${!!this.activeRenderTexture}`);
         if (this.activeRenderTexture) {
             // Luôn gọi checkProgress dù đang tẩy hay đang tô
             // Để SDK biết coverage thực tế sau khi erase (đã giảm)
@@ -141,7 +139,6 @@ export class PaintManager {
         const currentX = pointer.x - rt.x;
         const currentY = pointer.y - rt.y;
 
-        // console.log(`[PaintManager] painting at local ${currentX}, ${currentY}`);
 
         // 2. Tính khoảng cách
         const distance = Phaser.Math.Distance.Between(this.lastX, this.lastY, currentX, currentY);
@@ -233,7 +230,6 @@ export class PaintManager {
 
             // Console log for debugging
             if (total > 0) {
-                console.log(`[PaintManager] ID: ${id} | Match: ${match} / ${total} | Spill: ${spill} | Pct: ${(percentage * 100).toFixed(1)}% | Spill%: ${(spillRatio * 100).toFixed(1)}%`);
             }
 
             const usedColors = this.partColors.get(id) || new Set([this.brushColor]);
@@ -247,7 +243,6 @@ export class PaintManager {
             }
 
             if (!rt.getData('isFinished') && percentage >= threshold) {
-                console.log(`[PaintManager] Finished: ${id}`);
                 rt.setData('isFinished', true);
 
                 // ✅ GỬI DANH SÁCH MÀU VỀ SCENE

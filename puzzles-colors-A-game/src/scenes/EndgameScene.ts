@@ -85,7 +85,6 @@ export default class EndGameScene extends Phaser.Scene {
         game.finalizeAttempt("quit");
         const submitData = getFixedSubmitData();
 
-        console.log('%c[SDK EXIT] prepareSubmitData', 'color:#ff0055;font-weight:bold', submitData);
 
         // Transform submitData.items into session_summary
         const session_summary: any = {
@@ -152,7 +151,6 @@ export default class EndGameScene extends Phaser.Scene {
                 stats: submitData
             },
         };
-        console.log('%c[SDK] sdk.complete data:', 'color:#ff9100;font-weight:bold', completeData);
         sdk.complete(completeData);
 
     }

@@ -8,7 +8,6 @@ export class Scene2Debug {
         target: Phaser.GameObjects.Image,
         handHint: Phaser.GameObjects.Image
     ) {
-        console.log(`[DEBUG] Selected part: ${target.getData('partId')}`);
 
         // Show hand at current hint pos
         const hX = target.getData('hintX');
@@ -43,14 +42,12 @@ export class Scene2Debug {
             const newHintX = Math.round((dragX - target.x) / finalHintScale);
             const newHintY = Math.round((dragY - target.y) / finalHintScale);
 
-            console.log(`Hint Pos: x=${newHintX}, y=${newHintY}`);
             target.setData('hintX', newHintX);
             target.setData('hintY', newHintY);
         });
     }
 
     static debugShowAllHints(scene: Phaser.Scene, partsMap: Map<string, Phaser.GameObjects.Image>) {
-        console.log("--- DEBUG HINTS (INTERACTIVE) ---");
 
         // Clear existing debug points/labels if any
         scene.children.getAll().forEach((child) => {
@@ -71,7 +68,6 @@ export class Scene2Debug {
             const destX = cx + hX;
             const destY = cy + hY;
 
-            console.log(`[INIT] Hint for ${id}: x=${destX}, y=${destY} (global offset: ${hX}, ${hY})`);
 
             // Creates a draggable red circle
             const debugPoint = scene.add.circle(destX, destY, 8, 0xff0000)
@@ -106,7 +102,6 @@ export class Scene2Debug {
                 const newHintX = Math.round((debugPoint.x - part.x) / finalHintScale);
                 const newHintY = Math.round((debugPoint.y - part.y) / finalHintScale);
 
-                console.log(`%c[UPDATED] ${id} => hintX: ${newHintX}, hintY: ${newHintY}`, "color: #00ff00; font-weight: bold");
 
                 part.setData('hintX', newHintX);
                 part.setData('hintY', newHintY);
@@ -115,7 +110,6 @@ export class Scene2Debug {
     }
 
     static debugShowAllOffsets(scene: Phaser.Scene, partsMap: Map<string, Phaser.GameObjects.Image>) {
-        console.log("--- DEBUG OFFSETS (INTERACTIVE) ---");
 
         partsMap.forEach((part, id) => {
             const cx = part.getData('baseX');
@@ -140,7 +134,6 @@ export class Scene2Debug {
                 const newOffsetX = Math.round((part.x - cx) / combinedPartScale);
                 const newOffsetY = Math.round((part.y - cy) / combinedPartScale);
 
-                console.log(`%c[UPDATED OFFSET] "${id}": { offsetX: ${newOffsetX}, offsetY: ${newOffsetY} }`, "color: #00ffff; font-weight: bold");
 
                 part.setData('offsetX', newOffsetX);
                 part.setData('offsetY', newOffsetY);
@@ -149,7 +142,6 @@ export class Scene2Debug {
     }
 
     static dumpDebugConfig(scene: Phaser.Scene, partsMap: Map<string, Phaser.GameObjects.Image>) {
-        console.log("===== GENERATING CONFIG JSON =====");
 
         // Deep clone the full config to preserve structure
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -206,6 +198,5 @@ export class Scene2Debug {
             }
         });
 
-        console.log(JSON.stringify(fullConfig, null, 2));
     }
 }

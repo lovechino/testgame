@@ -154,7 +154,6 @@ export default class Scene2 extends Phaser.Scene {
             this.input.keyboard.enabled = true;
         }
 
-        console.log("Debug keys registered (P, H, O). Make sure the game canvas has focus!");
 
         if (this.input.keyboard) {
             this.input.keyboard.on('keydown', (event: KeyboardEvent) => {
@@ -189,7 +188,6 @@ export default class Scene2 extends Phaser.Scene {
             rt.setBlendMode(Phaser.BlendModes.NORMAL);
             rt.fill(singleColor);
         } else {
-            console.log("Multi-color artwork -> auto-filling with last used color!");
             // const lastColor = this.paintManager.getCurrentColor();
             rt.setBlendMode(Phaser.BlendModes.NORMAL);
             // rt.fill(lastColor);

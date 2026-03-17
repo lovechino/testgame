@@ -111,8 +111,6 @@ export class HintDisplayManager {
      * - Check console for TIP_OFFSET_X and TIP_OFFSET_Y values
      */
     enableDebugMode(hintX: number, hintY: number) {
-        console.log('🐛 [DEBUG] Hand Hint Debug Mode');
-        console.log(`📍 Hint Position: (${hintX}, ${hintY})`);
 
         // Show hand at hint position
         this.handHint.setPosition(hintX, hintY)
@@ -149,23 +147,8 @@ export class HintDisplayManager {
             const tipOffsetX = hintX - handX;
             const tipOffsetY = hintY - handY;
 
-            console.log('');
-            console.log('✅ [DEBUG] Hand positioned!');
-            console.log(`📍 Hand Center: (${handX.toFixed(0)}, ${handY.toFixed(0)})`);
-            console.log(`📍 Hint Point: (${hintX}, ${hintY})`);
-            console.log('');
-            console.log('🎯 Copy these values to GameConstants.ts:');
-            console.log(`TIP_OFFSET_X: ${tipOffsetX.toFixed(0)},`);
-            console.log(`TIP_OFFSET_Y: ${tipOffsetY.toFixed(0)},`);
-            console.log('');
-            console.log('💡 Explanation:');
-            console.log(`  - Hand is ${Math.abs(tipOffsetX).toFixed(0)}px ${tipOffsetX > 0 ? 'LEFT' : 'RIGHT'} of hint`);
-            console.log(`  - Hand is ${Math.abs(tipOffsetY).toFixed(0)}px ${tipOffsetY > 0 ? 'ABOVE' : 'BELOW'} hint`);
-            console.log('');
         });
 
-        console.log('👆 Drag the hand to the correct position');
-        console.log('📝 Offset values will appear in console when you release');
     }
 
     /**
@@ -179,6 +162,5 @@ export class HintDisplayManager {
         this.handHint.off('drag');
         this.handHint.off('dragend');
         this.handHint.setAlpha(0).setPosition(-200, -200);
-        console.log('🐛 [DEBUG] Debug mode disabled');
     }
 }

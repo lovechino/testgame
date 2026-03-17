@@ -170,7 +170,6 @@ class AudioManager {
         });
         dummySound.once('play', () => {
             dummySound.stop();
-            console.log('[Howler] Audio context unlocked manually.');
         });
 
         // Chỉ play nếu context đang ở trạng thái suspended/locked

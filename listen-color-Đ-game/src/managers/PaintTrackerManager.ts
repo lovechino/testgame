@@ -58,7 +58,6 @@ export class PaintTrackerManager {
 
             if (isDone) {
                 // Shape đã hoàn thành → chỉ finalize, KHÔNG onQuit
-                console.log(`[PaintTracker] finalizeAll: ${shapeId} DONE → finalize only`);
                 state.tracker.finalize();
             } else if (isReset) {
                 // Lấy hint count của shape này
@@ -66,21 +65,17 @@ export class PaintTrackerManager {
 
                 // Nếu là RESET mà chưa xong VÀ chưa dùng hint nào, chúng ta mới HỦY
                 if (hintCount === 0) {
-                    console.log(`[PaintTracker] finalizeAll: ${shapeId} RESET & Incomplete & No Hints → Discarding item`);
                 } else {
                     // Nếu ĐÃ dùng hint, bắt buộc finalize để SDK ghi nhận hint count
                     // Chỉ finalize, KHÔNG onQuit để tránh USER_ABANDONED trong scene2
-                    console.log(`[PaintTracker] finalizeAll: ${shapeId} RESET but HAS HINTS (${hintCount}) → finalize only (no USER_ABANDONED)`);
                     state.tracker.finalize();
                 }
             } else if (!state.pendingNewAttempt) {
                 // Shape chưa xong VÀ có open attempt (onShown đã gọi, onDone chưa gọi)
                 // Chỉ finalize, KHÔNG gọi onQuit để tránh error_code USER_ABANDONED trong scene2
-                console.log(`[PaintTracker] finalizeAll: ${shapeId} incomplete (open attempt) → finalize only (no USER_ABANDONED)`);
                 state.tracker.finalize();
             } else {
                 // Shape chưa xong NHƯNG không có open attempt (vd: sau khi tẩy)
-                console.log(`[PaintTracker] finalizeAll: ${shapeId} incomplete but no open attempt → finalize`);
                 state.tracker.finalize();
             }
 
@@ -213,12 +208,10 @@ export class PaintTrackerManager {
 
         // Đảm bảo onShown được gọi để SDK ghi nhận lại item này (tránh item rỗng bị loại bỏ khi reset)
         if (!state.hasShown && state.tracker) {
-            console.log(`[PaintTracker] Hint shown for ${partId} (shape: ${shapeId}) -> Triggering onShown to ensure recording`);
             state.tracker.onShown(Date.now());
             state.hasShown = true;
         }
 
-        console.log(`[PaintTracker] Hint #${next} cho shape: ${shapeId} (part: ${partId})`);
         return next;
     }
 
@@ -268,7 +261,6 @@ export class PaintTrackerManager {
         // --- Phát hiện khi người dùng TẨY MÀU: coverage giảm so với lần trước ---
         const ERASE_THRESHOLD = 0.05; // Coverage giảm hơn 5% → coi là erase
         if (lastCoverage > 0 && coverage < lastCoverage - ERASE_THRESHOLD) {
-            console.log(`[PaintTracker] Phat hien ERASE tren ${id}: ${lastCoverage.toFixed(3)} -> ${coverage.toFixed(3)}. Chi reset state, KHONG gui len SDK.`);
 
             // Chi reset state noi bo — KHONG goi onDone/onShown
             // Attempt hien tai van con "mo", lan to mau tiep theo se ghi vao chinh attempt nay
@@ -347,7 +339,6 @@ export class PaintTrackerManager {
             : null;
 
         if (errorCode) {
-            console.log(`[PaintTracker] HINT_RELIANCE: hint x${hintCount} cho ${shapeId}`);
         }
 
         // Gửi Delta báo cáo lên cho attempt này
@@ -369,7 +360,6 @@ export class PaintTrackerManager {
         // Khong goi onShown() ngay — dat co "pendingNewAttempt"
         // onShown se chi duoc goi neu nguoi dung thuc su to lai (tranh attempt rong -> USER_ABANDONED)
         state.pendingNewAttempt = true;
-        console.log(`[PaintTracker] onDone xong. Dat co pendingNewAttempt=true.`);
 
         return isCorrect;
     }

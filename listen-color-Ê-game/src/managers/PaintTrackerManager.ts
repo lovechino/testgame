@@ -58,21 +58,17 @@ export class PaintTrackerManager {
 
             if (isDone) {
                 // Shape đã hoàn thành → chỉ finalize, KHÔNG onQuit
-                console.log(`[PaintTracker] finalizeAll: ${shapeId} DONE → finalize only`);
                 state.tracker.finalize();
             } else if (isReset) {
                 // Nếu là RESET mà chưa xong, chúng ta HỦY LUÔN item này, không finalize.
                 // Việc không finalize sẽ khiến item này biến mất hoàn toàn khỏi JSON gửi về SDK.
-                console.log(`[PaintTracker] finalizeAll: ${shapeId} RESET & Incomplete → Discarding item to avoid Fail/Abandoned log`);
             } else if (!state.pendingNewAttempt) {
                 // Shape chưa xong VÀ có open attempt (onShown đã gọi, onDone chưa gọi)
                 // VÀ không phải Reset -> Đây là USER_ABANDONED thực sự
-                console.log(`[PaintTracker] finalizeAll: ${shapeId} ABANDONED (open attempt) → onQuit + finalize`);
                 state.tracker.onQuit(Date.now());
                 state.tracker.finalize();
             } else {
                 // Shape chưa xong NHƯNG không có open attempt (vd: sau khi tẩy)
-                console.log(`[PaintTracker] finalizeAll: ${shapeId} incomplete but no open attempt → finalize`);
                 state.tracker.finalize();
             }
 
@@ -178,7 +174,6 @@ export class PaintTrackerManager {
         const current = this.hintCountPerShape.get(shapeId) || 0;
         const next = current + 1;
         this.hintCountPerShape.set(shapeId, next);
-        console.log(`[PaintTracker] Hint #${next} cho shape: ${shapeId} (part: ${partId})`);
         return next;
     }
 

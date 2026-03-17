@@ -131,16 +131,13 @@ export class GameScoreManager {
             this.recordTrackingEvent(overrideError, selectedItemId);
         }
 
-        console.log(`recordScene1Attempt: choosing ${selectedItemId}, isCorrect: ${isCorrect}`);
         // onChoose: ghi attempt, SDK tự tính is_correct từ correct_option vs selected
         this.scene1Tracker.onChoose(selectedItemId, Date.now());
 
         if (isCorrect) {
-            console.log("recordScene1Attempt: Correct answer, finalizing tracker.");
             this.scene1Tracker.finalize();
             this.scene1Tracker = null;
         } else {
-            console.log("recordScene1Attempt: Wrong answer, adding to history via retryAttempt.");
             this.scene1WrongCount++; // Tăng biến đếm số lần sai
             // Chuẩn bị attempt mới cho lần chọn tiếp theo trên CÙNG item_id
             this.scene1Tracker.retryAttempt(Date.now());
@@ -162,12 +159,10 @@ export class GameScoreManager {
         // Nếu LÀ Reset
         else if (this.scene1WrongCount >= 2 || this.scene1HintCount > 0) {
             // Đã sai >= 2 lần HOẶC có dùng hint thì mới ghi nhận lỗi Abandoned
-            console.log(`[GameScoreManager] Reset with hints (${this.scene1HintCount}) or wrong count (${this.scene1WrongCount}). Finalizing.`);
             this.scene1Tracker.onQuit(Date.now());
             this.scene1Tracker.finalize();
         } else {
             // Nếu chưa sai đủ 2 lần và chưa dùng hint mà Reset -> Bỏ qua không finalize để không hiện trong log
-            console.log("[GameScoreManager] Reset early (no hints, wrong < 2). Discarding Scene 1 item tracker.");
         }
 
         this.scene1Tracker = null;

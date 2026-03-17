@@ -73,7 +73,6 @@ function attachResetHandler() {
 
     if (resetBtn) {
         resetBtn.onclick = () => {
-            console.log('[Reset] Mid-game reset → thêm 1 run mới, giữ data cũ');
 
             AudioManager.stopAll();
             gamePhaser.sound.stopByKey('bgm-nen');
@@ -214,4 +213,3 @@ export const sdk = game.createGameSdk({
 });
 
 installIrukaE2E(sdk);
-

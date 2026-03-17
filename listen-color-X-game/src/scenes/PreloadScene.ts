@@ -52,13 +52,11 @@ export default class PreloadScene extends Phaser.Scene {
         // This is the "Waterfall" loading pattern.
         this.load.on('filecomplete-json-game_manifest', (key: string, _type: string, data: any) => {
             if (key === 'game_manifest') {
-                console.log("Manifest JSON loaded. Triggering Smart Asset Loader...");
                 ManifestLoader.processManifest(this, data);
             }
         });
 
         this.load.on('complete', () => {
-            console.log("PreloadScene complete. Checking if game can start...");
             // We check if the KEY asset 'S1_Board' exists in texture manager.
             // Since our smart loader guarantees mapping S1_Board to SOMETHING, checking it validates the second phase ran.
             if (this.textures.exists(TextureKeys.S1_Board)) {

@@ -17,7 +17,6 @@ export class LevelLoader {
 
         const data = scene.cache.json.get(DataKeys.LevelS2Config);
         const manifest = scene.cache.json.get('game_manifest');
-        console.log("Level Data:", data);
 
         if (manifest && manifest.scenes && manifest.scenes.scene2) {
             const partsCfg = manifest.scenes.scene2.parts;

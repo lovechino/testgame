@@ -241,7 +241,6 @@ export default class Scene2 extends Phaser.Scene {
             rt.fill(singleColor);
         } else {
             // Nếu bé dùng >= 2 màu (tô sặc sỡ) -> Giữ nguyên nét vẽ nghệ thuật của bé
-            console.log("Multi-color artwork preserved!");
         }
 
         // Xóa khỏi danh sách chưa tô -> Để gợi ý không chỉ vào cái này nữa
@@ -254,7 +253,6 @@ export default class Scene2 extends Phaser.Scene {
 
         // Kiểm tra điều kiện thắng
         if (this.finishedParts.size >= this.totalParts) {
-            console.log("WIN!");
             AudioManager.play('sfx-correct_s2');
             this.time.delayedCall(GameConstants.SCENE2.TIMING.WIN_DELAY, () => this.scene.start(SceneKeys.EndGame));
         }

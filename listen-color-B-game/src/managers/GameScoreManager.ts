@@ -124,16 +124,13 @@ export class GameScoreManager {
             this.recordTrackingEvent(overrideError, selectedItemId);
         }
 
-        console.log(`recordScene1Attempt: choosing ${selectedItemId}, isCorrect: ${isCorrect}`);
         // onChoose: ghi attempt, SDK tự tính is_correct từ correct_option vs selected
         this.scene1Tracker.onChoose(selectedItemId, Date.now());
 
         if (isCorrect) {
-            console.log("recordScene1Attempt: Correct answer, finalizing tracker.");
             this.scene1Tracker.finalize();
             this.scene1Tracker = null;
         } else {
-            console.log("recordScene1Attempt: Wrong answer, adding to history via retryAttempt.");
             this.scene1WrongCount++; // Tăng biến đếm số lần sai
             // Chuẩn bị attempt mới cho lần chọn tiếp theo trên CÙNG item_id
             this.scene1Tracker.retryAttempt(Date.now());
@@ -159,7 +156,6 @@ export class GameScoreManager {
             this.scene1Tracker.finalize();
         } else {
             // Nếu chưa sai đủ 2 lần mà Reset -> Bỏ qua không finalize để không hiện trong log
-            console.log("[GameScoreManager] Reset early (wrong < 2). Discarding Scene 1 item tracker.");
         }
 
         this.scene1Tracker = null;
