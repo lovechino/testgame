@@ -212,7 +212,7 @@ export class Scene1UI {
                 }
             } else if (finalItems.length === 2) {
                 // Center 2 items horizontally
-                const offset = boardRight.displayWidth * 0.18;
+                const offset = boardRight.displayWidth * 0.3;
                 x = centerX + (index === 0 ? -offset : offset);
             }
 

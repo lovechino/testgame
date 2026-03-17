@@ -164,10 +164,13 @@ export class Scene1UI {
         const boardRight = scene.add.image(boardX, boardY, TextureKeys.S1_Board)
             .setOrigin(0, 0).setScale(targetScaleX, 0.7);
 
+        // Sử dụng getBounds() để lấy tọa độ vật lý chính xác của bảng sau khi scale
+        const bounds = boardRight.getBounds();
+
         return {
             boardRight,
-            centerX: boardX + (boardRight.displayWidth / 2),
-            centerY: boardY + boardRight.displayHeight / 2,
+            centerX: bounds.centerX,
+            centerY: bounds.centerY,
             targetItemScale
         };
     }
@@ -241,8 +244,9 @@ export class Scene1UI {
     }
 
     private static createVictoryUI(scene: Phaser.Scene, centerX: number, centerY: number) {
-        const victoryBg = scene.add.image(centerX, centerY, TextureKeys.BgPopup).setScale(0).setDepth(20);
-        const victoryText = scene.add.image(centerX, centerY + 240, TextureKeys.S1_TextResult).setAlpha(0).setDepth(21).setScale(0.8);
+        // Đảm bảo origin là (0.5, 0.5) để căn giữa chính xác tại centerX
+        const victoryBg = scene.add.image(centerX, centerY, TextureKeys.BgPopup).setOrigin(0.5, 0.5).setScale(0).setDepth(20);
+        const victoryText = scene.add.image(centerX, centerY + 240, TextureKeys.S1_TextResult).setOrigin(0.5, 0.5).setAlpha(0).setDepth(21).setScale(0.8);
         return { victoryBg, victoryText };
     }
 }

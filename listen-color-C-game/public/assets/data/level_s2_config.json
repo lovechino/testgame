@@ -9,22 +9,42 @@
       {
         "key": "s2_part_1_1",
         "note": "Shape_01",
-        "item_label": "Vây",
-        "offsetX": 1,
-        "offsetY": -1,
+        "item_label": "Vây dưới",
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -117,
-        "hintY": 7
+        "hintX": 70,
+        "hintY": 297
       },
       {
         "key": "s2_part_1_2",
         "note": "Shape_02",
+        "item_label": "Vây trên",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 141,
+        "hintY": -251
+      },
+      {
+        "key": "s2_part_1_3",
+        "note": "Shape_03",
         "item_label": "Thân",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
         "hintX": 249,
-        "hintY": 50
+        "hintY": 49
+      },
+      {
+        "key": "s2_part_1_4",
+        "note": "Shape_04",
+        "item_label": "Đuôi",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -268,
+        "hintY": 17
       }
     ]
   },
@@ -39,10 +59,10 @@
         "key": "s2_part_2_1",
         "note": "Char_01",
         "item_label": "Chữ c",
-        "offsetX": -1,
-        "offsetY": -1,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -135,
+        "hintX": -172,
         "hintY": -3
       }
     ]

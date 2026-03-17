@@ -9,92 +9,32 @@
       {
         "key": "s2_part_1_1",
         "note": "Shape_01",
-        "item_label": "Quần",
-        "offsetX": -1,
+        "item_label": "Thân",
+        "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -316,
-        "hintY": 119
+        "hintX": 1,
+        "hintY": -126
       },
       {
         "key": "s2_part_1_2",
         "note": "Shape_02",
-        "item_label": "Áo",
+        "item_label": "Đáy",
         "offsetX": 1,
-        "offsetY": -3,
+        "offsetY": -1,
         "scaleAdjust": 1,
-        "hintX": 16,
-        "hintY": 102
+        "hintX": 4,
+        "hintY": 121
       },
       {
         "key": "s2_part_1_3",
         "note": "Shape_03",
-        "item_label": "Tay trái",
-        "offsetX": -2,
-        "offsetY": -1,
-        "scaleAdjust": 1,
-        "hintX": -296,
-        "hintY": -174
-      },
-      {
-        "key": "s2_part_1_4",
-        "note": "Shape_04",
-        "item_label": "Tay phải",
+        "item_label": "Ở giữa phần đáy",
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 380,
-        "hintY": -237
-      },
-      {
-        "key": "s2_part_1_5",
-        "note": "Shape_05",
-        "item_label": "Mặt",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": 106,
-        "hintY": -84
-      },
-      {
-        "key": "s2_part_1_6",
-        "note": "Shape_06",
-        "item_label": "Tóc",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": 133,
-        "hintY": -205
-      },
-      {
-        "key": "s2_part_1_7",
-        "note": "Shape_07",
-        "item_label": "Cánh tay phải",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": 300,
-        "hintY": -42
-      },
-      {
-        "key": "s2_part_1_8",
-        "note": "Shape_08",
-        "item_label": "Bao tay phải",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": 357,
-        "hintY": -163
-      },
-      {
-        "key": "s2_part_1_9",
-        "note": "Shape_09",
-        "item_label": "Cánh tay trái",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": -208,
-        "hintY": -83
+        "hintX": 4,
+        "hintY": 259
       }
     ]
   },
@@ -110,10 +50,10 @@
         "note": "Char_01",
         "item_label": "Chữ u",
         "offsetX": 0,
-        "offsetY": 0,
+        "offsetY": -2,
         "scaleAdjust": 1,
-        "hintX": -10,
-        "hintY": 209
+        "hintX": 11,
+        "hintY": 202
       }
     ]
   }

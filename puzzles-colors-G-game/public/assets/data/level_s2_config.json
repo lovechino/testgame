@@ -1,6 +1,6 @@
 {
   "goalkeeper": {
-    "baseScale": 0.9,
+    "baseScale": 1.2,
     "outlineKey": "S2_player",
     "baseX_pct": 0.32,
     "baseY_pct": 0.48,
@@ -9,32 +9,22 @@
       {
         "key": "s2_part_1_1",
         "note": "Shape_01",
-        "item_label": "Cầu vồng",
-        "offsetX": 1,
-        "offsetY": -3,
+        "item_label": "Núi phải",
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 2,
-        "hintY": -89
+        "hintX": 322,
+        "hintY": 135
       },
       {
         "key": "s2_part_1_2",
         "note": "Shape_02",
-        "item_label": "Mây trái",
+        "item_label": "Núi trái",
         "offsetX": 1,
-        "offsetY": -3,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -335,
-        "hintY": 220
-      },
-      {
-        "key": "s2_part_1_3",
-        "note": "Shape_03",
-        "item_label": "Mây phải",
-        "offsetX": -2,
-        "offsetY": -1,
-        "scaleAdjust": 1,
-        "hintX": 338,
-        "hintY": 219
+        "hintX": -245,
+        "hintY": 75
       }
     ]
   },
@@ -53,7 +43,7 @@
         "offsetY": 0,
         "scaleAdjust": 1,
         "hintX": 0,
-        "hintY": 0
+        "hintY": 38
       }
     ]
   }

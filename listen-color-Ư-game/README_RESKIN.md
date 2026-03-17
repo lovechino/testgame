@@ -1,4 +1,4 @@
-# 2 — Game Source Code
+# 1 — Game Source Code
 
 > Source code đã được reskin sẵn. Để chỉnh UI và build:
 

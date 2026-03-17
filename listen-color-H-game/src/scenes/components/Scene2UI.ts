@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { GameConstants } from '../../consts/GameConstants';
 import { GameUtils } from '../../utils/GameUtils';
-import { TextureKeys } from '../../consts/Keys';
+import { TextureKeys, DataKeys } from '../../consts/Keys';
 import { PaintManager } from '../../utils/PaintManager';
 
 export class Scene2UI {
@@ -101,6 +101,7 @@ export class Scene2UI {
         const outlinesAvailableWidth = boardWidth * 0.9;
 
         const outlineCenterY = boardTop + (outlinesAvailableHeight / 2) + (boardHeight * 0.05);
+        const outline1Y = outlineCenterY - (boardHeight * 0.04); // Push up slightly as requested
 
         const outline1X = cx - (outlinesAvailableWidth * 0.25);
         const outline2X = cx + (outlinesAvailableWidth * 0.25);
@@ -108,17 +109,21 @@ export class Scene2UI {
         const safeZoneW = outlinesAvailableWidth / 2 * 0.85;
         const safeZoneH = outlinesAvailableHeight * 0.9;
 
-        const scale1 = GameUtils.getScaleToFit(scene, 's2_outline_1', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height);
-        const scale2 = GameUtils.getScaleToFit(scene, 's2_outline_2', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height);
+        const config = scene.cache.json.get(DataKeys.LevelS2Config);
+        const gkBaseScale = config?.goalkeeper?.baseScale ?? 1.0;
+        const letterBaseScale = config?.letter?.baseScale ?? 1.0;
+
+        const scale1 = GameUtils.getScaleToFit(scene, 's2_outline_1', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height) * gkBaseScale;
+        const scale2 = GameUtils.getScaleToFit(scene, 's2_outline_2', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height) * letterBaseScale;
 
         if (scene.textures.exists('s2_outline_1')) {
-            const gk = scene.add.image(outline1X, outlineCenterY, 's2_outline_1').setScale(scale1).setDepth(20);
+            const gk = scene.add.image(outline1X, outline1Y, 's2_outline_1').setScale(scale1).setDepth(20);
 
             // Add ball near goalkeeper's hand (relative to gk position)
             if (scene.textures.exists(TextureKeys.S2_Ball)) {
                 // GK is centered, hand is roughly at top right area
                 const ballX = outline1X + gk.displayWidth * 0.58;
-                const ballY = outlineCenterY - gk.displayHeight * 0.45;
+                const ballY = outline1Y - gk.displayHeight * 0.45;
                 scene.add.image(ballX, ballY, TextureKeys.S2_Ball).setScale(scale1 * 0.8).setDepth(21);
             }
         }
@@ -129,7 +134,7 @@ export class Scene2UI {
         // text_footer
         if (scene.textures.exists(TextureKeys.S2_TextScene2)) {
             const txtY = paletteY - GameUtils.pctY(scene, 0.08);
-            scene.add.image(cx - 130, txtY, TextureKeys.S2_TextScene2)
+            scene.add.image(cx + 130, txtY, TextureKeys.S2_TextScene2)
                 .setOrigin(0.5, 1)
                 .setScale(actualScaleY * 1.1);
         }
@@ -144,7 +149,7 @@ export class Scene2UI {
             autoScales: { group1: scale1, group2: scale2 },
             paletteY,
             outlines: {
-                group1: { x: outline1X, y: outlineCenterY },
+                group1: { x: outline1X, y: outline1Y },
                 group2: { x: outline2X, y: outlineCenterY }
             }
         };

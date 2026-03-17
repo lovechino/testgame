@@ -37,6 +37,9 @@ const config: Phaser.Types.Core.GameConfig = {
     },
     render: {
         transparent: true,
+        // pixelArt: true,
+        // roundPixels: true,
+        // antialias: false
     },
 };
 
@@ -51,7 +54,7 @@ function updateUIButtonScale() {
     const h = window.innerHeight;
 
     const scale = Math.min(w, h) / 1080;
-    const baseSize = 100;
+    const baseSize = 120;
     const newSize = baseSize * scale;
 
     resetBtn.style.width = `${newSize}px`;

@@ -10,31 +10,31 @@
         "key": "s2_part_1_1",
         "note": "Shape_01",
         "item_label": "Đĩa",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -174,
-        "hintY": 260
+        "hintX": -142,
+        "hintY": 298
       },
       {
         "key": "s2_part_1_2",
         "note": "Shape_02",
         "item_label": "Bánh trên",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 94,
-        "hintY": -247
+        "hintX": 90,
+        "hintY": -159
       },
       {
         "key": "s2_part_1_3",
         "note": "Shape_03",
         "item_label": "Bánh dưới",
-        "offsetX": -2,
-        "offsetY": -1,
+        "offsetX": 1,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -47,
-        "hintY": 38
+        "hintX": -58,
+        "hintY": 110
       }
     ]
   },
@@ -51,7 +51,7 @@
         "item_label": "Chữ x",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1,
+        "scaleAdjust": 0.97,
         "hintX": 0,
         "hintY": 0
       }

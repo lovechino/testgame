@@ -171,7 +171,7 @@ export default class Scene2 extends Phaser.Scene {
 
     private setupInput() {
         this.input.on('pointermove', (p: Phaser.Input.Pointer) => this.paintManager.handlePointerMove(p));
-        this.input.on('pointerup', () => this.paintManager.handlePointerUp());
+        this.input.on('pointerup', (p: Phaser.Input.Pointer) => this.paintManager.handlePointerUp(p));
         this.input.on('pointerdown', () => {
             this.idleManager.reset();
             this.introManager.stopIntro();
@@ -239,3 +239,4 @@ export default class Scene2 extends Phaser.Scene {
         });
     }
 }
+

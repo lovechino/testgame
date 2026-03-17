@@ -1,6 +1,6 @@
 {
   "goalkeeper": {
-    "baseScale": 0.9,
+    "baseScale": 0.7,
     "outlineKey": "S2_player",
     "baseX_pct": 0.32,
     "baseY_pct": 0.48,
@@ -10,8 +10,8 @@
         "key": "s2_part_1_1",
         "note": "Shape_01",
         "item_label": "Chùm nhãn",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
         "hintX": -8,
         "hintY": 101
@@ -19,7 +19,7 @@
     ]
   },
   "letter": {
-    "baseScale": 0.74,
+    "baseScale": 0.8,
     "outlineKey": "u_outline",
     "baseX_pct": 0.75,
     "baseY_pct": 0.48,

@@ -227,6 +227,7 @@ export default class Scene1 extends Phaser.Scene {
         if (!correctItem) return;
 
         const tracker = this.gameScoreManager.getScene1Tracker();
+        this.gameScoreManager.recordHint();
         this.hintDisplayManager.showHint(correctItem.x, correctItem.y, { ...GameConstants.IDLE, muteAudio: true }, tracker);
     }
 

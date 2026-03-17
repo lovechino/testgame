@@ -100,6 +100,7 @@ export default class Scene2 extends Phaser.Scene {
     shutdown() {
         this.introManager.stopIntro();
         if (this.bgm?.isPlaying) this.bgm.stop();
+        if (this.paintManager) this.paintManager.destroy();
         this.paintManager = null as any;
         this.paintTrackerManager.finalizeAll(this.isResetting);
     }
@@ -118,9 +119,9 @@ export default class Scene2 extends Phaser.Scene {
             (_id: string) => {
                 // Tracking is now handled by the global shape tracker
             },
-            (id: string, coverage: number, totalPx: number, matchPx: number, usedColors: Set<number>, spillPx: number, trueLastColor?: number) => {
+            (id: string, coverage: number, _totalPx: number, matchPx: number, usedColors: Set<number>, spillPx: number, trueLastColor?: number) => {
                 const hit = this.allPartsMap.get(id);
-                if (hit) return this.paintTrackerManager.recordAttempt(id, hit, coverage, totalPx, matchPx, usedColors, spillPx, trueLastColor) as any;
+                if (hit) return this.paintTrackerManager.recordAttempt(id, hit, coverage, matchPx, usedColors, spillPx, trueLastColor) as any;
             }
         );
         this.paintManager.setColor(this.PALETTE_DATA[0].color);
@@ -171,7 +172,7 @@ export default class Scene2 extends Phaser.Scene {
 
     private setupInput() {
         this.input.on('pointermove', (p: Phaser.Input.Pointer) => this.paintManager.handlePointerMove(p));
-        this.input.on('pointerup', () => this.paintManager.handlePointerUp());
+        this.input.on('pointerup', (p: Phaser.Input.Pointer) => this.paintManager.handlePointerUp(p));
         this.input.on('pointerdown', () => {
             this.idleManager.reset();
             this.introManager.stopIntro();

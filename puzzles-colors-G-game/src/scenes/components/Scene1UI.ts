@@ -207,7 +207,7 @@ export class Scene1UI {
                     y = centerY - spacingY - 70;
                 } else {
                     // Bottom Right item
-                    x = centerX + spacingX * 0.8;
+                    x = centerX + spacingX * 0.7;
                     y = centerY + spacingY + 70;
                 }
             } else if (finalItems.length === 2) {

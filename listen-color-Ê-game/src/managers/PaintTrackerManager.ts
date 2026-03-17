@@ -101,88 +101,63 @@ export class PaintTrackerManager {
 
     private initGroupedTracker(shapeId: string, parts: { partId: string, hitArea: Phaser.GameObjects.Image }[]) {
         const seq = ++this.nextItemSeq;
-        const state: ShapeTrackerState = {
-            tracker: null,
-            expectedRegions: [],
-            accumulatedRegionsResult: [],
-            finishedRegions: new Set(),
-            totalParts: parts.length,
-            lastReportedCoveragePerRegion: new Map(),
-            lastReportedMatchPxPerRegion: new Map(),
-            lastReportedSpillPxPerRegion: new Map(),
-            lastReportedAreaPxPerRegion: new Map(),
-            lastUsedColorPerRegion: new Map(),
-            pendingNewAttempt: false,
-            hasShown: false,
-        };
-        (state as any)._shapeId = shapeId; // lưu shapeId để recordHint tra cứu
-
-        const firstPart = parts[0].hitArea;
-        const minCov = firstPart.getData("min_region_coverage") ?? GameConstants.PAINT.WIN_PERCENT;
-        const maxSpill = firstPart.getData("max_spill_ratio") ?? 0;
-        const itemTypeOverride = firstPart.getData("itemTypeOverride") || 'paint';
-        // Đọc item_label từ JSON (đã được LevelLoader set vào hitArea)
-        // Nếu có nhiều parts trong 1 shape, dùng label từ part đầu tiên
-        const itemLabel: string | undefined = firstPart.getData("itemLabel") || undefined;
-
+        const state = this.createInitialState(parts.length, shapeId);
+        const header = parts[0].hitArea;
+        
         parts.forEach(p => {
-            let areaPx = p.hitArea.getData("area_px");
-            const key = p.hitArea.getData("partKey");
-            if ((!areaPx || areaPx === 0) && this.paintManager && key) {
-                areaPx = this.paintManager.preCalculateArea(key);
-                p.hitArea.setData("area_px", areaPx);
-            }
-            areaPx = areaPx || 1;
-
-            const allowedColorsRaw = p.hitArea.getData("allowed_colors") ?? ["any"];
-            const ALL_COLORS = ["0xff595e", "0xffca3a", "0x8ac926", "0x1982c4", "0x6a4c93", "0xfdfcdc", "0x000000"];
-            const finalAllowedColors = (allowedColorsRaw.length === 1 && allowedColorsRaw[0] === "any") ? ALL_COLORS : allowedColorsRaw;
-
-            const correctColor = p.hitArea.getData("correct_color");
-            const note = p.hitArea.getData("partNote");
-            const regionId = note || p.partId;
-
-            const regionConfig: any = {
-                id: regionId,
-                key: key,
-                allowed_colors: finalAllowedColors,
-                correct_color: correctColor ?? null
-            };
-
+            const regionConfig = this.createRegionConfig(p.partId, p.hitArea);
             state.expectedRegions.push(regionConfig);
         });
 
-        const itemType = itemTypeOverride; // 'paint-shape' hoặc 'paint-char' từ LevelLoader
+        const itemType = header.getData("itemTypeOverride") || 'paint';
+        state.tracker = this.createSDKTracker(shapeId, itemType, header.getData("itemLabel"), seq, state.expectedRegions, header);
 
-        const finalItemId = shapeId;
+        parts.forEach(p => this.shapeStates.set(p.partId, state));
+    }
 
-        state.tracker = game.createPaintTracker({
+    private createInitialState(total: number, shapeId: string): ShapeTrackerState {
+        return {
+            tracker: null, expectedRegions: [], accumulatedRegionsResult: [],
+            finishedRegions: new Set(), totalParts: total,
+            lastReportedCoveragePerRegion: new Map(), lastReportedMatchPxPerRegion: new Map(),
+            lastReportedSpillPxPerRegion: new Map(), lastReportedAreaPxPerRegion: new Map(),
+            lastUsedColorPerRegion: new Map(), pendingNewAttempt: false, hasShown: false,
+            _shapeId: shapeId
+        } as any;
+    }
+
+    private createRegionConfig(partId: string, hitArea: Phaser.GameObjects.Image) {
+        let areaPx = hitArea.getData("area_px");
+        if ((!areaPx || areaPx === 0) && this.paintManager) {
+            areaPx = this.paintManager.preCalculateArea(hitArea.getData("partKey"));
+            hitArea.setData("area_px", areaPx);
+        }
+
+        const allowedRaw = hitArea.getData("allowed_colors") ?? ["any"];
+        const ALL = ["0xff595e", "0xffca3a", "0x8ac926", "0x1982c4", "0x6a4c93", "0xfdfcdc", "0x000000"];
+        const colors = (allowedRaw.length === 1 && allowedRaw[0] === "any") ? ALL : allowedRaw;
+
+        return {
+            id: hitArea.getData("partNote") || partId,
+            key: hitArea.getData("partKey"),
+            allowed_colors: colors,
+            correct_color: hitArea.getData("correct_color") ?? null
+        };
+    }
+
+    private createSDKTracker(id: string, type: string, label: string | undefined, seq: number, regions: any[], hitArea: Phaser.GameObjects.Image) {
+        return game.createPaintTracker({
             meta: {
-                item_id: finalItemId,
-                item_type: itemType as any,
-                item_label: itemLabel,
-                seq,
-                run_seq: this.runSeq,
-                difficulty: 1,
-                scene_id: "SCN_PAINT_01",
-                scene_seq: seq,
-                scene_type: "paint",
-                skill_ids: [],
+                item_id: id, item_type: type as any, item_label: label,
+                seq, run_seq: this.runSeq, difficulty: 1,
+                scene_id: "SCN_PAINT_01", scene_seq: seq, scene_type: "paint", skill_ids: [],
             } as any,
             expected: {
-                item_id_override: finalItemId,
-                item_type_override: itemTypeOverride,
-                regions: state.expectedRegions,
-                min_region_coverage: minCov,
-                max_spill_ratio: maxSpill,
+                item_id_override: id, item_type_override: type,
+                regions,
+                min_region_coverage: hitArea.getData("min_region_coverage") ?? GameConstants.PAINT.WIN_PERCENT,
+                max_spill_ratio: hitArea.getData("max_spill_ratio") ?? 0,
             } as any,
-        });
-
-        // Removed eager onShown: state.tracker.onShown(Date.now());
-
-        // Map each partId to this state so recordAttempt can find it
-        parts.forEach(p => {
-            this.shapeStates.set(p.partId, state);
         });
     }
 
@@ -219,156 +194,101 @@ export class PaintTrackerManager {
         return partId;
     }
 
-    recordAttempt(id: string, hitArea: Phaser.GameObjects.Image, coverage: number, totalPx: number, matchPx: number, usedColors: Set<number>, spillPx: number = 0, trueLastColor?: number) {
+    recordAttempt(id: string, hit: Phaser.GameObjects.Image, coverage: number, match: number, colors: Set<number>, spill: number = 0, trueColor?: number) {
         const state = this.shapeStates.get(id);
-
         if (!state || !state.tracker) return false;
 
-        const brushSize = GameConstants.PAINT.BRUSH_SIZE;
-        // ✅ FIX: Dùng trueLastColor (màu cuối thực sự) thay vì phần tử cuối Set
-        // Set không re-insert → đỏ→vàng→đỏ sẽ vẫn lấy vàng nếu dùng Set
-        const colorArr = Array.from(usedColors);
-        const selectedColor = trueLastColor != null
-            ? this.toHex(trueLastColor)
-            : (colorArr.length > 0 ? this.toHex(colorArr[colorArr.length - 1]) : "multi");
-        const minCov = hitArea.getData("min_region_coverage") ?? GameConstants.PAINT.WIN_PERCENT;
-        const isCorrect = coverage >= minCov;
-        const spillRatio = 0; // Hardcode theo yêu cầu
+        this.ensureAttemptOpen(state);
 
-        // Luot choi moi ke ca sau khi da ve dung (de ghi nhan them Attempt va Color Change)
-        // if (state.finishedRegions.has(id)) { return true; }
+        const lastCov = state.lastReportedCoveragePerRegion.get(id) || 0;
+        if (this.checkErase(state, id, coverage, lastCov, match, spill, hit)) return false;
 
-        // Neu game vua moi load chua touch bao gio thi ban onShown lan dau
-        if (!state.hasShown) {
-            state.tracker.onShown(Date.now());
-            state.hasShown = true;
-        }
+        const selectedColor = this.getStrokeColor(colors, trueColor);
+        const { delta, colorChange } = this.calculateDeltas(state, id, coverage, match, spill, hit, selectedColor);
+        this.updateAccumulated(state, delta);
 
-        // Neu co pending attempt moi (sau lan ve truoc), mo attempt moi truoc khi ghi data
-        if (state.pendingNewAttempt) {
-            state.tracker.onShown(Date.now());
-            state.pendingNewAttempt = false;
-        }
-
-        // Khai báo regionId sớm để dùng trong cả erase block lẫn normal block
-        const note = hitArea.getData("partNote");
-        const regionId = note || id;
-
-        // --- Calculate Deltas for this Stroke/Attempt ---
-        const lastCoverage = state.lastReportedCoveragePerRegion.get(id) || 0;
-        const lastMatchPx = state.lastReportedMatchPxPerRegion.get(id) || 0;
-        const lastAreaPx = state.lastReportedAreaPxPerRegion.get(id) || 0;
-
-        // Fix cứng diện tích tổng: Lấy từ hitArea đã tính sẵn thay vì snapshot biến đổi
-        const totalPxFixed = hitArea.getData("area_px") || totalPx;
-
-        // --- Phát hiện khi người dùng TẨY MÀU: coverage giảm so với lần trước ---
-        const ERASE_THRESHOLD = 0.05; // Coverage giảm hơn 5% → coi là erase
-        if (lastCoverage > 0 && coverage < lastCoverage - ERASE_THRESHOLD) {
-            console.log(`[PaintTracker] Phat hien ERASE tren ${id}: ${lastCoverage.toFixed(3)} -> ${coverage.toFixed(3)}. Chi reset state, KHONG gui len SDK.`);
-
-            // Chi reset state noi bo — KHONG goi onDone/onShown
-            // Attempt hien tai van con "mo", lan to mau tiep theo se ghi vao chinh attempt nay
-            // => Khong co Attempt USER_ERASED xuat hien trong history
-            state.lastReportedCoveragePerRegion.set(id, coverage);
-            state.lastReportedMatchPxPerRegion.set(id, matchPx);
-            state.lastReportedSpillPxPerRegion.set(id, spillPx);
-            state.lastReportedAreaPxPerRegion.set(id, totalPxFixed);
-
-            // Giữ lại trí nhớ về màu cũ để nếu user chọn màu khác tô lên thì vẫn tính là đổi màu
-            // state.lastUsedColorPerRegion.delete(id); 
-
-            return false;
-        }
-
-        const deltaCoverage = Math.max(0, coverage - lastCoverage);
-        const deltaMatchPx = Math.max(0, matchPx - lastMatchPx);
-        // const deltaSpillPx = Math.max(0, spillPx - lastSpillPx);
-        const deltaSpillPx = 0;
-        const deltaAreaPx = Math.max(0, totalPxFixed - lastAreaPx);
-
-        // Update last reported values
-        state.lastReportedCoveragePerRegion.set(id, coverage);
-        state.lastReportedMatchPxPerRegion.set(id, matchPx);
-        state.lastReportedSpillPxPerRegion.set(id, spillPx);
-        state.lastReportedAreaPxPerRegion.set(id, totalPxFixed);
-
-
-        // Vẫn lưu Total vào biến để cập nhật biến tracking tổng
-        const regionResultTotal = {
-            region_id: regionId,
-            area_px: totalPxFixed,
-            paint_in_px: matchPx,
-            paint_out_px: spillPx,
-            coverage: coverage,
-            spill_ratio: spillRatio,
-            selected_color: selectedColor,
-        };
-
-        if (isCorrect) {
-            state.finishedRegions.add(id);
-        }
-
-        // Cập nhật mảng cộng dồn tạm thời (lưu Total của các vùng)
-        const existingIndex = state.accumulatedRegionsResult.findIndex((r: any) => r.region_id === regionId);
-        if (existingIndex >= 0) {
-            state.accumulatedRegionsResult[existingIndex] = regionResultTotal;
-        } else {
-            state.accumulatedRegionsResult.push(regionResultTotal);
-        }
-
-        // --- Calculate Color Change Delta (Consecutive Tracking) ---
-        // Đếm dựa trên việc người dùng có đổi sang màu khác với màu vừa tô nét trước hay không.
-        const prevColorStr = state.lastUsedColorPerRegion.get(id);
-        const colorChangeDelta = (prevColorStr && prevColorStr !== selectedColor) ? 1 : 0;
-        state.lastUsedColorPerRegion.set(id, selectedColor);
-
-        // --- Báo cáo lên SDK phần DELTA (chênh lệch của nét cọ vừa vẽ) ---
-        const deltaSpillRatio = 0; // Hardcode theo yêu cầu
-        const regionResultDelta = {
-            region_id: regionId,
-            area_px: deltaAreaPx,
-            paint_in_px: deltaMatchPx,
-            paint_out_px: deltaSpillPx,
-            coverage: deltaCoverage,
-            spill_ratio: deltaSpillRatio,
-            selected_color: selectedColor,
-        };
-
-        // --- Xác định errorCode ---
-        // HINT_RELIANCE: hint đã được dùng >= ngưỡng cho shape này
-        const shapeId = (state as any)._shapeId || id;
-        const hintCount = this.hintCountPerShape.get(shapeId) || 0;
-        const errorCode = hintCount > PaintTrackerManager.HINT_RELIANCE_THRESHOLD
-            ? 'HINT_RELIANCE'
-            : null;
-
-        if (errorCode) {
-            console.log(`[PaintTracker] HINT_RELIANCE: hint x${hintCount} cho ${shapeId}`);
-        }
-
-        // Gửi Delta báo cáo lên cho attempt này
-        state.tracker.onDone({
-            selected_color: selectedColor,
-            brush_size: brushSize,
-            color_change_count: colorChangeDelta,
-            brush_change_count: 0,
-            regions_result: [regionResultDelta],
-            total_paint_in_px: deltaMatchPx,
-            total_paint_out_px: deltaSpillPx,
-            completion_pct: deltaCoverage,
-            spill_ratio: deltaSpillRatio,
-        }, Date.now(), {
+        state.tracker.onDone(this.createAttemptData(selectedColor, delta, colorChange), Date.now(), {
             isCorrect: true,
-            errorCode,
+            errorCode: this.getErrorCode(state, id)
         });
 
-        // Khong goi onShown() ngay — dat co "pendingNewAttempt"
-        // onShown se chi duoc goi neu nguoi dung thuc su to lai (tranh attempt rong -> USER_ABANDONED)
         state.pendingNewAttempt = true;
-        console.log(`[PaintTracker] onDone xong. Dat co pendingNewAttempt=true.`);
+        return coverage >= (hit.getData("min_region_coverage") ?? GameConstants.PAINT.WIN_PERCENT);
+    }
 
-        return isCorrect;
+    private ensureAttemptOpen(state: ShapeTrackerState) {
+        if (!state.hasShown || state.pendingNewAttempt) {
+            state.tracker.onShown(Date.now());
+            state.hasShown = true;
+            state.pendingNewAttempt = false;
+        }
+    }
+
+    private checkErase(state: ShapeTrackerState, id: string, cov: number, lastCov: number, match: number, spill: number, hit: Phaser.GameObjects.Image) {
+        if (lastCov > 0 && cov < lastCov - 0.05) {
+            this.updateInternalState(state, id, cov, match, spill, hit.getData("area_px") || 0);
+            return true;
+        }
+        return false;
+    }
+
+    private getStrokeColor(colors: Set<number>, trueColor?: number): string {
+        if (trueColor != null) return this.toHex(trueColor);
+        const colorArr = Array.from(colors);
+        return colorArr.length > 0 ? this.toHex(colorArr[colorArr.length - 1]) : "multi";
+    }
+
+    private calculateDeltas(state: ShapeTrackerState, id: string, cov: number, match: number, spill: number, hit: Phaser.GameObjects.Image, color: string) {
+        const lastCov = state.lastReportedCoveragePerRegion.get(id) || 0;
+        const lastMatch = state.lastReportedMatchPxPerRegion.get(id) || 0;
+        const lastArea = state.lastReportedAreaPxPerRegion.get(id) || 0;
+        const totalPx = hit.getData("area_px") || 0;
+
+        const prevColor = state.lastUsedColorPerRegion.get(id);
+        const colorChange = (prevColor && prevColor !== color) ? 1 : 0;
+        state.lastUsedColorPerRegion.set(id, color);
+
+        const delta = {
+            region_id: hit.getData("partNote") || id,
+            area_px: Math.max(0, totalPx - lastArea),
+            paint_in_px: Math.max(0, match - lastMatch),
+            paint_out_px: 0,
+            coverage: Math.max(0, cov - lastCov),
+            spill_ratio: 0,
+            selected_color: color
+        };
+
+        this.updateInternalState(state, id, cov, match, spill, totalPx);
+        return { delta, colorChange };
+    }
+
+    private updateInternalState(state: ShapeTrackerState, id: string, cov: number, match: number, spill: number, area: number) {
+        state.lastReportedCoveragePerRegion.set(id, cov);
+        state.lastReportedMatchPxPerRegion.set(id, match);
+        state.lastReportedSpillPxPerRegion.set(id, spill);
+        state.lastReportedAreaPxPerRegion.set(id, area);
+    }
+
+    private updateAccumulated(state: ShapeTrackerState, totalResult: any) {
+        const idx = state.accumulatedRegionsResult.findIndex((r: any) => r.region_id === totalResult.region_id);
+        if (idx >= 0) state.accumulatedRegionsResult[idx] = totalResult;
+        else state.accumulatedRegionsResult.push(totalResult);
+        if (totalResult.coverage >= (GameConstants.PAINT.WIN_PERCENT)) state.finishedRegions.add(totalResult.region_id);
+    }
+
+    private createAttemptData(color: string, delta: any, colorChange: number) {
+        return {
+            selected_color: color, brush_size: GameConstants.PAINT.BRUSH_SIZE,
+            color_change_count: colorChange, brush_change_count: 0,
+            regions_result: [delta], total_paint_in_px: delta.paint_in_px,
+            total_paint_out_px: delta.paint_out_px, completion_pct: delta.coverage, spill_ratio: 0
+        };
+    }
+
+    private getErrorCode(state: ShapeTrackerState, id: string) {
+        const shapeId = (state as any)._shapeId || id;
+        const count = this.hintCountPerShape.get(shapeId) || 0;
+        return count > PaintTrackerManager.HINT_RELIANCE_THRESHOLD ? 'HINT_RELIANCE' : null;
     }
 
     private toHex(color: number): string {

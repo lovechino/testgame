@@ -204,11 +204,11 @@ export class Scene1UI {
                 } else if (index === 0) {
                     // Top Right item
                     x = centerX + spacingX * 0.8;
-                    y = centerY - spacingY - 85;
+                    y = centerY - spacingY - 70;
                 } else {
                     // Bottom Right item
                     x = centerX + spacingX * 0.8;
-                    y = centerY + spacingY + 90;
+                    y = centerY + spacingY + 70;
                 }
             } else if (finalItems.length === 2) {
                 // Center 2 items horizontally

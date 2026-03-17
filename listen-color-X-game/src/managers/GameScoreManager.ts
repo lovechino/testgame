@@ -16,6 +16,7 @@ export class GameScoreManager {
     private selectIndex: number = 0;
     private currentScore: number = 0;
     private scene1WrongCount: number = 0;
+    private scene1HintCount: number = 0;
 
     private constructor() {
         this.resetFull();
@@ -27,6 +28,7 @@ export class GameScoreManager {
         this.scene1Tracker = null;
         this.selectIndex = 0;
         this.scene1WrongCount = 0;
+        this.scene1HintCount = 0;
     }
 
     reset() {
@@ -39,6 +41,10 @@ export class GameScoreManager {
 
     setTotal(total: number) {
         game.setTotal(total);
+    }
+
+    recordHint() {
+        this.scene1HintCount++;
     }
 
     startLevel(levelIndex: number, totalLevels: number) {
@@ -71,6 +77,7 @@ export class GameScoreManager {
 
         this.selectIndex++;
         this.scene1WrongCount = 0; // Reset số lần sai khi bắt đầu item mới
+        this.scene1HintCount = 0; // Reset số lần hint khi bắt đầu item mới
         const itemId = `select_${this.selectIndex.toString().padStart(2, '0')}`;
 
         // Chèn runSeq từ global state
@@ -153,17 +160,19 @@ export class GameScoreManager {
             this.scene1Tracker.finalize();
         }
         // Nếu LÀ Reset
-        else if (this.scene1WrongCount >= 2) {
-            // Đã sai >= 2 lần thì mới ghi nhận lỗi Abandoned
+        else if (this.scene1WrongCount >= 2 || this.scene1HintCount > 0) {
+            // Đã sai >= 2 lần HOẶC có dùng hint thì mới ghi nhận lỗi Abandoned
+            console.log(`[GameScoreManager] Reset with hints (${this.scene1HintCount}) or wrong count (${this.scene1WrongCount}). Finalizing.`);
             this.scene1Tracker.onQuit(Date.now());
             this.scene1Tracker.finalize();
         } else {
-            // Nếu chưa sai đủ 2 lần mà Reset -> Bỏ qua không finalize để không hiện trong log
-            console.log("[GameScoreManager] Reset early (wrong < 2). Discarding Scene 1 item tracker.");
+            // Nếu chưa sai đủ 2 lần và chưa dùng hint mà Reset -> Bỏ qua không finalize để không hiện trong log
+            console.log("[GameScoreManager] Reset early (no hints, wrong < 2). Discarding Scene 1 item tracker.");
         }
 
         this.scene1Tracker = null;
         this.scene1WrongCount = 0;
+        this.scene1HintCount = 0;
     }
 
     /**

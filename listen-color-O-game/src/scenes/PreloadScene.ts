@@ -27,6 +27,7 @@ export default class PreloadScene extends Phaser.Scene {
 
         // Banner Frame (Decorative wrapper)
         this.load.image(TextureKeys.BannerFrame, 'assets/images/bg/banner.png');
+        this.load.image(TextureKeys.S2_TextScene2, 'assets/reskin/s2_text_footer.png');
 
         // Colors
         this.load.image(TextureKeys.BtnRed, 'assets/images/color/red.png');
@@ -36,6 +37,8 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image(TextureKeys.BtnPurple, 'assets/images/color/purple.png');
         this.load.image(TextureKeys.BtnCream, 'assets/images/color/cream.png');
         this.load.image(TextureKeys.BtnBlack, 'assets/images/color/black.png');
+        this.load.image(TextureKeys.BtnOrange, 'assets/images/color/orange.png');
+        this.load.image(TextureKeys.BtnPink, 'assets/images/color/pink.png');
 
         // End Game
         this.load.image(TextureKeys.End_Icon, 'assets/images/ui/icon_end.png');

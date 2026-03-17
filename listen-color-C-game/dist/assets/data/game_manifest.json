@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "5",
+    "title": "f",
     "version": "1.0.0"
   },
   "common": {
@@ -55,6 +55,14 @@
           {
             "key": "s2_part_1_2",
             "path": "assets/reskin/s2_part_1_2.png"
+          },
+          {
+            "key": "s2_part_1_3",
+            "path": "assets/reskin/s2_part_1_3.png"
+          },
+          {
+            "key": "s2_part_1_4",
+            "path": "assets/reskin/s2_part_1_4.png"
           }
         ],
         "group2": [

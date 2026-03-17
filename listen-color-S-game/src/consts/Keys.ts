@@ -67,6 +67,7 @@ export enum TextureKeys {
     BtnPurple = 'btn_purple',
     BtnCream = 'btn_cream',
     BtnBlack = 'btn_black',
+    BtnPink = 'btn_pink',
 
     // --- End Game ---
     End_Icon = 'icon_end',

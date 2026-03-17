@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { GameConstants } from '../../consts/GameConstants';
 import { GameUtils } from '../../utils/GameUtils';
-import { TextureKeys } from '../../consts/Keys';
+import { DataKeys, TextureKeys } from '../../consts/Keys';
 import { PaintManager } from '../../utils/PaintManager';
 
 export class Scene2UI {
@@ -108,8 +108,9 @@ export class Scene2UI {
         const safeZoneW = outlinesAvailableWidth / 2 * 0.85;
         const safeZoneH = outlinesAvailableHeight * 0.9;
 
-        const scale1 = GameUtils.getScaleToFit(scene, 's2_outline_1', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height);
-        const scale2 = GameUtils.getScaleToFit(scene, 's2_outline_2', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height);
+        const data = scene.cache.json.get(DataKeys.LevelS2Config);
+        const scale1 = GameUtils.getScaleToFit(scene, 's2_outline_1', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height) * (data?.goalkeeper?.baseScale ?? 1);
+        const scale2 = GameUtils.getScaleToFit(scene, 's2_outline_2', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height) * (data?.letter?.baseScale ?? 1);
 
         if (scene.textures.exists('s2_outline_1')) {
             const gk = scene.add.image(outline1X, outlineCenterY, 's2_outline_1').setScale(scale1).setDepth(20);
@@ -129,7 +130,7 @@ export class Scene2UI {
         // text_footer
         if (scene.textures.exists(TextureKeys.S2_TextScene2)) {
             const txtY = paletteY - GameUtils.pctY(scene, 0.08);
-            scene.add.image(cx - 130, txtY, TextureKeys.S2_TextScene2)
+            scene.add.image(cx - 500, txtY, TextureKeys.S2_TextScene2)
                 .setOrigin(0.5, 1)
                 .setScale(actualScaleY * 1.1);
         }

@@ -10,8 +10,8 @@
         "key": "s2_part_1_1",
         "note": "Shape_01",
         "item_label": "Cái nơ",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
         "hintX": -276,
         "hintY": -291
@@ -20,21 +20,21 @@
         "key": "s2_part_1_2",
         "note": "Shape_02",
         "item_label": "Tóc",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -74,
-        "hintY": -368
+        "hintX": 36,
+        "hintY": -364
       },
       {
         "key": "s2_part_1_3",
         "note": "Shape_03",
         "item_label": "Mặt",
-        "offsetX": -2,
-        "offsetY": -1,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -59,
-        "hintY": -182
+        "hintX": 61,
+        "hintY": -132
       },
       {
         "key": "s2_part_1_4",
@@ -43,48 +43,18 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -78,
-        "hintY": 183
+        "hintX": 69,
+        "hintY": 193
       },
       {
         "key": "s2_part_1_5",
         "note": "Shape_05",
-        "item_label": "Yếm",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": -72,
-        "hintY": 26
-      },
-      {
-        "key": "s2_part_1_6",
-        "note": "Shape_06",
-        "item_label": "Tay phải",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": 119,
-        "hintY": 129
-      },
-      {
-        "key": "s2_part_1_7",
-        "note": "Shape_07",
-        "item_label": "Tay trái",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": -339,
-        "hintY": 149
-      },
-      {
-        "key": "s2_part_1_8",
-        "note": "Shape_08",
         "item_label": "Giày",
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 19,
-        "hintY": 346
+        "hintX": 112,
+        "hintY": 325
       }
     ]
   },
@@ -100,7 +70,7 @@
         "note": "Char_01",
         "item_label": "Chữ e",
         "offsetX": 0,
-        "offsetY": 0,
+        "offsetY": 6,
         "scaleAdjust": 1,
         "hintX": 0,
         "hintY": 91
@@ -110,10 +80,10 @@
         "note": "Char_02",
         "item_label": "Dấu mũ",
         "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": -1,
-        "hintY": -294
+        "offsetY": -14,
+        "scaleAdjust": 0.97,
+        "hintX": 4,
+        "hintY": -357
       }
     ]
   }

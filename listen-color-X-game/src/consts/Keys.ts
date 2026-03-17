@@ -71,6 +71,10 @@ export enum TextureKeys {
     // --- End Game ---
     End_Icon = 'icon_end',
     End_BannerCongrat = 'banner_congrat',
+    BtnOrange = "BtnOrange",
+    BtnPink = "BtnPink",
+    BtnGrey = "BtnGrey",
+    BtnLightBlue = "BtnLightBlue",
     // S2_TResult = "t_res",
     // S2_OctoResult = "octopus_res",
 }

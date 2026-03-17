@@ -10,9 +10,9 @@
         "key": "s2_part_1_1",
         "note": "Shape_01",
         "item_label": "Quạt",
-        "offsetX": 1,
-        "offsetY": -3,
-        "scaleAdjust": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 0.9992,
         "hintX": 12,
         "hintY": 148
       }

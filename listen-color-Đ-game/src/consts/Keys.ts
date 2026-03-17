@@ -58,7 +58,6 @@ export enum TextureKeys {
     S2_Layer1 = 'S2_Layer1',
     S2_OctoResult = "S2_OctoResult",
     S2_Ball = 'S2_Ball',
-
     // Các nút màu
     BtnRed = 'btn_red',
     BtnYellow = 'btn_yellow',
@@ -67,10 +66,12 @@ export enum TextureKeys {
     BtnPurple = 'btn_purple',
     BtnCream = 'btn_cream',
     BtnBlack = 'btn_black',
+    BtnPink = 'btn_pink',
 
     // --- End Game ---
     End_Icon = 'icon_end',
     End_BannerCongrat = 'banner_congrat',
+    BtnMauMoi = "BtnMauMoi",
     // S2_TResult = "t_res",
     // S2_OctoResult = "octopus_res",
 }

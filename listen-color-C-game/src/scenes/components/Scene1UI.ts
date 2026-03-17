@@ -85,7 +85,7 @@ export class Scene1UI {
 
     private static createLeftBoard(scene: Phaser.Scene, boardX: number, boardY: number, targetScaleX: number) {
         const boardLeft = scene.add.image(boardX, boardY, TextureKeys.S1_Board)
-            .setOrigin(1, 0).setScale(targetScaleX -0.2, 0.7);
+            .setOrigin(1, 0).setScale(targetScaleX - 0.2, 0.7);
 
         return { boardLeft, centerX: boardX - (boardLeft.displayWidth / 2) };
     }
@@ -162,7 +162,7 @@ export class Scene1UI {
         const targetItemScale = 0.65;
 
         const boardRight = scene.add.image(boardX, boardY, TextureKeys.S1_Board)
-            .setOrigin(0, 0).setScale(targetScaleX-0.2, 0.7);
+            .setOrigin(0, 0).setScale(targetScaleX - 0.1, 0.7);
 
         return {
             boardRight,

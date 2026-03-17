@@ -61,14 +61,22 @@ export class PaintTrackerManager {
                 console.log(`[PaintTracker] finalizeAll: ${shapeId} DONE → finalize only`);
                 state.tracker.finalize();
             } else if (isReset) {
-                // Nếu là RESET mà chưa xong, chúng ta HỦY LUÔN item này, không finalize.
-                // Việc không finalize sẽ khiến item này biến mất hoàn toàn khỏi JSON gửi về SDK.
-                console.log(`[PaintTracker] finalizeAll: ${shapeId} RESET & Incomplete → Discarding item to avoid Fail/Abandoned log`);
+                // Lấy hint count của shape này
+                const hintCount = this.hintCountPerShape.get(shapeId) || 0;
+
+                // Nếu là RESET mà chưa xong VÀ chưa dùng hint nào, chúng ta mới HỦY
+                if (hintCount === 0) {
+                    console.log(`[PaintTracker] finalizeAll: ${shapeId} RESET & Incomplete & No Hints → Discarding item`);
+                } else {
+                    // Nếu ĐÃ dùng hint, bắt buộc finalize để SDK ghi nhận hint count
+                    // Chỉ finalize, KHÔNG onQuit để tránh USER_ABANDONED trong scene2
+                    console.log(`[PaintTracker] finalizeAll: ${shapeId} RESET but HAS HINTS (${hintCount}) → finalize only (no USER_ABANDONED)`);
+                    state.tracker.finalize();
+                }
             } else if (!state.pendingNewAttempt) {
                 // Shape chưa xong VÀ có open attempt (onShown đã gọi, onDone chưa gọi)
-                // VÀ không phải Reset -> Đây là USER_ABANDONED thực sự
-                console.log(`[PaintTracker] finalizeAll: ${shapeId} ABANDONED (open attempt) → onQuit + finalize`);
-                state.tracker.onQuit(Date.now());
+                // Chỉ finalize, KHÔNG gọi onQuit để tránh error_code USER_ABANDONED trong scene2
+                console.log(`[PaintTracker] finalizeAll: ${shapeId} incomplete (open attempt) → finalize only (no USER_ABANDONED)`);
                 state.tracker.finalize();
             } else {
                 // Shape chưa xong NHƯNG không có open attempt (vd: sau khi tẩy)
@@ -198,25 +206,20 @@ export class PaintTrackerManager {
         const state = this.shapeStates.get(partId);
         if (!state) return 0;
 
-        // Tìm shapeId thực để group các part cùng shape
-        const shapeId = this._getShapeIdForPart(partId);
+        const shapeId = (state as any)._shapeId || partId;
         const current = this.hintCountPerShape.get(shapeId) || 0;
         const next = current + 1;
         this.hintCountPerShape.set(shapeId, next);
+
+        // Đảm bảo onShown được gọi để SDK ghi nhận lại item này (tránh item rỗng bị loại bỏ khi reset)
+        if (!state.hasShown && state.tracker) {
+            console.log(`[PaintTracker] Hint shown for ${partId} (shape: ${shapeId}) -> Triggering onShown to ensure recording`);
+            state.tracker.onShown(Date.now());
+            state.hasShown = true;
+        }
+
         console.log(`[PaintTracker] Hint #${next} cho shape: ${shapeId} (part: ${partId})`);
         return next;
-    }
-
-    private _getShapeIdForPart(partId: string): string {
-        // Tìm trong các entry để lấy shapeId tương ứng
-        // (nhiều partId có thể map về cùng 1 shapeState)
-        for (const [pid, state] of this.shapeStates.entries()) {
-            if (pid === partId) {
-                // Tìm shapeId từ expectedRegions[0].id hoặc fallback về partId
-                return (state as any)._shapeId || partId;
-            }
-        }
-        return partId;
     }
 
     recordAttempt(id: string, hitArea: Phaser.GameObjects.Image, coverage: number, totalPx: number, matchPx: number, usedColors: Set<number>, spillPx: number = 0, trueLastColor?: number) {

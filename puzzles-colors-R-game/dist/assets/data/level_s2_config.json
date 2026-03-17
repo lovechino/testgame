@@ -1,6 +1,6 @@
 {
   "goalkeeper": {
-    "baseScale": 0.9,
+    "baseScale": 1.25,
     "outlineKey": "S2_player",
     "baseX_pct": 0.32,
     "baseY_pct": 0.48,
@@ -9,12 +9,42 @@
       {
         "key": "s2_part_1_1",
         "note": "Shape_01",
-        "item_label": "Ảnh trái",
-        "offsetX": 1,
-        "offsetY": -3,
+        "item_label": "Mặt và tay",
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 55,
-        "hintY": 132
+        "hintX": 176,
+        "hintY": -18
+      },
+      {
+        "key": "s2_part_1_2",
+        "note": "Shape_02",
+        "item_label": "Ngôi sao",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -257,
+        "hintY": -299
+      },
+      {
+        "key": "s2_part_1_3",
+        "note": "Shape_03",
+        "item_label": "Tóc",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 264,
+        "hintY": -178
+      },
+      {
+        "key": "s2_part_1_4",
+        "note": "Shape_04",
+        "item_label": "Áo",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 104,
+        "hintY": 223
       }
     ]
   },
@@ -32,8 +62,8 @@
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -95,
-        "hintY": -100
+        "hintX": -150,
+        "hintY": -129
       }
     ]
   }

@@ -37,7 +37,8 @@ export default class Scene2 extends Phaser.Scene {
         { key: TextureKeys.BtnBlue, color: 0x1982C4 },
         { key: TextureKeys.BtnPurple, color: 0x6A4C93 },
         { key: TextureKeys.BtnCream, color: 0xFDFCDC },
-        { key: TextureKeys.BtnBlack, color: 0x000000 }
+        { key: TextureKeys.BtnBlack, color: 0x000000 },
+        { key: TextureKeys.BtnPink, color: 0xFF0095 }
     ];
 
     constructor() { super(SceneKeys.Scene2); }

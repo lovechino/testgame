@@ -10,8 +10,8 @@
         "key": "s2_part_1_1",
         "note": "Shape_01",
         "item_label": "Tóc",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
         "hintX": -156,
         "hintY": -429
@@ -20,8 +20,8 @@
         "key": "s2_part_1_2",
         "note": "Shape_02",
         "item_label": "Mặt",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
         "hintX": -144,
         "hintY": -237
@@ -30,8 +30,8 @@
         "key": "s2_part_1_3",
         "note": "Shape_03",
         "item_label": "Tay",
-        "offsetX": -2,
-        "offsetY": -1,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
         "hintX": 328,
         "hintY": -99
@@ -41,7 +41,7 @@
         "note": "Shape_04",
         "item_label": "Áo",
         "offsetX": 0,
-        "offsetY": 0,
+        "offsetY": -0.5,
         "scaleAdjust": 1,
         "hintX": -44,
         "hintY": 197

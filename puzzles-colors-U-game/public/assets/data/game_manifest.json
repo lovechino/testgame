@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "1",
+    "title": "3",
     "version": "1.0.0"
   },
   "common": {
@@ -59,30 +59,6 @@
           {
             "key": "s2_part_1_3",
             "path": "assets/reskin/s2_part_1_3.png"
-          },
-          {
-            "key": "s2_part_1_4",
-            "path": "assets/reskin/s2_part_1_4.png"
-          },
-          {
-            "key": "s2_part_1_5",
-            "path": "assets/reskin/s2_part_1_5.png"
-          },
-          {
-            "key": "s2_part_1_6",
-            "path": "assets/reskin/s2_part_1_6.png"
-          },
-          {
-            "key": "s2_part_1_7",
-            "path": "assets/reskin/s2_part_1_7.png"
-          },
-          {
-            "key": "s2_part_1_8",
-            "path": "assets/reskin/s2_part_1_8.png"
-          },
-          {
-            "key": "s2_part_1_9",
-            "path": "assets/reskin/s2_part_1_9.png"
           }
         ],
         "group2": [

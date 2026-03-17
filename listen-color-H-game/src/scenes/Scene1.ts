@@ -203,9 +203,9 @@ export default class Scene1 extends Phaser.Scene {
         this.tweens.add({ targets: this.victoryBg, scale: 0.9, duration: ANIM.WIN_POPUP, ease: 'Back.out' });
         this.tweens.add({ targets: this.victoryText, alpha: 1, y: this.victoryText.y - 20, duration: ANIM.WIN_POPUP });
 
-        winnerItem.setDepth(100);
+        winnerItem.setDepth(100).setOrigin(0.5);
         this.tweens.add({
-            targets: winnerItem, x: this.victoryBg.x, y: this.victoryBg.y - 60, scale: 0.7, duration: ANIM.WIN_POPUP, ease: 'Back.out',
+            targets: winnerItem, x: this.victoryBg.x + 35, y: this.victoryBg.y - 60, scale: 0.7, duration: ANIM.WIN_POPUP, ease: 'Back.out',
             onComplete: () => {
                 playVoiceLocked(null, 'voice_cai_o');
                 this.time.delayedCall(GameConstants.SCENE1.TIMING.DELAY_CORRECT_SFX, () => {

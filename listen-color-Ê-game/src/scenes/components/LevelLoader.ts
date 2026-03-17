@@ -25,7 +25,7 @@ export class LevelLoader {
             // Group 1 (Category 1)
             if (partsCfg.group1) {
                 const combined = partsCfg.group1.map((p: any) => {
-                    const configPart = data.goalkeeper?.parts?.find((cp: any) => cp.key === p.key);
+                    const configPart = data?.goalkeeper?.parts?.find((cp: any) => cp.key === p.key);
                     return { ...p, ...configPart };
                 });
                 // USE autoScale group1 if available
@@ -35,15 +35,15 @@ export class LevelLoader {
                 const baseY = outlines?.group1.y;
 
                 spawnParts(scene, paintManager, unfinishedPartsMap, combined,
-                    baseX ?? data.goalkeeper?.baseX_pct ?? 0.32,
-                    baseY ?? data.goalkeeper?.baseY_pct ?? 0.48,
-                    scale, onDebugRequest, !!baseX, data.goalkeeper, "shape_1", "paint-shape");
+                    baseX ?? data?.goalkeeper?.baseX_pct ?? 0.32,
+                    baseY ?? data?.goalkeeper?.baseY_pct ?? 0.48,
+                    scale, onDebugRequest, !!baseX, data?.goalkeeper, "shape_1", "paint-shape");
             }
 
             // Group 2 (Category 2)
             if (partsCfg.group2) {
                 const combined = partsCfg.group2.map((p: any) => {
-                    const configPart = data.letter?.parts?.find((cp: any) => cp.key === p.key);
+                    const configPart = data?.letter?.parts?.find((cp: any) => cp.key === p.key);
                     return { ...p, ...configPart };
                 });
                 // USE autoScale group2 if available
@@ -52,9 +52,9 @@ export class LevelLoader {
                 const baseY = outlines?.group2.y;
 
                 spawnParts(scene, paintManager, unfinishedPartsMap, combined,
-                    baseX ?? data.letter?.baseX_pct ?? 0.73,
-                    baseY ?? data.letter?.baseY_pct ?? 0.48,
-                    scale, onDebugRequest, !!baseX, data.letter, "char_1", "paint-char");
+                    baseX ?? data?.letter?.baseX_pct ?? 0.73,
+                    baseY ?? data?.letter?.baseY_pct ?? 0.48,
+                    scale, onDebugRequest, !!baseX, data?.letter, "char_1", "paint-char");
             }
         } else if (data) {
             // Fallback for games without manifest

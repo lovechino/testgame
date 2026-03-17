@@ -1,6 +1,6 @@
 {
   "goalkeeper": {
-    "baseScale": 0.9,
+    "baseScale": 1.3,
     "outlineKey": "S2_player",
     "baseX_pct": 0.32,
     "baseY_pct": 0.48,
@@ -10,9 +10,9 @@
         "key": "s2_part_1_1",
         "note": "Shape_01",
         "item_label": "Thân tàu",
-        "offsetX": 1,
-        "offsetY": -3,
-        "scaleAdjust": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.001,
         "hintX": -10,
         "hintY": 29
       },
@@ -20,9 +20,9 @@
         "key": "s2_part_1_2",
         "note": "Shape_02",
         "item_label": "Nóc tàu",
-        "offsetX": 1,
-        "offsetY": -3,
-        "scaleAdjust": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1.001,
         "hintX": -115,
         "hintY": -180
       },
@@ -30,8 +30,8 @@
         "key": "s2_part_1_3",
         "note": "Shape_03",
         "item_label": "Cửa sổ",
-        "offsetX": -2,
-        "offsetY": -1,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
         "hintX": -178,
         "hintY": -93
@@ -42,14 +42,14 @@
         "item_label": "Mây",
         "offsetX": 0,
         "offsetY": 0,
-        "scaleAdjust": 1,
+        "scaleAdjust": 1.001,
         "hintX": 163,
         "hintY": -312
       }
     ]
   },
   "letter": {
-    "baseScale": 0.74,
+    "baseScale": 0.9,
     "outlineKey": "u_outline",
     "baseX_pct": 0.75,
     "baseY_pct": 0.48,

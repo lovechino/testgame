@@ -10,8 +10,8 @@
         "key": "s2_part_1_1",
         "note": "Shape_01",
         "item_label": "Hoa trái",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": -2,
+        "offsetY": -4,
         "scaleAdjust": 1,
         "hintX": -131,
         "hintY": 34
@@ -20,8 +20,8 @@
         "key": "s2_part_1_2",
         "note": "Shape_02",
         "item_label": "Hoa phải",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": -2,
+        "offsetY": -5,
         "scaleAdjust": 1,
         "hintX": 283,
         "hintY": -68
@@ -29,7 +29,7 @@
     ]
   },
   "letter": {
-    "baseScale": 0.74,
+    "baseScale": 0.8,
     "outlineKey": "u_outline",
     "baseX_pct": 0.75,
     "baseY_pct": 0.48,

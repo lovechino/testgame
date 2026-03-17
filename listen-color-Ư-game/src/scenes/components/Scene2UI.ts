@@ -129,7 +129,7 @@ export class Scene2UI {
         // text_footer
         if (scene.textures.exists(TextureKeys.S2_TextScene2)) {
             const txtY = paletteY - GameUtils.pctY(scene, 0.08);
-            scene.add.image(cx - 130, txtY, TextureKeys.S2_TextScene2)
+            scene.add.image(cx - 70, txtY, TextureKeys.S2_TextScene2)
                 .setOrigin(0.5, 1)
                 .setScale(actualScaleY * 1.1);
         }

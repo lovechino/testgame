@@ -57,7 +57,7 @@ export class EndgameUI {
     static createButtons(scene: Phaser.Scene, onRestart: () => void, onExit: () => void, container?: Phaser.GameObjects.Container) {
         const w = scene.scale.width;
         const h = scene.scale.height;
-        const btnScale = Math.min(w, h) / 1280;
+        const btnScale = Math.min(w, h) / 1360;
         const spacing = 250 * btnScale;
 
         // Replay Btn

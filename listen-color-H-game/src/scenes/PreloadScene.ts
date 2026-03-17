@@ -36,6 +36,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image(TextureKeys.BtnPurple, 'assets/images/color/purple.png');
         this.load.image(TextureKeys.BtnCream, 'assets/images/color/cream.png');
         this.load.image(TextureKeys.BtnBlack, 'assets/images/color/black.png');
+        this.load.image(TextureKeys.BtnGrey, 'assets/images/color/grey.png');
 
         // End Game
         this.load.image(TextureKeys.End_Icon, 'assets/images/ui/icon_end.png');

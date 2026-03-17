@@ -112,7 +112,7 @@ export class Scene2UI {
         const scale2 = GameUtils.getScaleToFit(scene, 's2_outline_2', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height);
 
         if (scene.textures.exists('s2_outline_1')) {
-            const gk = scene.add.image(outline1X, outlineCenterY, 's2_outline_1').setScale(scale1).setDepth(20);
+            const gk = scene.add.image(Math.round(outline1X), Math.round(outlineCenterY), 's2_outline_1').setScale(scale1).setDepth(20);
 
             // Add ball near goalkeeper's hand (relative to gk position)
             if (scene.textures.exists(TextureKeys.S2_Ball)) {
@@ -123,13 +123,13 @@ export class Scene2UI {
             }
         }
         if (scene.textures.exists('s2_outline_2')) {
-            scene.add.image(outline2X, outlineCenterY, 's2_outline_2').setScale(scale2).setDepth(20);
+            scene.add.image(Math.round(outline2X), Math.round(outlineCenterY), 's2_outline_2').setScale(scale2).setDepth(20);
         }
 
         // text_footer
         if (scene.textures.exists(TextureKeys.S2_TextScene2)) {
             const txtY = paletteY - GameUtils.pctY(scene, 0.08);
-            scene.add.image(cx - 130, txtY, TextureKeys.S2_TextScene2)
+            scene.add.image(cx - 80, txtY, TextureKeys.S2_TextScene2)
                 .setOrigin(0.5, 1)
                 .setScale(actualScaleY * 1.1);
         }
@@ -144,8 +144,8 @@ export class Scene2UI {
             autoScales: { group1: scale1, group2: scale2 },
             paletteY,
             outlines: {
-                group1: { x: outline1X, y: outlineCenterY },
-                group2: { x: outline2X, y: outlineCenterY }
+                group1: { x: Math.round(outline1X), y: Math.round(outlineCenterY) },
+                group2: { x: Math.round(outline2X), y: Math.round(outlineCenterY) }
             }
         };
     }

@@ -37,7 +37,10 @@ export default class Scene2 extends Phaser.Scene {
         { key: TextureKeys.BtnBlue, color: 0x1982C4 },
         { key: TextureKeys.BtnPurple, color: 0x6A4C93 },
         { key: TextureKeys.BtnCream, color: 0xFDFCDC },
-        { key: TextureKeys.BtnBlack, color: 0x000000 }
+        // { key: TextureKeys.BtnBlack, color: 0x000000 }
+        { key: TextureKeys.BtnOrange, color: 0xFFA500 },
+        { key: TextureKeys.BtnPink, color: 0xFFC0CB },
+
     ];
 
     constructor() { super(SceneKeys.Scene2); }
@@ -171,7 +174,7 @@ export default class Scene2 extends Phaser.Scene {
 
     private setupInput() {
         this.input.on('pointermove', (p: Phaser.Input.Pointer) => this.paintManager.handlePointerMove(p));
-        this.input.on('pointerup', () => this.paintManager.handlePointerUp());
+        this.input.on('pointerup', (p: Phaser.Input.Pointer) => this.paintManager.handlePointerUp(p));
         this.input.on('pointerdown', () => {
             this.idleManager.reset();
             this.introManager.stopIntro();
@@ -239,3 +242,5 @@ export default class Scene2 extends Phaser.Scene {
         });
     }
 }
+
+

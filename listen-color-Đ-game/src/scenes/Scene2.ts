@@ -35,9 +35,11 @@ export default class Scene2 extends Phaser.Scene {
         { key: TextureKeys.BtnYellow, color: 0xFFCA3A },
         { key: TextureKeys.BtnGreen, color: 0x8AC926 },
         { key: TextureKeys.BtnBlue, color: 0x1982C4 },
-        { key: TextureKeys.BtnPurple, color: 0x6A4C93 },
+        // { key: TextureKeys.BtnPurple, color: 0x6A4C93 },
         { key: TextureKeys.BtnCream, color: 0xFDFCDC },
-        { key: TextureKeys.BtnBlack, color: 0x000000 }
+        // { key: TextureKeys.BtnBlack, color: 0x000000 },
+        { key: TextureKeys.BtnPink, color: 0xFF009D },
+        { key: TextureKeys.BtnMauMoi, color: 0xC75A6E },
     ];
 
     constructor() { super(SceneKeys.Scene2); }
@@ -171,7 +173,7 @@ export default class Scene2 extends Phaser.Scene {
 
     private setupInput() {
         this.input.on('pointermove', (p: Phaser.Input.Pointer) => this.paintManager.handlePointerMove(p));
-        this.input.on('pointerup', () => this.paintManager.handlePointerUp());
+        this.input.on('pointerup', (p: Phaser.Input.Pointer) => this.paintManager.handlePointerUp(p));
         this.input.on('pointerdown', () => {
             this.idleManager.reset();
             this.introManager.stopIntro();

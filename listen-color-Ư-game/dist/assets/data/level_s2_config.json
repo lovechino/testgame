@@ -10,61 +10,81 @@
         "key": "s2_part_1_1",
         "note": "Shape_01",
         "item_label": "Áo",
-        "offsetX": 1,
-        "offsetY": -3,
+        "offsetX": 0,
+        "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -88,
-        "hintY": 64
+        "hintX": -77,
+        "hintY": 62
       },
       {
         "key": "s2_part_1_2",
         "note": "Shape_02",
-        "item_label": "Chân váy",
-        "offsetX": 1,
-        "offsetY": -3,
+        "item_label": "Váy",
+        "offsetX": -1,
+        "offsetY": -1,
         "scaleAdjust": 1,
-        "hintX": -82,
-        "hintY": 403
+        "hintX": -69,
+        "hintY": 390
       },
       {
         "key": "s2_part_1_3",
         "note": "Shape_03",
         "item_label": "Mặt",
-        "offsetX": -2,
-        "offsetY": -1,
+        "offsetX": 0,
+        "offsetY": 1,
         "scaleAdjust": 1,
-        "hintX": -11,
-        "hintY": -228
+        "hintX": -64,
+        "hintY": -218
       },
       {
         "key": "s2_part_1_4",
         "note": "Shape_04",
-        "item_label": "Tóc",
-        "offsetX": 0,
-        "offsetY": 0,
-        "scaleAdjust": 1,
-        "hintX": 63,
-        "hintY": -327
-      },
-      {
-        "key": "s2_part_1_5",
-        "note": "Shape_05",
         "item_label": "Mũ",
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": -100,
-        "hintY": -370
+        "hintX": -87,
+        "hintY": -354
+      },
+      {
+        "key": "s2_part_1_5",
+        "note": "Shape_05",
+        "item_label": "Tay",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": -204,
+        "hintY": 250
       },
       {
         "key": "s2_part_1_6",
         "note": "Shape_06",
-        "item_label": "Khay",
+        "item_label": "Đĩa",
         "offsetX": 0,
         "offsetY": 0,
         "scaleAdjust": 1,
-        "hintX": 65,
-        "hintY": 273
+        "hintX": 71,
+        "hintY": 263
+      },
+      {
+        "key": "s2_part_1_7",
+        "note": "Shape_07",
+        "item_label": "Bát",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 6,
+        "hintY": 173
+      },
+      {
+        "key": "s2_part_1_8",
+        "note": "Shape_08",
+        "item_label": "Cốc",
+        "offsetX": 0,
+        "offsetY": 0,
+        "scaleAdjust": 1,
+        "hintX": 208,
+        "hintY": 208
       }
     ]
   },
@@ -78,12 +98,12 @@
       {
         "key": "s2_part_2_1",
         "note": "Char_01",
-        "item_label": "Chữ ư",
+        "item_label": "Chữ Ư",
         "offsetX": 0,
-        "offsetY": 0,
+        "offsetY": 3,
         "scaleAdjust": 1,
-        "hintX": -54,
-        "hintY": 243
+        "hintX": -66,
+        "hintY": 258
       }
     ]
   }

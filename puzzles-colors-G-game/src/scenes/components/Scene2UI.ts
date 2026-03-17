@@ -102,13 +102,13 @@ export class Scene2UI {
 
         const outlineCenterY = boardTop + (outlinesAvailableHeight / 2) + (boardHeight * 0.05);
 
-        const outline1X = cx - (outlinesAvailableWidth * 0.25);
+        const outline1X = cx - (outlinesAvailableWidth * 0.23);
         const outline2X = cx + (outlinesAvailableWidth * 0.25);
 
         const safeZoneW = outlinesAvailableWidth / 2 * 0.85;
         const safeZoneH = outlinesAvailableHeight * 0.9;
 
-        const scale1 = GameUtils.getScaleToFit(scene, 's2_outline_1', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height);
+        const scale1 = GameUtils.getScaleToFit(scene, 's2_outline_1', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height) * 1.4;
         const scale2 = GameUtils.getScaleToFit(scene, 's2_outline_2', safeZoneW / scene.scale.width, safeZoneH / scene.scale.height);
 
         if (scene.textures.exists('s2_outline_1')) {

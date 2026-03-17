@@ -46,6 +46,7 @@
           "path": "assets/reskin/s2_outline_2.png"
         }
       ],
+      "footerText": "assets/reskin/s2_text_footer.png",
       "parts": {
         "group1": [
           {

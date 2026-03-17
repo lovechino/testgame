@@ -1,6 +1,6 @@
 {
   "goalkeeper": {
-    "baseScale": 0.9,
+    "baseScale": 0.92,
     "outlineKey": "S2_player",
     "baseX_pct": 0.32,
     "baseY_pct": 0.48,
@@ -11,7 +11,7 @@
         "note": "Shape_01",
         "item_label": "Quả bưởi",
         "offsetX": 1,
-        "offsetY": -3,
+        "offsetY": -1,
         "scaleAdjust": 1,
         "hintX": -21,
         "hintY": 83
